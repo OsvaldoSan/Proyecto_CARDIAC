@@ -1,0 +1,49 @@
+
+.fondo{
+    -fx-background-color: linear-gradient(#d4cece, #f3e9e9);
+}
+
+.fondoOutput{
+    -fx-background-color: linear-gradient(#cf3030 5%, #fababa);
+}
+
+.registro{
+    -fx-background-color: linear-gradient(#bdb9b9 30%, #dbd6d7 95%);
+}
+
+.texto_normal{
+    -fx-font-family: "Lato Black";
+    -fx-font-size: 16px;
+}
+
+.title{
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#3e5ca9 60%, #8facf7);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.grid {
+    -fx-background-color: white;
+    -fx-background-radius: 5.0;
+    -fx-background-insets: 0.0 5.0 0.0 5.0;
+    -fx-padding: 10;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+.labelDirection{
+    -fx-background-color: blue;
+}
+
+.labelContent{
+    -fx-background-color:red;
+}

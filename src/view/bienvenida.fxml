@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: orange;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Bienvenida">
+   <top>
+      <Label alignment="TOP_CENTER" text="Welcome to CARDIAC Systems" textOverrun="CENTER_ELLIPSIS" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Caladea Bold Italic" size="24.0" />
+         </font>
+         <effect>
+            <Lighting>
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant />
+               </light>
+            </Lighting>
+         </effect>
+      </Label>
+   </top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="370.0" prefWidth="496.0" spacing="70.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
+               <children>
+                  <Button id="cardiac" fx:id="cardiac" blendMode="MULTIPLY" mnemonicParsing="false" onAction="#goVirtualMachine" prefHeight="37.0" prefWidth="209.0" style="-fx-background-radius: 40; -fx-background-color: black;" text="CARDIAC">
+                     <font>
+                        <Font name="Amiri" size="17.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.8684210777282715" green="0.16885964572429657" blue="0.16885964572429657" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.5" />
+                     </effect></Button>
+                  <Button fx:id="instNormal" mnemonicParsing="false" prefHeight="45.0" prefWidth="182.0" style="-fx-background-color: black; -fx-background-radius: 40;" text="Instrucciones">
+                     <font>
+                        <Font name="Amiri" size="17.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="0.11057692307692309" endY="0.06730769230769229" startX="1.0" startY="0.15865384615384615">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.9210526347160339" green="0.11513157933950424" blue="0.11513157933950424" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.5" />
+                     </effect></Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="145.0" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
+               <children>
+                  <Button id="cardiac" fx:id="cardiacConcurrente" blendMode="MULTIPLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="209.0" style="-fx-background-radius: 40; -fx-background-color: black;" text="CARDIAC Concurrente">
+                     <font>
+                        <Font name="Amiri" size="17.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.8684210777282715" green="0.16885964572429657" blue="0.16885964572429657" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.5" />
+                     </effect>
+                  </Button>
+                  <Button fx:id="instConcurrente" mnemonicParsing="false" prefHeight="45.0" prefWidth="182.0" style="-fx-background-color: black; -fx-background-radius: 40;" text="Instrucciones">
+                     <font>
+                        <Font name="Amiri" size="17.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="0.11057692307692309" endY="0.06730769230769229" startX="1.0" startY="0.15865384615384615">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.9210526347160339" green="0.11513157933950424" blue="0.11513157933950424" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.5" />
+                     </effect>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="195.0" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
+               <children>
+                  <Button id="cardiac" fx:id="cardiacParalelo" blendMode="MULTIPLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="209.0" style="-fx-background-radius: 40; -fx-background-color: black;" text="CARDIAC Paralelo">
+                     <font>
+                        <Font name="Amiri" size="17.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.8684210777282715" green="0.16885964572429657" blue="0.16885964572429657" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.5" />
+                     </effect>
+                  </Button>
+                  <Button fx:id="instParalela" mnemonicParsing="false" prefHeight="45.0" prefWidth="182.0" style="-fx-background-color: black; -fx-background-radius: 40;" text="Instrucciones">
+                     <font>
+                        <Font name="Amiri" size="17.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="0.11057692307692309" endY="0.06730769230769229" startX="1.0" startY="0.15865384615384615">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.9210526347160339" green="0.11513157933950424" blue="0.11513157933950424" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.5" />
+                     </effect>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
