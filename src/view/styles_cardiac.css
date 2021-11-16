@@ -40,10 +40,19 @@
     -fx-vgap: 20;
 }
 
+.itemDirection{
+    -fx-background-color:cyan;
+}
 .labelDirection{
-    -fx-background-color: blue;
+    -fx-text-fill: black;
+}
+.itemContent{
+    -fx-background-color:#e56ced;
+}
+.labelContent{
+    -fx-text-fill:black;
 }
 
-.labelContent{
-    -fx-background-color:red;
+.cycleCounter{
+    -fx-background-color:green;
 }

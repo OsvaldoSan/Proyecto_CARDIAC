@@ -5,14 +5,15 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Cardiac {
     //The model and all of its parameters are not necessary, but it is clearer keep in mind what are the parts
@@ -38,23 +39,25 @@ public class Cardiac {
     private TextField gTerminalText;
 
     @FXML
-    private Button gTerminalRun;
+    private TextArea gDeckText;
+
+    @FXML
+    private Button gTerminalRun, gAddCard;
 
     @FXML
     private GridPane gridMemory= new GridPane();
     @FXML
     private ScrollPane scrollMemory ;
-    private Label cellMemory[]=new Label[100], numberMemory[]=new Label[100];
+    private StackPane itemsDirection[]= new StackPane[100],itemsContent[]=new StackPane[100];
+    private Label contentMemory[]=new Label[100], directionMemory[]=new Label[100];
 
 
     //ejecucion más lenta elejida por el usuario
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1300), e -> cycleSystem() ));
     //Control variables
     private Boolean isInput=false, isStarted=false;
-    private String newInput;
     private int cycleNumber=0;
-
-
+    private Queue<String> cards=new LinkedList<>();
 
 
     @FXML
@@ -70,15 +73,26 @@ public class Cardiac {
     }
 
     @FXML
-    public void runTerminal(ActionEvent event){
-
-        if(isInput==true){
+    public void execution(ActionEvent event){
+        Object button=event.getSource();
+        if(button.equals(gTerminalRun) && isInput==true){
             isInput=false;
             gTerminalNote.setText("Gracias!");
             Memory[operand]= gTerminalText.getText();
+            gTerminalText.clear();
             updateMemoryParametersG();
             timeline.play();
         }
+
+        if(button.equals(gAddCard)){
+
+            cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
+            gDeckText.clear();
+            System.out.println(cards);
+
+        }
+
+
 
     }
 
@@ -91,50 +105,52 @@ public class Cardiac {
 
         gridMemory.getStyleClass().add("grid");
 
-
-       /*gridMemory.setMinWidth(Region.USE_COMPUTED_SIZE);
-        gridMemory.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        gridMemory.setMaxWidth(Region.USE_PREF_SIZE);*/
-
-        //set grid height
-        /*gridMemory.setMinHeight(Region.USE_COMPUTED_SIZE);
-        gridMemory.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        gridMemory.setMaxHeight(Region.USE_PREF_SIZE);*/
-
         for(int i=0;i<100;++i){
 
             if(row==10){//20 because there will be a column for the number and a column for the content
                 row=0;
                 column+=2;//because it must jump the content
             }
-            numberMemory[i]= new Label(Integer.toString(i));
-            numberMemory[i].getStyleClass().clear();
-            numberMemory[i].getStyleClass().add("labelDirection");
+            //Create item
+            itemsDirection[i]=new StackPane();
+            itemsDirection[i].getStyleClass().add("itemDirection");
+            //Add label direction
+            if(i<10) {
+                directionMemory[i]= new Label("0"+Integer.toString(i)+" :");
+            }
+            else {
+                directionMemory[i] = new Label(Integer.toString(i)+" :");
+            }
 
-            addConstraintsGrid(numberMemory[i],column++,row);
+            directionMemory[i].getStyleClass().add("labelDirection");
+            itemsDirection[i].getChildren().add(directionMemory[i]);
 
-            gridMemory.getChildren().add(numberMemory[i]);
+            addConstraintsGrid(itemsDirection[i],column++,row);
+            //Add item to grid
+            gridMemory.getChildren().add(itemsDirection[i]);
 
-            cellMemory[i]= new Label("N/A");
+            //Create Label with content
+            contentMemory[i]= new Label("    ");
             if(Memory[i]!=null){
                 System.out.println("La memoria es "+Memory[i]);
-                cellMemory[i].setText(Memory[i] );
+                contentMemory[i].setText(Memory[i] );
             }
-            cellMemory[i].getStyleClass().clear();
-            cellMemory[i].getStyleClass().add("labelContent");
+            contentMemory[i].getStyleClass().add("labelContent");
+            //Create item and add label content
+            itemsContent[i]=new StackPane();
+            itemsContent[i].getStyleClass().add("itemContent");
+            itemsContent[i].getChildren().add(contentMemory[i]);
 
-            addConstraintsGrid(cellMemory[i],column--,row++); //Is column-- because for every cycle
+            //ADD Item
+            addConstraintsGrid(itemsContent[i],column--,row++); //Is column-- because for every cycle
             //we put in row 0 and column 0 a direction and in column 1 a content, but next will be roq 1 and column 0
-
-
-
-            gridMemory.getChildren().add(cellMemory[i]);
+            gridMemory.getChildren().add(itemsContent[i]);
 
         }
 
     }
 
-    public void addConstraintsGrid(Label memory,int x,int y){
+    public void addConstraintsGrid(StackPane memory,int x,int y){
         GridPane.setConstraints(memory,x,y);
         GridPane.setVgrow(memory, Priority.ALWAYS);
         GridPane.setHgrow(memory, Priority.ALWAYS);
@@ -143,12 +159,12 @@ public class Cardiac {
 
     public void updateMemoryParametersG(){
         for(int i=0;i<100;++i){
-            if(Memory[i]!=cellMemory[i].getText()){
+            if(Memory[i]!= contentMemory[i].getText()){
                 if(Memory[i]==null){
-                    cellMemory[i].setText("N/A");
+                    contentMemory[i].setText("    ");
                 }
                 else{
-                    cellMemory[i].setText(Memory[i]);
+                    contentMemory[i].setText(Memory[i]);
                 }
             }
         }
@@ -172,7 +188,7 @@ public class Cardiac {
         gAcc.setText(Integer.toString(acc));
 
 
-        //gCycleNumber.setText(Integer.toString(cycleNumber));
+        gCycleNumber.setText(Integer.toString(cycleNumber));
     }
 
 
@@ -197,12 +213,25 @@ public class Cardiac {
         }
 
         updateContentG();
-
+        String prueba;
         switch (opCode){
             case 0:
                 gTerminalNote.setText("Ingrese el contenido para la celda "+operand);
-                isInput=true;
-                timeline.pause();
+                if(cards.isEmpty() == false){
+                    System.out.println("No esta bacia");
+                    gTerminalNote.setText("Gracias!");
+                    System.out.println(cards);
+                    prueba=cards.remove();
+                    System.out.println(prueba);
+                    System.out.println("Cards no esta vacia");
+                    Memory[operand]=prueba;
+                    updateMemoryParametersG();
+                    wait(430);//Time in miliseconds
+                }
+                else {
+                    isInput = true;
+                    timeline.pause();
+                }
                 break;
             case 1:
                 acc = Integer.parseInt(Memory[operand]);
@@ -246,7 +275,13 @@ public class Cardiac {
             updateMemoryParametersG();
         }
 
-
+    public void wait(int n){
+        try {
+            Thread.sleep(n);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
