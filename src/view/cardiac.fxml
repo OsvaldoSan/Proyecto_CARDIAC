@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -132,20 +133,36 @@
                     <tabs>
                       <Tab text="Deck Mode">
                            <content>
-                              <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <Label styleClass="texto_normal" text="Ingrese la tarjeta completa" VBox.vgrow="ALWAYS" />
-                                    <TextArea fx:id="gDeckText" prefHeight="137.0" prefWidth="277.0" promptText="001" VBox.vgrow="ALWAYS">
-                                       <VBox.margin>
-                                          <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                       </VBox.margin>
-                                    </TextArea>
-                                    <Button fx:id="gAddCard" mnemonicParsing="false" onAction="#execution" text="Add Card" VBox.vgrow="NEVER" />
+                                    <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="277.0" prefWidth="137.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label styleClass="texto_normal" text="Ingrese la tarjeta completa" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
+                                          <TextArea fx:id="gDeckText" prefHeight="137.0" prefWidth="277.0" promptText="001" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                                             </VBox.margin>
+                                          </TextArea>
+                                          <Button fx:id="gAddCard" mnemonicParsing="false" onAction="#execution" text="Add Card" VBox.vgrow="NEVER" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox prefHeight="277.0" prefWidth="134.0" spacing="10.0" styleClass="fondo" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label styleClass="texto_normal" text="Tarjetas en el sistema" textAlignment="CENTER" wrapText="true" />
+                                          <StackPane fx:id="stackCardsInSystem" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                                       </padding>
+                                    </VBox>
                                  </children>
-                                 <padding>
-                                    <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
-                                 </padding>
-                              </VBox>
+                              </HBox>
                            </content>
                       </Tab>
                       <Tab text="Terminal Mode">

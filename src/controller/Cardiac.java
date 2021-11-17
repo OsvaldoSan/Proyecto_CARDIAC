@@ -3,12 +3,15 @@ package controller;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.util.Arrays;
@@ -47,9 +50,12 @@ public class Cardiac {
     @FXML
     private GridPane gridMemory= new GridPane();
     @FXML
-    private ScrollPane scrollMemory ;
+    private ScrollPane scrollMemory;
+    @FXML
+    private StackPane stackCardsInSystem;
     private StackPane itemsDirection[]= new StackPane[100],itemsContent[]=new StackPane[100];
     private Label contentMemory[]=new Label[100], directionMemory[]=new Label[100];
+    private ListView<String> cardsSystem;
 
 
     //ejecucion más lenta elejida por el usuario
@@ -66,6 +72,7 @@ public class Cardiac {
             isStarted=true;
             timeline.setCycleCount(Animation.INDEFINITE);
             cardiac.start();
+            updateCardsInSystem();
             updateCardiacParameters();
             createGridMemory();
             timeline.play();
@@ -84,10 +91,12 @@ public class Cardiac {
             timeline.play();
         }
 
+        //Add Card
         if(button.equals(gAddCard)){
 
             cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
             gDeckText.clear();
+            updateCardsInSystem();
             System.out.println(cards);
 
         }
@@ -191,6 +200,19 @@ public class Cardiac {
         gCycleNumber.setText(Integer.toString(cycleNumber));
     }
 
+    public void updateCardsInSystem(){
+        if(cards.isEmpty()==false){
+            System.out.println(cards);
+        }
+        else{
+            System.out.println("Cards no esta vacía");
+            cardsSystem=new ListView<String>( FXCollections.observableArrayList("Nothing Here","Neither here") );
+            System.out.println(cardsSystem.toString());
+            System.out.println(stackCardsInSystem.getScene());
+
+            stackCardsInSystem.getChildren().add(cardsSystem);
+        }
+    }
 
     public void cycleSystem() {
         cycleNumber++;
@@ -223,6 +245,7 @@ public class Cardiac {
                     System.out.println(cards);
                     prueba=cards.remove();
                     System.out.println(prueba);
+                    updateCardsInSystem();
                     System.out.println("Cards no esta vacia");
                     Memory[operand]=prueba;
                     updateMemoryParametersG();
