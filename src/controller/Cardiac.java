@@ -4,14 +4,12 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.util.Arrays;
@@ -22,7 +20,7 @@ public class Cardiac {
     //The model and all of its parameters are not necessary, but it is clearer keep in mind what are the parts
     //that cardiac needs, although in the future could be good for save information.
     // Cardiac Variables
-    modelo.Cardiac cardiac = new modelo.Cardiac();
+    modelo.Cardiac cardiac;
 
     private String InReg;
     private String[] Memory;
@@ -45,7 +43,7 @@ public class Cardiac {
     private TextArea gDeckText;
 
     @FXML
-    private Button gTerminalRun, gAddCard;
+    private Button gTerminalRun, gAddCard,gStart,gPause,gStop,gRestart;
 
     @FXML
     private GridPane gridMemory= new GridPane();
@@ -53,29 +51,61 @@ public class Cardiac {
     private ScrollPane scrollMemory;
     @FXML
     private StackPane stackCardsInSystem;
+
     private StackPane itemsDirection[]= new StackPane[100],itemsContent[]=new StackPane[100];
     private Label contentMemory[]=new Label[100], directionMemory[]=new Label[100];
     private ListView<String> cardsSystem;
 
 
     //ejecucion más lenta elejida por el usuario
-    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1300), e -> cycleSystem() ));
+    private int TIME=1400;
+    private Timeline timeline ;
     //Control variables
-    private Boolean isInput=false, isStarted=false;
+    private Boolean isInput=false, isStarted=false, isPause=false;
     private int cycleNumber=0;
-    private Queue<String> cards=new LinkedList<>();
+    private Queue<String> cards;
 
 
     @FXML
-    public void startTerminal(ActionEvent event){
-        if(isStarted==false) {
+    public void controlBar(ActionEvent event){
+        Object button=event.getSource();
+        if(button.equals(gStart) && isStarted==false) {
+            cardiac = new modelo.Cardiac();
+            timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
+            cards =new LinkedList<>();
+
             isStarted=true;
             timeline.setCycleCount(Animation.INDEFINITE);
             cardiac.start();
             updateCardsInSystem();
-            updateCardiacParameters();
+            getCardiacParameters();
             createGridMemory();
             timeline.play();
+        }
+        else if( (button.equals(gStop) || button.equals(gRestart) ) && isStarted==true){
+            setCardiacParameters();//If you want to save the state of the virtual machine in the future with a better in the code
+            clearContentG();
+            clearMemoryParametersG();
+            cards.clear();
+            isStarted=false;
+            cardiac = new modelo.Cardiac();
+            if(button.equals(gStart)){
+                gStart.fire(); //Throws the event to start a new Cardiac machine
+            }
+        }
+        else if( button.equals(gPause) ){
+            if(isPause=false){
+                timeline.pause();
+                isPause=true;
+                gPause.setText("Play");
+            }
+            else{
+                timeline.play();
+                isPause=false;
+                gPause.setText("Pause");
+            }
+
+
         }
     }
 
@@ -84,7 +114,7 @@ public class Cardiac {
         Object button=event.getSource();
         if(button.equals(gTerminalRun) && isInput==true){
             isInput=false;
-            gTerminalNote.setText("Gracias!");
+            gTerminalNote.setText("Thanks!");
             Memory[operand]= gTerminalText.getText();
             gTerminalText.clear();
             updateMemoryParametersG();
@@ -93,11 +123,15 @@ public class Cardiac {
 
         //Add Card
         if(button.equals(gAddCard)){
-
             cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
             gDeckText.clear();
             updateCardsInSystem();
-            System.out.println(cards);
+            if(isInput==true){
+                takeCardFromQueue();
+                isInput=false;
+                updateCardsInSystem();
+                timeline.play();
+            }
 
         }
 
@@ -166,6 +200,15 @@ public class Cardiac {
 
     }
 
+    public void getCardiacParameters(){
+        InReg=cardiac.getInReg();
+        Memory=cardiac.getMemory();
+        opCode = cardiac.getOpCode();
+        operand = cardiac.getOperand();
+        acc = cardiac.getAcc();
+        pc = cardiac.getPc();
+        sizeCell= cardiac.getSizeCell();
+    }
     public void updateMemoryParametersG(){
         for(int i=0;i<100;++i){
             if(Memory[i]!= contentMemory[i].getText()){
@@ -179,14 +222,19 @@ public class Cardiac {
         }
     }
 
-    public void updateCardiacParameters(){
-        InReg=cardiac.getInReg();
-        Memory=cardiac.getMemory();
-        opCode = cardiac.getOpCode();
-        operand = cardiac.getOperand();
-        acc = cardiac.getAcc();
-        pc = cardiac.getPc();
-        sizeCell= cardiac.getSizeCell();
+    public void clearMemoryParametersG(){
+        for(int i=0;i<100;++i){
+                    contentMemory[i].setText("    ");
+        }
+    }
+
+    public void setCardiacParameters(){
+        cardiac.setInReg(InReg);
+        cardiac.setMemory(Memory);
+        cardiac.setOpCode(opCode);
+        cardiac.setOperand(operand);
+        cardiac.setAcc(acc);
+        cardiac.setPc(pc);
     }
 
     public void updateContentG(){
@@ -200,18 +248,36 @@ public class Cardiac {
         gCycleNumber.setText(Integer.toString(cycleNumber));
     }
 
+    public void clearContentG(){
+        gInReg.setText("  ");
+        gOpCode.setText(Integer.toString(0));
+        gOperand.setText(Integer.toString(0));
+        gPc.setText(Integer.toString(0));
+        gAcc.setText(Integer.toString(0));
+
+
+        gCycleNumber.setText(Integer.toString(0));
+    }
+
     public void updateCardsInSystem(){
+
         if(cards.isEmpty()==false){
-            System.out.println(cards);
+            cardsSystem=new ListView<String>(FXCollections.observableArrayList(cards.toString().substring(1).split("\\[|,[ ]|\\]") ));
         }
         else{
-            System.out.println("Cards no esta vacía");
             cardsSystem=new ListView<String>( FXCollections.observableArrayList("Nothing Here","Neither here") );
-            System.out.println(cardsSystem.toString());
-            System.out.println(stackCardsInSystem.getScene());
+        }
 
+        // If cardsSystem is not in Stack Pane we add it
+        if(cardsSystem.getParent() == null){
             stackCardsInSystem.getChildren().add(cardsSystem);
         }
+    }
+
+    public void takeCardFromQueue(){
+        Memory[operand]=cards.remove();
+        updateMemoryParametersG();
+        wait(TIME);//Time in miliseconds
     }
 
     public void cycleSystem() {
@@ -240,16 +306,7 @@ public class Cardiac {
             case 0:
                 gTerminalNote.setText("Ingrese el contenido para la celda "+operand);
                 if(cards.isEmpty() == false){
-                    System.out.println("No esta bacia");
-                    gTerminalNote.setText("Gracias!");
-                    System.out.println(cards);
-                    prueba=cards.remove();
-                    System.out.println(prueba);
-                    updateCardsInSystem();
-                    System.out.println("Cards no esta vacia");
-                    Memory[operand]=prueba;
-                    updateMemoryParametersG();
-                    wait(430);//Time in miliseconds
+                    takeCardFromQueue();
                 }
                 else {
                     isInput = true;
@@ -305,6 +362,8 @@ public class Cardiac {
             e.printStackTrace();
         }
     }
+
+
 
 }
 

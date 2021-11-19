@@ -115,15 +115,16 @@
                   </VBox>
                   <ToolBar prefHeight="18.0" prefWidth="287.0" styleClass="fondo" VBox.vgrow="ALWAYS">
                     <items>
-                      <Button fx:id="gstart" mnemonicParsing="false" onAction="#startTerminal" text="Start" />
-                        <Button fx:id="gstop" mnemonicParsing="false" text="Stop" />
-                        <Button fx:id="grestart" mnemonicParsing="false" text="Restart" />
+                      <Button fx:id="gstart" mnemonicParsing="false" onAction="#controlBar" text="Start" />
+                        <Button fx:id="gPause" mnemonicParsing="false" onAction="#controlBar" text="Pause" />
+                        <Button fx:id="gStop" mnemonicParsing="false" onAction="#controlBar" text="Stop" />
+                        <Button fx:id="gRestart" mnemonicParsing="false" onAction="#controlBar" text="Restart" />
                     </items>
                      <padding>
-                        <Insets bottom="5.0" left="60.0" right="10.0" top="5.0" />
+                        <Insets bottom="5.0" left="15.0" right="10.0" top="5.0" />
                      </padding>
                      <opaqueInsets>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets left="1.0" right="1.0" />
                      </opaqueInsets>
                      <VBox.margin>
                         <Insets top="5.0" />
