@@ -31,6 +31,11 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
+.button:hover{
+    -fx-background-color: linear-gradient(#8facf7,#3e5ca9 60%);
+    -fx-cursor: hand;
+}
+
 .grid {
     -fx-background-color: white;
     -fx-background-radius: 5.0;
@@ -41,18 +46,45 @@
 }
 
 .itemDirection{
-    -fx-background-color:cyan;
+    -fx-background-color:#bef7f5;
+     -fx-background-radius: 5.0;
+     -fx-background-insets: 0.5 5.0 0.5 5.0;
+     -fx-padding: 10;
+     -fx-hgap: 8;
+     -fx-vgap: 8;
 }
+
+.itemDirectionSelected{
+-fx-background-color:#1570ed;
+     -fx-background-radius: 5.0;
+     -fx-background-insets: 0.5 5.0 0.5 5.0;
+     -fx-padding: 10;
+     -fx-hgap: 8;
+     -fx-vgap: 8;
+
+}
+
 .labelDirection{
-    -fx-text-fill: black;
+    -fx-font-size: 14px;
+   -fx-font-family: "Arial Black";
+   -fx-fill: #818181;
+   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
 }
 .itemContent{
-    -fx-background-color:#e56ced;
+    -fx-background-color:#e3fcfc;
+    -fx-background-radius: 5.0;
+    -fx-background-insets: 0.5 5.0 0.5 5.0;
+    -fx-padding: 10;
+    -fx-hgap: 8;
+    -fx-vgap: 8;
 }
 .labelContent{
     -fx-text-fill:black;
 }
 
 .cycleCounter{
-    -fx-background-color:green;
+    -fx-background-color: linear-gradient(#6cede9,#bef7f5);
+    -fx-background-radius: 5.0;
+    -fx-padding: 5 5 5 5;
+    -fx-text-fill:blue;
 }

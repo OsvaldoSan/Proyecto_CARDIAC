@@ -34,7 +34,7 @@ public class Cardiac {
     private String output;
 
     @FXML
-    private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gOutput,gCycleNumber;
+    private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gOutput,gCycleNumber,gCardiacStatus;
 
     @FXML
     private TextField gTerminalText;
@@ -64,12 +64,14 @@ public class Cardiac {
     private Boolean isInput=false, isStarted=false, isPause=false;
     private int cycleNumber=0;
     private Queue<String> cards;
+    private final String STATUS="CARDIAC is ";
 
 
     @FXML
     public void controlBar(ActionEvent event){
         Object button=event.getSource();
         if(button.equals(gStart) && isStarted==false) {
+            gCardiacStatus.setText(STATUS+"working");
             cardiac = new modelo.Cardiac();
             timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
             cards =new LinkedList<>();
@@ -83,21 +85,22 @@ public class Cardiac {
             timeline.play();
         }
         else if( (button.equals(gStop) || button.equals(gRestart) ) && isStarted==true){
+            gCardiacStatus.setText(STATUS+"off");
             setCardiacParameters();//If you want to save the state of the virtual machine in the future with a better in the code
             clearContentG();
             clearMemoryParametersG();
             cards.clear();
             isStarted=false;
             cardiac = new modelo.Cardiac();
-            if(button.equals(gStart)){
+            if(button.equals(gRestart)){
                 gStart.fire(); //Throws the event to start a new Cardiac machine
             }
         }
         else if( button.equals(gPause) ){
-            if(isPause=false){
-                timeline.pause();
+            if(isPause==false){
                 isPause=true;
                 gPause.setText("Play");
+                timeline.pause();
             }
             else{
                 timeline.play();
@@ -117,6 +120,7 @@ public class Cardiac {
             gTerminalNote.setText("Thanks!");
             Memory[operand]= gTerminalText.getText();
             gTerminalText.clear();
+            pc++;
             updateMemoryParametersG();
             timeline.play();
         }
@@ -129,7 +133,7 @@ public class Cardiac {
             if(isInput==true){
                 takeCardFromQueue();
                 isInput=false;
-                updateCardsInSystem();
+                pc++;
                 timeline.play();
             }
 
@@ -246,6 +250,12 @@ public class Cardiac {
 
 
         gCycleNumber.setText(Integer.toString(cycleNumber));
+        if(pc>0) {
+            System.out.println("pc es mayor a 0");
+            itemsDirection[pc - 1].getStyleClass().clear();
+            itemsDirection[pc - 1].getStyleClass().add("itemDirection");
+        }
+        itemsDirection[pc].getStyleClass().add("itemDirectionSelected");
     }
 
     public void clearContentG(){
@@ -255,8 +265,8 @@ public class Cardiac {
         gPc.setText(Integer.toString(0));
         gAcc.setText(Integer.toString(0));
 
-
-        gCycleNumber.setText(Integer.toString(0));
+        cycleNumber=0;
+        gCycleNumber.setText(Integer.toString(cycleNumber));
     }
 
     public void updateCardsInSystem(){
@@ -277,6 +287,7 @@ public class Cardiac {
     public void takeCardFromQueue(){
         Memory[operand]=cards.remove();
         updateMemoryParametersG();
+        updateCardsInSystem();
         wait(TIME);//Time in miliseconds
     }
 
@@ -298,10 +309,10 @@ public class Cardiac {
             operand = 0;
             updateContentG();
             timeline.stop();
+            gCardiacStatus.setText(STATUS+"dead, please restart");
         }
 
         updateContentG();
-        String prueba;
         switch (opCode){
             case 0:
                 gTerminalNote.setText("Ingrese el contenido para la celda "+operand);
@@ -310,6 +321,8 @@ public class Cardiac {
                 }
                 else {
                     isInput = true;
+                    jump=true;//We simulate a jump to not add a cycle to the pc her, we'll added it in the ActionEvent Button
+                    //Only when isInput==true we will add one to the pc
                     timeline.pause();
                 }
                 break;
