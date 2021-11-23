@@ -34,7 +34,7 @@ public class Cardiac {
     private String output;
 
     @FXML
-    private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gOutput,gCycleNumber,gCardiacStatus;
+    private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gOutput,gCycleNumber,gCardiacStatus,gOperation;
 
     @FXML
     private TextField gTerminalText;
@@ -120,7 +120,7 @@ public class Cardiac {
             gTerminalNote.setText("Thanks!");
             Memory[operand]= gTerminalText.getText();
             gTerminalText.clear();
-            pc++;
+            changePC(pc,pc+1);
             updateMemoryParametersG();
             timeline.play();
         }
@@ -250,12 +250,7 @@ public class Cardiac {
 
 
         gCycleNumber.setText(Integer.toString(cycleNumber));
-        if(pc>0) {
-            System.out.println("pc es mayor a 0");
-            itemsDirection[pc - 1].getStyleClass().clear();
-            itemsDirection[pc - 1].getStyleClass().add("itemDirection");
-        }
-        itemsDirection[pc].getStyleClass().add("itemDirectionSelected");
+
     }
 
     public void clearContentG(){
@@ -267,6 +262,43 @@ public class Cardiac {
 
         cycleNumber=0;
         gCycleNumber.setText(Integer.toString(cycleNumber));
+    }
+
+    public void updateOperationText(){
+        switch(operand){
+            case 0:
+                gOperation.setText("Input");
+                break;
+            case 1:
+                gOperation.setText("Load");
+                break;
+            case 2:
+                gOperation.setText("Add");
+                break;
+            case 3:
+                gOperation.setText("Branch if less than zero");
+                break;
+            case 4:
+                gOperation.setText("Shift");
+                break;
+            case 5:
+                gOperation.setText("Output");
+                break;
+            case 6:
+                gOperation.setText("Store");
+                break;
+            case 7:
+                gOperation.setText("Subtraction");
+                break;
+            case 8:
+                gOperation.setText("Jump");
+                break;
+            case 9:
+                gOperation.setText("Halt");
+                break;
+
+
+        }
     }
 
     public void updateCardsInSystem(){
@@ -291,6 +323,17 @@ public class Cardiac {
         wait(TIME);//Time in miliseconds
     }
 
+    public void changePC(int actualPC, int nextPC){
+        pc=nextPC;
+        if(actualPC>=0) {
+            System.out.println("pc es mayor a 0");
+            itemsDirection[actualPC].getStyleClass().clear();
+            itemsDirection[actualPC].getStyleClass().add("itemDirection");
+        }
+        itemsDirection[nextPC].getStyleClass().add("itemDirectionSelected");
+
+
+    }
     public void cycleSystem() {
         cycleNumber++;
 
@@ -334,7 +377,7 @@ public class Cardiac {
                 break;
             case 3:
                 if (acc < 0) {
-                    pc = operand;
+                    changePC(pc,operand);
                 }
                 break;
             case 4:
@@ -354,17 +397,17 @@ public class Cardiac {
                 acc -= Integer.parseInt(Memory[operand]);
                 break;
             case 8:
-                pc = operand;
+                changePC(pc,operand);
                 jump=true;
                 break;
             case 9:
-                pc = operand;
+                changePC(pc,operand);
                 jump=true;
                 System.out.println("Termino de programa");
                 break;
 
         }
-            if(jump==false) { pc += 1; }
+            if(jump==false) { changePC(pc,pc+1); }
             updateMemoryParametersG();
         }
 
