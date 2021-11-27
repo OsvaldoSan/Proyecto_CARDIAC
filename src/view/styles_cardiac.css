@@ -7,6 +7,15 @@
     -fx-background-color: linear-gradient(#cf3030 5%, #fababa);
 }
 
+.imageFondo{
+    -fx-background-image: url("../images/galaxia.jpg");
+        -fx-background-size: 900, 500;
+        -fx-background-repeat: no-repeat;
+        -fx-border-color: #2e8b57;
+        -fx-border-width: 2px;
+        -fx-padding: 10;
+        -fx-spacing: 8;
+}
 .registro{
     -fx-background-color: linear-gradient(#bdb9b9 30%, #dbd6d7 95%);
 }
@@ -48,6 +57,7 @@
     -fx-background-radius: 5.0;
     -fx-background-insets: 0.0 5.0 0.0 5.0;
     -fx-padding: 10;
+    -fx-vgrow-policy:always;
     -fx-hgap: 20;
     -fx-vgap: 20;
 }

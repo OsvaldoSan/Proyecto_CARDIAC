@@ -247,6 +247,7 @@ public class Cardiac {
         gOperand.setText(Integer.toString(operand));
         gPc.setText(Integer.toString(pc));
         gAcc.setText(Integer.toString(acc));
+        updateOperationText();
 
 
         gCycleNumber.setText(Integer.toString(cycleNumber));
@@ -265,7 +266,7 @@ public class Cardiac {
     }
 
     public void updateOperationText(){
-        switch(operand){
+        switch(opCode){
             case 0:
                 gOperation.setText("Input");
                 break;

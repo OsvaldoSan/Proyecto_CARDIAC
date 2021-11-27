@@ -113,7 +113,7 @@
                                  </padding>
                                  <children>
                                     <Label alignment="CENTER" styleClass="texto_normal" text="Operation" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="gOperation" alignment="CENTER" styleClass="texto_especial" text="Branch if less than zero" wrapText="true" />
+                                    <Label fx:id="gOperation" alignment="CENTER" styleClass="texto_especial" text="Input" wrapText="true" />
                                  </children>
                                  <GridPane.margin>
                                     <Insets />
@@ -218,7 +218,7 @@
             </VBox>
          </left>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="200.0" prefWidth="100.0" styleClass="fondo" stylesheets="@styles_cardiac.css" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="471.0" styleClass="fondo" stylesheets="@styles_cardiac.css" VBox.vgrow="NEVER">
                      <children>
@@ -241,7 +241,11 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <ScrollPane fx:id="scrollMemory" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="imageFondo" stylesheets="@styles_cardiac.css" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ScrollPane fx:id="scrollMemory" prefHeight="420.0" prefWidth="421.0" styleClass="fondo" stylesheets="@styles_cardiac.css" />
+                     </children>
+                  </VBox>
                </children>
             </VBox>
          </center>
