@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8fc66f43-a514-4dec-8267-5e728ac757d9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/Cardiac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Cardiac.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/cardiac.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/cardiac.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/styles_cardiac.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/styles_cardiac.css" afterDir="false" />
     </list>
@@ -61,6 +60,9 @@
     </task>
     <servers />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="166" y="31" width="1026" height="734" key="#Project_Structure" timestamp="1637975267858">
       <screen x="0" y="31" width="1366" height="737" />
@@ -74,21 +76,21 @@
       <screen x="0" y="31" width="1366" height="737" />
     </state>
     <state x="466" y="158" width="714" height="481" key="FileChooserDialogImpl/0.31.1366.737@0.31.1366.737" timestamp="1637975250137" />
-    <state width="1324" height="176" key="GridCell.Tab.0.bottom" timestamp="1637977950470">
+    <state width="1324" height="176" key="GridCell.Tab.0.bottom" timestamp="1638236898650">
       <screen x="0" y="31" width="1366" height="737" />
     </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.bottom/0.31.1366.737@0.31.1366.737" timestamp="1637977950470" />
-    <state width="1324" height="176" key="GridCell.Tab.0.center" timestamp="1637977950469">
+    <state width="1324" height="176" key="GridCell.Tab.0.bottom/0.31.1366.737@0.31.1366.737" timestamp="1638236898650" />
+    <state width="1324" height="176" key="GridCell.Tab.0.center" timestamp="1638236898650">
       <screen x="0" y="31" width="1366" height="737" />
     </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.center/0.31.1366.737@0.31.1366.737" timestamp="1637977950469" />
-    <state width="1324" height="176" key="GridCell.Tab.0.left" timestamp="1637977950468">
+    <state width="1324" height="176" key="GridCell.Tab.0.center/0.31.1366.737@0.31.1366.737" timestamp="1638236898650" />
+    <state width="1324" height="176" key="GridCell.Tab.0.left" timestamp="1638236898649">
       <screen x="0" y="31" width="1366" height="737" />
     </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.left/0.31.1366.737@0.31.1366.737" timestamp="1637977950468" />
-    <state width="1324" height="176" key="GridCell.Tab.0.right" timestamp="1637977950470">
+    <state width="1324" height="176" key="GridCell.Tab.0.left/0.31.1366.737@0.31.1366.737" timestamp="1638236898649" />
+    <state width="1324" height="176" key="GridCell.Tab.0.right" timestamp="1638236898650">
       <screen x="0" y="31" width="1366" height="737" />
     </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.right/0.31.1366.737@0.31.1366.737" timestamp="1637977950470" />
+    <state width="1324" height="176" key="GridCell.Tab.0.right/0.31.1366.737@0.31.1366.737" timestamp="1638236898650" />
   </component>
 </project>

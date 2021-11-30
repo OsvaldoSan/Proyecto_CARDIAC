@@ -82,6 +82,7 @@ public class Cardiac {
             updateCardsInSystem();
             getCardiacParameters();
             createGridMemory();
+            changePC(0,0);// This is to select the 0 cell
             timeline.play();
         }
         else if( (button.equals(gStop) || button.equals(gRestart) ) && isStarted==true){

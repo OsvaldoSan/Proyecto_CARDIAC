@@ -158,10 +158,10 @@
                            <content>
                               <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="277.0" prefWidth="137.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                                    <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="277.0" prefWidth="137.0" spacing="10.0" styleClass="miniFondo" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Label prefHeight="48.0" prefWidth="130.0" styleClass="texto_normal" text="Ingrese la tarjeta completa" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
-                                          <TextArea fx:id="gDeckText" prefHeight="92.0" prefWidth="120.0" promptText="001" VBox.vgrow="ALWAYS">
+                                          <Label prefHeight="77.0" prefWidth="116.0" styleClass="texto_normal" text="Ingrese la tarjeta" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
+                                          <TextArea fx:id="gDeckText" prefHeight="134.0" prefWidth="106.0" promptText="001" VBox.vgrow="ALWAYS">
                                              <VBox.margin>
                                                 <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
                                              </VBox.margin>
@@ -169,10 +169,10 @@
                                           <Button fx:id="gAddCard" mnemonicParsing="false" onAction="#execution" text="Add Card" VBox.vgrow="NEVER" />
                                        </children>
                                        <padding>
-                                          <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                                          <Insets bottom="5.0" left="5.0" right="5.0" />
                                        </padding>
                                     </VBox>
-                                    <VBox prefHeight="277.0" prefWidth="134.0" spacing="10.0" styleClass="fondo" HBox.hgrow="ALWAYS">
+                                    <VBox prefHeight="277.0" prefWidth="134.0" spacing="10.0" styleClass="miniFondo" HBox.hgrow="ALWAYS">
                                        <children>
                                           <Label prefHeight="56.0" prefWidth="127.0" styleClass="texto_normal" text="Tarjetas en el sistema" textAlignment="CENTER" wrapText="true" />
                                           <StackPane fx:id="stackCardsInSystem" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
@@ -243,7 +243,7 @@
                   </HBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" styleClass="imageFondo" stylesheets="@styles_cardiac.css" VBox.vgrow="ALWAYS">
                      <children>
-                        <ScrollPane fx:id="scrollMemory" prefHeight="420.0" prefWidth="421.0" styleClass="fondo" stylesheets="@styles_cardiac.css" />
+                        <ScrollPane fx:id="scrollMemory" prefHeight="432.0" prefWidth="447.0" styleClass="imageFondo" stylesheets="@styles_cardiac.css" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>

@@ -8,13 +8,20 @@
 }
 
 .imageFondo{
-    -fx-background-image: url("../images/galaxia.jpg");
-        -fx-background-size: 900, 500;
-        -fx-background-repeat: no-repeat;
-        -fx-border-color: #2e8b57;
+    -fx-background-image: url("../images/oleg-laptev-7jQh3EiS8Bs-unsplash.jpg");
+        -fx-border-color: #717275;
         -fx-border-width: 2px;
         -fx-padding: 10;
         -fx-spacing: 8;
+}
+
+.miniFondo{
+    -fx-background-image: url("../images/evie-s-uuCjYxJVf4o-unsplash.jpg");
+    -fx-background-size: contain;
+    -fx-border-color: #2e8b57;
+    -fx-border-width: 2px;
+    -fx-padding: 10;
+    -fx-spacing: 8;
 }
 .registro{
     -fx-background-color: linear-gradient(#bdb9b9 30%, #dbd6d7 95%);
@@ -60,6 +67,11 @@
     -fx-vgrow-policy:always;
     -fx-hgap: 20;
     -fx-vgap: 20;
+    -fx-background-image: url("../images/montanitas.png");
+    -fx-border-color: #4e5780;
+    -fx-border-width: 2px;
+    -fx-padding: 10;
+     -fx-spacing: 8;
 }
 
 .itemDirection{
