@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="8fc66f43-a514-4dec-8267-5e728ac757d9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/Cardiac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Cardiac.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/cardiac.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/cardiac.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/styles_cardiac.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/styles_cardiac.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +17,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/Main.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/controller/Bienvenida.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/view/bienvenida.fxml" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="21TpLqsmUlon4neXPot4uObxMY9" />
   <component name="ProjectViewState">
@@ -24,13 +35,22 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PATH_TO_FX$" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/view" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="/usr/lib/jvm/java-11-openjdk" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="main.Main" />
       <module name="CARDIAC" />
       <option name="VM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml" />
@@ -47,6 +67,7 @@
       </method>
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -63,34 +84,15 @@
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="166" y="31" width="1026" height="734" key="#Project_Structure" timestamp="1637975267858">
-      <screen x="0" y="31" width="1366" height="737" />
-    </state>
-    <state x="166" y="31" width="1026" height="734" key="#Project_Structure/0.31.1366.737@0.31.1366.737" timestamp="1637975267858" />
-    <state x="141" y="58" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1637975209773">
-      <screen x="0" y="31" width="1366" height="737" />
-    </state>
-    <state x="141" y="58" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.31.1366.737@0.31.1366.737" timestamp="1637975209773" />
-    <state x="466" y="158" width="714" height="481" key="FileChooserDialogImpl" timestamp="1637975250137">
-      <screen x="0" y="31" width="1366" height="737" />
-    </state>
-    <state x="466" y="158" width="714" height="481" key="FileChooserDialogImpl/0.31.1366.737@0.31.1366.737" timestamp="1637975250137" />
-    <state width="1324" height="176" key="GridCell.Tab.0.bottom" timestamp="1638236898650">
-      <screen x="0" y="31" width="1366" height="737" />
-    </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.bottom/0.31.1366.737@0.31.1366.737" timestamp="1638236898650" />
-    <state width="1324" height="176" key="GridCell.Tab.0.center" timestamp="1638236898650">
-      <screen x="0" y="31" width="1366" height="737" />
-    </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.center/0.31.1366.737@0.31.1366.737" timestamp="1638236898650" />
-    <state width="1324" height="176" key="GridCell.Tab.0.left" timestamp="1638236898649">
-      <screen x="0" y="31" width="1366" height="737" />
-    </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.left/0.31.1366.737@0.31.1366.737" timestamp="1638236898649" />
-    <state width="1324" height="176" key="GridCell.Tab.0.right" timestamp="1638236898650">
-      <screen x="0" y="31" width="1366" height="737" />
-    </state>
-    <state width="1324" height="176" key="GridCell.Tab.0.right/0.31.1366.737@0.31.1366.737" timestamp="1638236898650" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

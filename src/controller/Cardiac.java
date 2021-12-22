@@ -1,22 +1,26 @@
 package controller;
-
+//Hay un bucle infinito cuando se da load a un vacio
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.ResourceBundle;
 
-public class Cardiac {
+public class Cardiac implements Initializable {
     //The model and all of its parameters are not necessary, but it is clearer keep in mind what are the parts
     //that cardiac needs, although in the future could be good for save information.
     // Cardiac Variables
@@ -51,6 +55,8 @@ public class Cardiac {
     private ScrollPane scrollMemory;
     @FXML
     private StackPane stackCardsInSystem;
+    @FXML
+    private ChoiceBox<String> tempos;
 
     private StackPane itemsDirection[]= new StackPane[100],itemsContent[]=new StackPane[100];
     private Label contentMemory[]=new Label[100], directionMemory[]=new Label[100];
@@ -71,6 +77,8 @@ public class Cardiac {
     public void controlBar(ActionEvent event){
         Object button=event.getSource();
         if(button.equals(gStart) && isStarted==false) {
+
+            tempoControl();
             gCardiacStatus.setText(STATUS+"working");
             cardiac = new modelo.Cardiac();
             timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
@@ -110,6 +118,24 @@ public class Cardiac {
             }
 
 
+        }
+    }
+
+    public void tempoControl(){
+        if(tempos.getValue()==null){
+            gCardiacStatus.setText("Normal speed will be set");
+            TIME=1500;
+            return;
+        }
+        String tempo=tempos.getValue();
+        if(tempo=="Fast"){
+            TIME=200;
+        }
+        else if(tempo=="Normal"){
+            TIME=1500;
+        }
+        else{
+            TIME=2500;
         }
     }
 
@@ -336,6 +362,16 @@ public class Cardiac {
 
 
     }
+
+    public void emergencyStop(){
+        InReg = null;
+        opCode = 0;
+        operand = 0;
+        updateContentG();
+        timeline.stop();
+        gCardiacStatus.setText(STATUS+"dead, please restart");
+    }
+
     public void cycleSystem() {
         cycleNumber++;
 
@@ -349,12 +385,7 @@ public class Cardiac {
             operand = Integer.parseInt(Memory[pc].substring(1));
         }
         else{
-            InReg = null;
-            opCode = 0;
-            operand = 0;
-            updateContentG();
-            timeline.stop();
-            gCardiacStatus.setText(STATUS+"dead, please restart");
+            emergencyStop();
         }
 
         updateContentG();
@@ -372,7 +403,13 @@ public class Cardiac {
                 }
                 break;
             case 1:
+                if(Memory[operand]==null){
+                    System.out.println("Salida de emergencia");
+                    emergencyStop();
+                    break;
+                }
                 acc = Integer.parseInt(Memory[operand]);
+                System.out.println("Acumulator here =="+acc);
                 break;
             case 2:
                 acc += Integer.parseInt(Memory[operand]);
@@ -421,7 +458,12 @@ public class Cardiac {
         }
     }
 
-
+    @Override
+    public void initialize(URL url, ResourceBundle rb){
+        //FXCollections.observableArrayList("Fast","Normal","Slow");
+        tempos.getItems().addAll("Fast","Normal","Slow");
+        tempos.setValue("Normal");
+    }
 
 }
 
