@@ -1,6 +1,7 @@
 # My documents
 documentos/*
 out/production/ProyectoCardiac/Maquina_Virtual/Main.class
+
 # Java
 .mtj.tmp/
 *.class
@@ -37,4 +38,4 @@ out/*
 *.iml
 *.ipr
 *.iws
-
+#*.idea/ Es necesario guardar las configuraciones de IDEA
