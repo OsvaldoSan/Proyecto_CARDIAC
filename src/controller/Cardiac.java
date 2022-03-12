@@ -4,7 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,79 +27,81 @@ public class Cardiac implements Initializable {
 
     private String InReg;
     private String[] Memory;
-    private int opCode;
-    private int operand;
-    private int acc;
-    private int pc ;
-    private int sizeCell;
+    private int opCode,operand,acc,pc,sizeCell;
 
-    // Graphic variables
+    // GUI variables
     private String output;
-
     @FXML
     private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gOutput,gCycleNumber,gCardiacStatus,gOperation;
-
     @FXML
     private TextField gTerminalText;
-
     @FXML
     private TextArea gDeckText;
-
     @FXML
     private Button gTerminalRun, gAddCard,gStart,gPause,gStop,gRestart;
-
     @FXML
-    private GridPane gridMemory= new GridPane();
+    private GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell
     @FXML
-    private ScrollPane scrollMemory;
+    private ScrollPane scrollMemory;//Is the area whit scroll that has
     @FXML
-    private StackPane stackCardsInSystem;
+    private StackPane stackCardsInWaitingList;
     @FXML
     private ChoiceBox<String> tempos;
 
     private StackPane itemsDirection[]= new StackPane[100],itemsContent[]=new StackPane[100];
-    private Label contentMemory[]=new Label[100], directionMemory[]=new Label[100];
-    private ListView<String> cardsSystem;
+    private Label gContentMemory[]=new Label[100], gDirectionMemory[]=new Label[100];
+    private ListView<String> cardsWaitingList;
 
-
+    //Scheduling variables
     //ejecucion más lenta elejida por el usuario
     private int TIME=1400;
     private Timeline timeline ;
     //Control variables
     private Boolean isInput=false, isStarted=false, isPause=false;
     private int cycleNumber=0;
+
     private Queue<String> cards;
+
+    // Final Variables
     private final String STATUS="CARDIAC is ";
 
 
-    @FXML
+    @FXML // This bar controls when is started or stopped Cardiac
     public void controlBar(ActionEvent event){
         Object button=event.getSource();
         if(button.equals(gStart) && isStarted==false) {
-
             tempoControl();
             gCardiacStatus.setText(STATUS+"working");
+            // Active Cardiac
             cardiac = new modelo.Cardiac();
+            // timeline knows what has to do, but is still stopped
             timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
+            timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
+
             cards =new LinkedList<>();
 
             isStarted=true;
-            timeline.setCycleCount(Animation.INDEFINITE);
+            // Initialize the Cardiac Variables
             cardiac.start();
-            updateCardsInSystem();
+
+            updateCardsInWaitingList();
             getCardiacParameters();
             createGridMemory();
             changePC(0,0);// This is to select the 0 cell
+
+            // Start the cycle
             timeline.play();
         }
         else if( (button.equals(gStop) || button.equals(gRestart) ) && isStarted==true){
             gCardiacStatus.setText(STATUS+"off");
-            setCardiacParameters();//If you want to save the state of the virtual machine in the future with a better in the code
+            setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
+
+            // Use new function to stop CARDIAC
             clearContentG();
             clearMemoryParametersG();
             cards.clear();
+
             isStarted=false;
-            cardiac = new modelo.Cardiac();
             if(button.equals(gRestart)){
                 gStart.fire(); //Throws the event to start a new Cardiac machine
             }
@@ -121,7 +122,9 @@ public class Cardiac implements Initializable {
         }
     }
 
+    // Controls the speed of each cycle in the VM
     public void tempoControl(){
+        // Tempos is the list that have the different tempos, if there is nothing selected takes the default
         if(tempos.getValue()==null){
             gCardiacStatus.setText("Normal speed will be set");
             TIME=1500;
@@ -134,7 +137,7 @@ public class Cardiac implements Initializable {
         else if(tempo=="Normal"){
             TIME=1500;
         }
-        else{
+        else{ // The option for slow tempo
             TIME=2500;
         }
     }
@@ -148,7 +151,7 @@ public class Cardiac implements Initializable {
             Memory[operand]= gTerminalText.getText();
             gTerminalText.clear();
             changePC(pc,pc+1);
-            updateMemoryParametersG();
+            updateMemoryValuesG();
             timeline.play();
         }
 
@@ -156,7 +159,7 @@ public class Cardiac implements Initializable {
         if(button.equals(gAddCard)){
             cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
             gDeckText.clear();
-            updateCardsInSystem();
+            updateCardsInWaitingList();
             if(isInput==true){
                 takeCardFromQueue();
                 isInput=false;
@@ -172,100 +175,96 @@ public class Cardiac implements Initializable {
 
 
     public void createGridMemory(){
-        final int cells=100;
+        final int cells=100;//This will change
         int column=0,row=0;
-        scrollMemory.setContent(gridMemory);
-        scrollMemory.setPannable(true);
+
+        scrollMemory.setContent(gridMemory);// Put the grid into the scroll
+        scrollMemory.setPannable(true); // What is this?
 
         gridMemory.getStyleClass().add("grid");
 
         for(int i=0;i<100;++i){
 
-            if(row==10){//20 because there will be a column for the number and a column for the content
+            //There are two columns in each row, the direction and the content of the direction
+            // Example with six direction that needs 3 columns and two rows
+            // dir : cont dir:cont dir:cont
+            // dir: cont dir:cont dir:cont
+            if(row==10){
                 row=0;
                 column+=2;//because it must jump the content
             }
+            /*Add a new element to the grid
+            * gDirectionMemory have a list of labels with direction, and itemsDirection have a list of panes that will receive that label
+            * First we add the direction, the we add the content
+            * */
             //Create item
             itemsDirection[i]=new StackPane();
             itemsDirection[i].getStyleClass().add("itemDirection");
             //Add label direction
             if(i<10) {
-                directionMemory[i]= new Label("0"+Integer.toString(i)+" :");
+                gDirectionMemory[i]= new Label("0"+Integer.toString(i)+" :");
             }
             else {
-                directionMemory[i] = new Label(Integer.toString(i)+" :");
+                gDirectionMemory[i] = new Label(Integer.toString(i)+" :");
             }
 
-            directionMemory[i].getStyleClass().add("labelDirection");
-            itemsDirection[i].getChildren().add(directionMemory[i]);
+            gDirectionMemory[i].getStyleClass().add("labelDirection");
+            itemsDirection[i].getChildren().add(gDirectionMemory[i]);
 
-            addConstraintsGrid(itemsDirection[i],column++,row);
+            //Puts the restrictions to this pane in which column and row will be inside the grid memory
+            addConstraintsGrid(itemsDirection[i],column++,row);//We put column++ because below we use that value of the column to the content
             //Add item to grid
             gridMemory.getChildren().add(itemsDirection[i]);
 
-            //Create Label with content
-            contentMemory[i]= new Label("    ");
+            // Add the content pane to the grid
+            //Create Label with empty content
+            gContentMemory[i]= new Label("    ");
             if(Memory[i]!=null){
-                System.out.println("La memoria es "+Memory[i]);
-                contentMemory[i].setText(Memory[i] );
+                //System.out.println("La memoria es "+Memory[i]);
+                gContentMemory[i].setText(Memory[i] );
             }
-            contentMemory[i].getStyleClass().add("labelContent");
+            gContentMemory[i].getStyleClass().add("labelContent");
             //Create item and add label content
             itemsContent[i]=new StackPane();
             itemsContent[i].getStyleClass().add("itemContent");
-            itemsContent[i].getChildren().add(contentMemory[i]);
+            itemsContent[i].getChildren().add(gContentMemory[i]);
 
             //ADD Item
             addConstraintsGrid(itemsContent[i],column--,row++); //Is column-- because for every cycle
-            //we put in row 0 and column 0 a direction and in column 1 a content, but next will be roq 1 and column 0
+            //we put in row 0 and column 0 a direction and in column 1 a content, but next will be row 1 and column 0
             gridMemory.getChildren().add(itemsContent[i]);
 
         }
 
     }
 
+    // it's used to define constraints to the grid
     public void addConstraintsGrid(StackPane memory,int x,int y){
-        GridPane.setConstraints(memory,x,y);
-        GridPane.setVgrow(memory, Priority.ALWAYS);
+        GridPane.setConstraints(memory,x,y);// Define in which column and row will be put the Pane
+        GridPane.setVgrow(memory, Priority.ALWAYS);// Define when the Vertical side will grow along the window
         GridPane.setHgrow(memory, Priority.ALWAYS);
 
     }
 
-    public void getCardiacParameters(){
-        InReg=cardiac.getInReg();
-        Memory=cardiac.getMemory();
-        opCode = cardiac.getOpCode();
-        operand = cardiac.getOperand();
-        acc = cardiac.getAcc();
-        pc = cardiac.getPc();
-        sizeCell= cardiac.getSizeCell();
-    }
-    public void updateMemoryParametersG(){
+    // Values allocated in the Memory System are set in the graphic contentMemory
+    public void updateMemoryValuesG(){
         for(int i=0;i<100;++i){
-            if(Memory[i]!= contentMemory[i].getText()){
+            if(Memory[i]!= gContentMemory[i].getText()){
                 if(Memory[i]==null){
-                    contentMemory[i].setText("    ");
+                    gContentMemory[i].setText("    ");
                 }
                 else{
-                    contentMemory[i].setText(Memory[i]);
+                    gContentMemory[i].setText(Memory[i]);
                 }
             }
         }
     }
 
+    // put in contentMemory all empty
     public void clearMemoryParametersG(){
         for(int i=0;i<100;++i){
-                    contentMemory[i].setText("    ");
+                    gContentMemory[i].setText("    ");
         }
-    }
-
-    public void setCardiacParameters(){
-        cardiac.setInReg(InReg);
-        cardiac.setMemory(Memory);
-        cardiac.setOpCode(opCode);
-        cardiac.setOperand(operand);
-        cardiac.setAcc(acc);
-        cardiac.setPc(pc);
     }
 
     public void updateContentG(){
@@ -274,13 +273,13 @@ public class Cardiac implements Initializable {
         gOperand.setText(Integer.toString(operand));
         gPc.setText(Integer.toString(pc));
         gAcc.setText(Integer.toString(acc));
-        updateOperationText();
 
-
+        updateOperationTextG(); // Updates the value of gOperation
         gCycleNumber.setText(Integer.toString(cycleNumber));
 
     }
 
+    //Erase every content
     public void clearContentG(){
         gInReg.setText("  ");
         gOpCode.setText(Integer.toString(0));
@@ -292,7 +291,8 @@ public class Cardiac implements Initializable {
         gCycleNumber.setText(Integer.toString(cycleNumber));
     }
 
-    public void updateOperationText(){
+    //Updates the value of gOperation that shows to the user which operation is do it
+    public void updateOperationTextG(){
         switch(opCode){
             case 0:
                 gOperation.setText("Input");
@@ -324,45 +324,50 @@ public class Cardiac implements Initializable {
             case 9:
                 gOperation.setText("Halt");
                 break;
-
-
+            default:
+                gOperation.setText(" ");
+                break;
         }
     }
 
-    public void updateCardsInSystem(){
-
+    //Is for the options that charge a complete deck
+    public void updateCardsInWaitingList(){
+        //cards is the queue
+        //cardsSystem is the List view that shows which instructions are waiting his turn
+        //stackCardsInSystem is the pane that has the list in the GUI
         if(cards.isEmpty()==false){
-            cardsSystem=new ListView<String>(FXCollections.observableArrayList(cards.toString().substring(1).split("\\[|,[ ]|\\]") ));
+            cardsWaitingList =new ListView<String>(FXCollections.observableArrayList(cards.toString().substring(1).split("\\[|,[ ]|\\]") ));
         }
         else{
-            cardsSystem=new ListView<String>( FXCollections.observableArrayList("Nothing Here","Neither here") );
+            cardsWaitingList =new ListView<String>( FXCollections.observableArrayList("Nothing Here","Neither here") );
         }
 
         // If cardsSystem is not in Stack Pane we add it
-        if(cardsSystem.getParent() == null){
-            stackCardsInSystem.getChildren().add(cardsSystem);
+        if(cardsWaitingList.getParent() == null){
+            stackCardsInWaitingList.getChildren().add(cardsWaitingList);
         }
     }
 
+    // Take an instruction from the queue "cards" and put them into Memory
+    // This requires that operand will be updated since the place where this method is called
     public void takeCardFromQueue(){
         Memory[operand]=cards.remove();
-        updateMemoryParametersG();
-        updateCardsInSystem();
+        updateMemoryValuesG();
+        updateCardsInWaitingList();
         wait(TIME);//Time in miliseconds
     }
 
+    // Change the pc in the system and in the GUI, because it has to change the style of the item
     public void changePC(int actualPC, int nextPC){
         pc=nextPC;
         if(actualPC>=0) {
-            System.out.println("pc es mayor a 0");
             itemsDirection[actualPC].getStyleClass().clear();
             itemsDirection[actualPC].getStyleClass().add("itemDirection");
         }
         itemsDirection[nextPC].getStyleClass().add("itemDirectionSelected");
-
-
     }
 
+    // Stops the Virtual Machine
     public void emergencyStop(){
         InReg = null;
         opCode = 0;
@@ -381,6 +386,7 @@ public class Cardiac implements Initializable {
 
         if(Memory[pc]!=null){
             InReg = Memory[pc];
+            System.out.println("Memorya"+Memory[pc]);
             opCode = Integer.parseInt(Memory[pc].substring(0, 1));
             operand = Integer.parseInt(Memory[pc].substring(1));
         }
@@ -447,7 +453,7 @@ public class Cardiac implements Initializable {
 
         }
             if(jump==false) { changePC(pc,pc+1); }
-            updateMemoryParametersG();
+            updateMemoryValuesG();
         }
 
     public void wait(int n){
@@ -464,6 +470,29 @@ public class Cardiac implements Initializable {
         tempos.getItems().addAll("Fast","Normal","Slow");
         tempos.setValue("Normal");
     }
+
+    /*Connection with the model*/
+    // Get Cardiac parameters from the model
+    public void getCardiacParameters(){
+        InReg=cardiac.getInReg();
+        Memory=cardiac.getMemory();
+        opCode = cardiac.getOpCode();
+        operand = cardiac.getOperand();
+        acc = cardiac.getAcc();
+        pc = cardiac.getPc();
+        sizeCell= cardiac.getSizeCell();
+    }
+
+    // Set parameters to the model
+    public void setCardiacParameters(){
+        cardiac.setInReg(InReg);
+        cardiac.setMemory(Memory);
+        cardiac.setOpCode(opCode);
+        cardiac.setOperand(operand);
+        cardiac.setAcc(acc);
+        cardiac.setPc(pc);
+    }
+
 
 }
 

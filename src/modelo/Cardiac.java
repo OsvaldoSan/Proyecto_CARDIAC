@@ -2,34 +2,34 @@ package modelo;
 
 import java.util.Scanner;
 
-public class Cardiac {
-    private int cells;
-    private int sizeCell;
+public class  Cardiac {
+    private int cells;//Amount of cells of the memory
+    private int sizeCell; // Size in characters, depends on cells
     private String Memory[]; // Memory of CARDIAC Machine
-    private int pc = 0;//Program counter
-    private int acc=0;//Accumulator
-    private String InReg="";//Instruction register
-    private int opCode=0;
-    private int operand=0;
-    private Boolean Negative=false; //
+    private int pc;//Program counter
+    private int acc;//Accumulator
+    private String InReg;//Instruction register
+    private int opCode;
+    private int operand;
+    private Boolean Negative; //
 
 
-    public Cardiac() {
-        cells = 100;
-        sizeCell = 3;//i.e. 0,1,2
+    public Cardiac(int cells) {
+        this.cells = cells;
+        sizeCell = Integer.toString(cells).length();// Each cell needs 3 spaces when the total amount is 100
         Memory = new String[cells];
+        pc=0;
+        acc=0;
+        InReg=null;
+        opCode=0;
+        operand=0;
+        Negative=false;
+    }
+    public Cardiac(){
+        this(100); // The default option is cells=100
     }
 
     /*Setters*/
-
-    public void setCells(int cells) {
-        this.cells = cells;
-    }
-
-    public void setSizeCell(int sizeCell) {
-        this.sizeCell = sizeCell;
-    }
-
     public void setMemory(String[] memory) {
         Memory = memory;
     }
@@ -104,7 +104,7 @@ public class Cardiac {
         return card.split("-");
     }
 
-    // Put the card in the memory
+    // Put the entire card in the memory
     public void loadCard(String[] card, int position) {
         for (int i = 0; i < card.length; ++i) {
             Memory[position + i] = card[i];
@@ -126,7 +126,8 @@ public class Cardiac {
     }
 
     //Transform strings for architecture of sizeCells=3 to architecture of every sizeCell
-    public String[] transform(String[] card) { //Always receive instruction with 3 cells
+    // Receive a card with a list of instructions
+    public String[] transformSpace(String[] card) { //Always receive instruction with 3 cells
         if (sizeCell == 3) {
             return card;
         }
@@ -147,8 +148,8 @@ public class Cardiac {
         return newCard;
     }
 
-    // Most difficult operations for cardiac
-    public int input(int cell) {
+    // Most difficult basic operations for cardiac
+    public int input(int cell) { // Input since terminal
         System.out.print("Input the content to the cell number " + cell + " : ");
         Scanner enter = new Scanner(System.in);
         return enter.nextInt();
@@ -178,11 +179,11 @@ public class Cardiac {
     // Methods to make  CARDIAC works
     // It is the first instruction to make CARDIAC wake up
     public void start() {
-        Memory[0] = "001";
-        Memory[cells - 1] = "800"; // In the last cell
+        //We use the index 0 because we only pass one value
+        // We use this because if Cardiac needs another architecture this will change the architecture of the instructions
+        Memory[0] = transformSpace(new String[]{"001"})[0];
+        Memory[cells - 1] = transformSpace(new String[]{"800"})[0]; // In the last cell
     }
-
-
 
 }
 

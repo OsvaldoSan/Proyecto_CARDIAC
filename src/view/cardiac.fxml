@@ -181,8 +181,8 @@
                                     </VBox>
                                     <VBox prefHeight="277.0" prefWidth="134.0" spacing="10.0" styleClass="miniFondo" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Label prefHeight="56.0" prefWidth="127.0" styleClass="texto_normal" text="Tarjetas en el sistema" textAlignment="CENTER" wrapText="true" />
-                                          <StackPane fx:id="stackCardsInSystem" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                          <Label prefHeight="56.0" prefWidth="127.0" styleClass="texto_normal" text="Instrucciones en espera" textAlignment="CENTER" wrapText="true" />
+                                          <StackPane fx:id="stackCardsInWaitingList" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                                        </children>
                                        <HBox.margin>
                                           <Insets />
