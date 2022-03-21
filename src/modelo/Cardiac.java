@@ -155,22 +155,22 @@ public class  Cardiac {
         return enter.nextInt();
     }
 
-    public int shiftLeft(String p, int des) {
-        if (des >= p.length())
+    public int shiftLeft(String instruction, int displacement) {
+        if (displacement >= instruction.length())
             return 0;
-        String prefix = p.substring(des);// From des to end of instruction
+        String prefix = instruction.substring(displacement);// From displacement to end of instruction
         StringBuffer suffix = new StringBuffer(); // suffix is the new end of the string
-        for (int i = 0; i < des; ++i)
+        for (int i = 0; i < displacement; ++i)
             suffix.append('0');
         return Integer.parseInt(prefix.concat(suffix.toString()).replaceAll(",", ""));
     }
 
-    public int shiftRight(String p, int des) {
-        if (des >= p.length())
+    public int shiftRight(String instruction, int displacement) {
+        if (displacement >= instruction.length())
             return 0;
-        String suffix = p.substring(0, sizeCell - des);
+        String suffix = instruction.substring(0, sizeCell - displacement);
         StringBuilder prefix = new StringBuilder();
-        for (int i = 0; i < (sizeCell - des); ++i)
+        for (int i = 0; i < (sizeCell - displacement); ++i)
             prefix.append('0');
         return Integer.parseInt(prefix.toString().concat(suffix).replaceAll(",", ""));
     }
@@ -178,7 +178,7 @@ public class  Cardiac {
 
     // Methods to make  CARDIAC works
     // It is the first instruction to make CARDIAC wake up
-    public void start() {
+    public void startCVM() {
         //We use the index 0 because we only pass one value
         // We use this because if Cardiac needs another architecture this will change the architecture of the instructions
         Memory[0] = transformSpace(new String[]{"001"})[0];

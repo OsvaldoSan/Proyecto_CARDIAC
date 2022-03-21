@@ -23,7 +23,7 @@ public class Cardiac implements Initializable {
     //The model and all of its parameters are not necessary, but it is clearer keep in mind what are the parts
     //that cardiac needs, although in the future could be good for save information.
     // Cardiac Variables
-    modelo.Cardiac cardiac;
+    private modelo.Cardiac cardiac;
 
     private String InReg;
     private String[] Memory;
@@ -82,7 +82,7 @@ public class Cardiac implements Initializable {
 
             isStarted=true;
             // Initialize the Cardiac Variables
-            cardiac.start();
+            cardiac.startCVM();
 
             updateCardsInWaitingList();
             getCardiacParameters();
@@ -97,8 +97,7 @@ public class Cardiac implements Initializable {
             setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
 
             // Use new function to stop CARDIAC
-            clearContentG();
-            clearMemoryParametersG();
+            stopCVM();
             cards.clear();
 
             isStarted=false;
@@ -142,6 +141,8 @@ public class Cardiac implements Initializable {
         }
     }
 
+    // Event actioned by gTerminalRun or gAddCard
+    //The system always give priority to the Waiting List
     @FXML
     public void execution(ActionEvent event){
         Object button=event.getSource();
@@ -163,7 +164,8 @@ public class Cardiac implements Initializable {
             if(isInput==true){
                 takeCardFromQueue();
                 isInput=false;
-                pc++;
+                //pc++;
+                changePC(pc,pc+1);
                 timeline.play();
             }
 
@@ -261,11 +263,11 @@ public class Cardiac implements Initializable {
     }
 
     // put in contentMemory all empty
-    public void clearMemoryParametersG(){
+    /*public void clearMemoryParametersG(){
         for(int i=0;i<100;++i){
-                    gContentMemory[i].setText("    ");
+                    Memory[i].setText("    ");
         }
-    }
+    }*/
 
     public void updateContentG(){
         gInReg.setText(InReg);
@@ -280,7 +282,7 @@ public class Cardiac implements Initializable {
     }
 
     //Erase every content
-    public void clearContentG(){
+    /*public void clearContentG(){
         gInReg.setText("  ");
         gOpCode.setText(Integer.toString(0));
         gOperand.setText(Integer.toString(0));
@@ -289,7 +291,7 @@ public class Cardiac implements Initializable {
 
         cycleNumber=0;
         gCycleNumber.setText(Integer.toString(cycleNumber));
-    }
+    }*/
 
     //Updates the value of gOperation that shows to the user which operation is do it
     public void updateOperationTextG(){
@@ -336,6 +338,8 @@ public class Cardiac implements Initializable {
         //cardsSystem is the List view that shows which instructions are waiting his turn
         //stackCardsInSystem is the pane that has the list in the GUI
         if(cards.isEmpty()==false){
+            //toString returns an arrays of elements ex: ["Hola","Adios"], with substring(1) we take the first bracket and with the split regex
+            // we have the words individual in a list of each word
             cardsWaitingList =new ListView<String>(FXCollections.observableArrayList(cards.toString().substring(1).split("\\[|,[ ]|\\]") ));
         }
         else{
@@ -366,14 +370,24 @@ public class Cardiac implements Initializable {
         }
         itemsDirection[nextPC].getStyleClass().add("itemDirectionSelected");
     }
-
-    // Stops the Virtual Machine
-    public void emergencyStop(){
+    public void stopCVM(){
         InReg = null;
         opCode = 0;
         operand = 0;
+        cycleNumber=0;
+        acc=0;
+        pc=0;
+        Arrays.fill(Memory,null);//This clean the Memory of the machine
         updateContentG();
+        updateMemoryValuesG();
+        //clearMemoryParametersG();
+
         timeline.stop();
+    }
+
+    // Stops the Virtual Machine
+    public void emergencyStop(){
+        stopCVM();
         gCardiacStatus.setText(STATUS+"dead, please restart");
     }
 
@@ -386,7 +400,7 @@ public class Cardiac implements Initializable {
 
         if(Memory[pc]!=null){
             InReg = Memory[pc];
-            System.out.println("Memorya"+Memory[pc]);
+           // System.out.println("Memoria en pc != null "+Memory[pc]);
             opCode = Integer.parseInt(Memory[pc].substring(0, 1));
             operand = Integer.parseInt(Memory[pc].substring(1));
         }
@@ -395,6 +409,11 @@ public class Cardiac implements Initializable {
         }
 
         updateContentG();
+
+        if( (Memory[operand]==null) && ( (opCode==1) || (opCode==2) || (opCode==7) ) ){ //Security 2,1,7
+            emergencyStop();
+        }
+
         switch (opCode){
             case 0:
                 gTerminalNote.setText("Ingrese el contenido para la celda "+operand);
@@ -403,21 +422,16 @@ public class Cardiac implements Initializable {
                 }
                 else {
                     isInput = true;
-                    jump=true;//We simulate a jump to not add a cycle to the pc her, we'll added it in the ActionEvent Button
+                    jump=true;//We simulate a jump to not add a cycle to the pc here, we'll added it in the ActionEvent Button
                     //Only when isInput==true we will add one to the pc
                     timeline.pause();
                 }
                 break;
             case 1:
-                if(Memory[operand]==null){
-                    System.out.println("Salida de emergencia");
-                    emergencyStop();
-                    break;
-                }
                 acc = Integer.parseInt(Memory[operand]);
-                System.out.println("Acumulator here =="+acc);
                 break;
             case 2:
+
                 acc += Integer.parseInt(Memory[operand]);
                 break;
             case 3:

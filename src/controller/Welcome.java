@@ -8,40 +8,41 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class Bienvenida {
+public class Welcome {
 
     @FXML
     private Button cardiac;
 
     @FXML
-    private void goVirtualMachine(ActionEvent event){
-        Object recurso=event.getSource();
-        if(recurso.equals(cardiac)){
+    private void goVirtualMachine(ActionEvent vmButton){
+        Object resource=vmButton.getSource();
+        if(resource.equals(cardiac)){
             System.out.println("Reconocio a cardiac");
-            loadStage("../view/cardiac.fxml",event);
+            loadStage("../view/cardiac.fxml",vmButton);
         }
     }
 
-    private void loadStage(String url, ActionEvent event){
+    private void loadStage(String fxmlPage, ActionEvent selectedVM){
         try{
-            /*Object eventSource = event.getSource();
+            /*Object eventSource = selectedVM.getSource();
             Node sourceAsNode = (Node) eventSource ;
             Scene oldScene = sourceAsNode.getScene();
             Window window = oldScene.getWindow();
             //Stage stage = (Stage) window ;
             //stage.hide();*/
-            Stage stage=(Stage)((Node)event.getSource()).getScene().getWindow();
+            //To get the window and execute in the same window
+            Stage stage=(Stage)((Node)selectedVM.getSource()).getScene().getWindow();
 
 
-            Parent nueva = FXMLLoader.load(getClass().getResource(url));
-            Scene scene = new Scene(nueva);
+            Parent newPage = FXMLLoader.load(getClass().getResource(fxmlPage));
+            Scene scene = new Scene(newPage);
             scene.getStylesheets().add(getClass().getResource("../view/styles_cardiac.css").toExternalForm());
 
             stage.setScene(scene);
+            //Generalize with valie of button
             stage.setTitle("CARDIAC");
             stage.show();
 

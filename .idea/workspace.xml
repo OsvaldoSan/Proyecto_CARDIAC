@@ -6,9 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="8fc66f43-a514-4dec-8267-5e728ac757d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/Bienvenida.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Welcome.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/Cardiac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Cardiac.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modelo/Cardiac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/modelo/Cardiac.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/cardiac.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/cardiac.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/bienvenida.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/welcome.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +30,8 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/Main.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/controller/Bienvenida.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/view/bienvenida.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/controller/Welcome.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/view/welcome.fxml" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

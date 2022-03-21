@@ -38,4 +38,5 @@ out/*
 *.iml
 *.ipr
 *.iws
+.idea/uiDesigner.xml
 #*.idea/ Es necesario guardar las configuraciones de IDEA
