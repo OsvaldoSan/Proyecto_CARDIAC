@@ -53,7 +53,6 @@ public class Cardiac implements Initializable {
     private ListView<String> cardsWaitingList;
 
     //Scheduling variables
-    //ejecucion más lenta elejida por el usuario
     private int TIME=1400;
     private Timeline timeline ;
     //Control variables
@@ -66,7 +65,9 @@ public class Cardiac implements Initializable {
     private final String STATUS="CARDIAC is ";
 
 
-    @FXML // This bar controls when is started or stopped Cardiac
+    /* ----------------- Methods that are the main connection with the GUI ----------------------------------*/
+
+    @FXML // This bar controls when is started,paused or stopped Cardiac
     public void controlBar(ActionEvent event){
         Object button=event.getSource();
         if(button.equals(gStart) && isStarted==false) {
@@ -121,27 +122,7 @@ public class Cardiac implements Initializable {
         }
     }
 
-    // Controls the speed of each cycle in the VM
-    public void tempoControl(){
-        // Tempos is the list that have the different tempos, if there is nothing selected takes the default
-        if(tempos.getValue()==null){
-            gCardiacStatus.setText("Normal speed will be set");
-            TIME=1500;
-            return;
-        }
-        String tempo=tempos.getValue();
-        if(tempo=="Fast"){
-            TIME=200;
-        }
-        else if(tempo=="Normal"){
-            TIME=1500;
-        }
-        else{ // The option for slow tempo
-            TIME=2500;
-        }
-    }
-
-    // Event actioned by gTerminalRun or gAddCard
+    // This event actioned by gTerminalRun or gAddCard, is the method that throws events to the action
     //The system always give priority to the Waiting List
     @FXML
     public void execution(ActionEvent event){
@@ -170,12 +151,10 @@ public class Cardiac implements Initializable {
             }
 
         }
-
-
-
     }
 
-
+    /* -------------- Creation of GUI -------------------------------*/
+    /*Create the grid Memory*/
     public void createGridMemory(){
         final int cells=100;//This will change
         int column=0,row=0;
@@ -248,6 +227,8 @@ public class Cardiac implements Initializable {
 
     }
 
+    /* ------------------------ Update Values of the GUI ------------------------- */
+
     // Values allocated in the Memory System are set in the graphic contentMemory
     public void updateMemoryValuesG(){
         for(int i=0;i<100;++i){
@@ -262,13 +243,6 @@ public class Cardiac implements Initializable {
         }
     }
 
-    // put in contentMemory all empty
-    /*public void clearMemoryParametersG(){
-        for(int i=0;i<100;++i){
-                    Memory[i].setText("    ");
-        }
-    }*/
-
     public void updateContentG(){
         gInReg.setText(InReg);
         gOpCode.setText(Integer.toString(opCode));
@@ -280,18 +254,6 @@ public class Cardiac implements Initializable {
         gCycleNumber.setText(Integer.toString(cycleNumber));
 
     }
-
-    //Erase every content
-    /*public void clearContentG(){
-        gInReg.setText("  ");
-        gOpCode.setText(Integer.toString(0));
-        gOperand.setText(Integer.toString(0));
-        gPc.setText(Integer.toString(0));
-        gAcc.setText(Integer.toString(0));
-
-        cycleNumber=0;
-        gCycleNumber.setText(Integer.toString(cycleNumber));
-    }*/
 
     //Updates the value of gOperation that shows to the user which operation is do it
     public void updateOperationTextG(){
@@ -332,6 +294,19 @@ public class Cardiac implements Initializable {
         }
     }
 
+    /* ------------------------------- Objects to control the execution of the VM -----------------------------------*/
+    // Change the pc in the system and in the GUI, because it has to change the style of the item
+    public void changePC(int actualPC, int nextPC){
+        pc=nextPC;
+        if(actualPC>=0) {
+            itemsDirection[actualPC].getStyleClass().clear();
+            itemsDirection[actualPC].getStyleClass().add("itemDirection");
+        }
+        itemsDirection[nextPC].getStyleClass().add("itemDirectionSelected");
+    }
+
+    /*Control the Waiting List and the  stop*/
+
     //Is for the options that charge a complete deck
     public void updateCardsInWaitingList(){
         //cards is the queue
@@ -361,15 +336,7 @@ public class Cardiac implements Initializable {
         wait(TIME);//Time in miliseconds
     }
 
-    // Change the pc in the system and in the GUI, because it has to change the style of the item
-    public void changePC(int actualPC, int nextPC){
-        pc=nextPC;
-        if(actualPC>=0) {
-            itemsDirection[actualPC].getStyleClass().clear();
-            itemsDirection[actualPC].getStyleClass().add("itemDirection");
-        }
-        itemsDirection[nextPC].getStyleClass().add("itemDirectionSelected");
-    }
+    //Transform every variable to null, including the memory and update the values of the GUI
     public void stopCVM(){
         InReg = null;
         opCode = 0;
@@ -385,12 +352,36 @@ public class Cardiac implements Initializable {
         timeline.stop();
     }
 
-    // Stops the Virtual Machine
+    // Stops the Virtual Machine by itself
     public void emergencyStop(){
         stopCVM();
         gCardiacStatus.setText(STATUS+"dead, please restart");
     }
 
+    // Controls the speed of each cycle in the VM
+    public void tempoControl(){
+        // Tempos is the list that have the different tempos, if there is nothing selected takes the default
+        if(tempos.getValue()==null){
+            gCardiacStatus.setText("Normal speed will be set");
+            TIME=1500;
+            return;
+        }
+        String tempo=tempos.getValue();
+        if(tempo=="Fast"){
+            TIME=200;
+        }
+        else if(tempo=="Normal"){
+            TIME=1500;
+        }
+        else{ // The option for slow tempo
+            TIME=2500;
+        }
+    }
+
+
+
+    /* ------------------- Main Method that lead every change -----------------------------*/
+    /*Control the cycle and times*/
     public void cycleSystem() {
         cycleNumber++;
 
@@ -405,21 +396,21 @@ public class Cardiac implements Initializable {
             operand = Integer.parseInt(Memory[pc].substring(1));
         }
         else{
+            System.out.println("Memory of PC is null, pc=="+pc);
             emergencyStop();
         }
 
         updateContentG();
 
         if( (Memory[operand]==null) && ( (opCode==1) || (opCode==2) || (opCode==7) ) ){ //Security 2,1,7
+            System.out.println("Memory of operand is null and opcode=="+opCode);
             emergencyStop();
         }
 
         switch (opCode){
             case 0:
                 gTerminalNote.setText("Ingrese el contenido para la celda "+operand);
-                if(cards.isEmpty() == false){
-                    takeCardFromQueue();
-                }
+                if(!cards.isEmpty()) takeCardFromQueue();
                 else {
                     isInput = true;
                     jump=true;//We simulate a jump to not add a cycle to the pc here, we'll added it in the ActionEvent Button
@@ -428,10 +419,11 @@ public class Cardiac implements Initializable {
                 }
                 break;
             case 1:
+                System.out.println(" Case 1  Operand :"+operand+"  Memoria:" +Memory[operand]);
                 acc = Integer.parseInt(Memory[operand]);
                 break;
             case 2:
-
+                System.out.println(" Case 2  Operand :"+operand+"  Memoria:" +Memory[operand]);
                 acc += Integer.parseInt(Memory[operand]);
                 break;
             case 3:
@@ -478,6 +470,7 @@ public class Cardiac implements Initializable {
         }
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb){
         //FXCollections.observableArrayList("Fast","Normal","Slow");
@@ -485,7 +478,10 @@ public class Cardiac implements Initializable {
         tempos.setValue("Normal");
     }
 
-    /*Connection with the model*/
+
+
+
+    /* ------------------------------- Connection with the model -----------------------------------*/
     // Get Cardiac parameters from the model
     public void getCardiacParameters(){
         InReg=cardiac.getInReg();

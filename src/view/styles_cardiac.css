@@ -1,11 +1,17 @@
+
+/* ------------------ Fondos ---------------------------- */
+/*Fondo Gris Principal, usado en : Tab Pane*/
 .fondo{
     -fx-background-color: linear-gradient(#d4cece, #f3e9e9);
 }
 
+/*El fondo que usa la parte de la salida al usuario*/
 .fondoOutput{
     -fx-background-color: linear-gradient(#cf3030 5%, #fababa);
 }
 
+
+/*Imagen de fondo para el Scroll, actualmente gris laminado*/
 .imageFondo{
     -fx-background-image: url("../images/oleg-laptev-7jQh3EiS8Bs-unsplash.jpg");
         -fx-border-color: #717275;
@@ -14,6 +20,7 @@
         -fx-spacing: 8;
 }
 
+/*Fondo pequeño para la VBox de la Waiting List, actualmente flor grisasea*/
 .miniFondo{
     -fx-background-image: url("../images/evie-s-uuCjYxJVf4o-unsplash.jpg");
     -fx-background-size: contain;
@@ -22,15 +29,22 @@
     -fx-padding: 10;
     -fx-spacing: 8;
 }
+
+
+/*Fondo principal del Vbox que soporta la parte Izquierda de CARDIAC*/
 .registro{
     -fx-background-color: linear-gradient(#bdb9b9 30%, #dbd6d7 95%);
 }
 
+/* ------------------------ Estilos generales de texto-------------------- */
+
+/*Texto negro usado en las instrucciones, es el común*/
 .texto_normal{
     -fx-font-family: "Lato Black";
     -fx-font-size: 16px;
 }
 
+/* Es el texto blanco que indica que operación se va a ejecutar*/
 .texto_especial{
     -fx-font-family: "Lato Black";
     -fx-font-size: 15px;
@@ -38,6 +52,7 @@
     -fx-effect: dropshadow( gaussian , #041c8a , 1,2,1,1 );
 }
 
+/*El diseño de los titulos*/
 .title{
     -fx-font-size: 22px;
     -fx-font-weight: bold;
@@ -45,6 +60,7 @@
     -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
 }
 
+/*----------------------------- Estilo de los botones ----------------  */
 .button {
     -fx-text-fill: white;
     -fx-font-family: "Arial Narrow";
@@ -53,11 +69,15 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
+/*Boton cuando se pone el cursor arriba*/
 .button:hover{
     -fx-background-color: linear-gradient(#8facf7,#3e5ca9 60%);
     -fx-cursor: hand;
 }
 
+
+/*------------------------------ Diseño del Grid de la memoria principal --------------------------------*/
+/* + Añadido desde Java: Se añade en el objeto grid*/
 .grid {
     -fx-background-color: white;
     -fx-background-radius: 5.0;
@@ -73,6 +93,7 @@
      -fx-spacing: 8;
 }
 
+/* + Añadido desde Java: Se añade en la lista de objetos de Stack Pane llamado itemsDirection */
 .itemDirection{
     -fx-background-color:#bef7f5;
      -fx-background-radius: 5.0;
@@ -82,6 +103,7 @@
      -fx-vgap: 8;
 }
 
+/* + Añadido desde Java: Se añade en el metodo de Change PC para cambiar el tono del item seleccionado sobre el Stack Pane*/
 .itemDirectionSelected{
 -fx-background-color:#1570ed;
      -fx-background-radius: 5.0;
@@ -89,15 +111,18 @@
      -fx-padding: 10;
      -fx-hgap: 8;
      -fx-vgap: 8;
-
 }
 
+
+/* + Añadido desde Java: En la lista de etiquetas para el grid, gDirectionMemory en el metodo de la creación de la memoria*/
 .labelDirection{
     -fx-font-size: 14px;
    -fx-font-family: "Arial Black";
    -fx-fill: #818181;
    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
 }
+
+/* + Añadido desde Java: En la lista de objetos Stack Pane para los itemContent en el metodo de la creación de memoria*/
 .itemContent{
     -fx-background-color:#e3fcfc;
     -fx-background-radius: 5.0;
@@ -106,10 +131,13 @@
     -fx-hgap: 8;
     -fx-vgap: 8;
 }
+/* + Añadido desde Java:En la lista de etiquetas gContentMemory*/
 .labelContent{
     -fx-text-fill:black;
 }
 
+/*---------------------- Elementos especiales con su propio diseño --------------------------------------*/
+/*Es el estilo para el contador de ciclos*/
 .cycleCounter{
     -fx-background-color: linear-gradient(#6cede9,#bef7f5);
     -fx-background-radius: 5.0;
