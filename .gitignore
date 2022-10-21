@@ -39,4 +39,4 @@ out/*
 *.ipr
 *.iws
 .idea/uiDesigner.xml
-#*.idea/ Es necesario guardar las configuraciones de IDEA
+#*.idea/ Es necesario guardar las configuraciones de IDEA, sino podemos tener problemas
