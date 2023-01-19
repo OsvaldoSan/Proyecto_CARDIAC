@@ -1,5 +1,6 @@
 package controller;
-//Hay un bucle infinito cuando se da load a un vacio
+
+// There is an infinite cycle when there is a "load" form an empty element
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -30,8 +31,9 @@ public class Cardiac implements Initializable {
     private int opCode,operand,acc,pc,sizeCell;
 
     // GUI variables
+    // Internal variable of output that gOutput uses
     private String output;
-    @FXML
+    @FXML // This label must use before any new variable that exists in the FXML
     private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gOutput,gCycleNumber,gCardiacStatus,gOperation;
     @FXML
     private TextField gTerminalText;
@@ -40,14 +42,16 @@ public class Cardiac implements Initializable {
     @FXML
     private Button gTerminalRun, gAddCard,gStart,gPause,gStop,gRestart;
     @FXML
-    private GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell
+    private GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell, there is not intialize in Scene Builder, because the length will be decided with the sizeCell
+    //it could be without label
     @FXML
-    private ScrollPane scrollMemory;//Is the area whit scroll that has
+    private ScrollPane scrollMemory;//Is the area whit scroll that has the grid
     @FXML
     private StackPane stackCardsInWaitingList;
     @FXML
     private ChoiceBox<String> tempos;
 
+    // The size can change in function of the size of the cells
     private StackPane itemsDirection[]= new StackPane[100],itemsContent[]=new StackPane[100];
     private Label gContentMemory[]=new Label[100], gDirectionMemory[]=new Label[100];
     private ListView<String> cardsWaitingList;
@@ -79,6 +83,7 @@ public class Cardiac implements Initializable {
             timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
             timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
 
+            // The list of cards is set
             cards =new LinkedList<>();
 
             isStarted=true;
@@ -130,7 +135,7 @@ public class Cardiac implements Initializable {
         if(button.equals(gTerminalRun) && isInput==true){
             isInput=false;
             gTerminalNote.setText("Thanks!");
-            Memory[operand]= gTerminalText.getText();
+            Memory[operand]= cardiac.toStr(gTerminalText.getText());
             gTerminalText.clear();
             changePC(pc,pc+1);
             updateMemoryValuesG();
@@ -140,6 +145,7 @@ public class Cardiac implements Initializable {
         //Add Card
         if(button.equals(gAddCard)){
             cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
+            //Erase all if there is not an input time
             gDeckText.clear();
             updateCardsInWaitingList();
             if(isInput==true){
@@ -162,6 +168,7 @@ public class Cardiac implements Initializable {
         scrollMemory.setContent(gridMemory);// Put the grid into the scroll
         scrollMemory.setPannable(true); // What is this?
 
+        // It searches in the style sheet defined for this module
         gridMemory.getStyleClass().add("grid");
 
         for(int i=0;i<100;++i){
@@ -230,6 +237,7 @@ public class Cardiac implements Initializable {
     /* ------------------------ Update Values of the GUI ------------------------- */
 
     // Values allocated in the Memory System are set in the graphic contentMemory
+    // It is less efficient
     public void updateMemoryValuesG(){
         for(int i=0;i<100;++i){
             if(Memory[i]!= gContentMemory[i].getText()){
@@ -308,10 +316,11 @@ public class Cardiac implements Initializable {
     /*Control the Waiting List and the  stop*/
 
     //Is for the options that charge a complete deck
+    // It is not optimized, because it use all the queue each time that a new element is get out of the queue
     public void updateCardsInWaitingList(){
         //cards is the queue
-        //cardsSystem is the List view that shows which instructions are waiting his turn
-        //stackCardsInSystem is the pane that has the list in the GUI
+        //cardsWaitingList is the List view that shows which instructions are waiting his turn
+        //stackCardsInWaitingList is the pane that has the list in the GUI
         if(cards.isEmpty()==false){
             //toString returns an arrays of elements ex: ["Hola","Adios"], with substring(1) we take the first bracket and with the split regex
             // we have the words individual in a list of each word
@@ -330,7 +339,7 @@ public class Cardiac implements Initializable {
     // Take an instruction from the queue "cards" and put them into Memory
     // This requires that operand will be updated since the place where this method is called
     public void takeCardFromQueue(){
-        Memory[operand]=cards.remove();
+        Memory[operand]= cardiac.toStr(cards.remove());
         updateMemoryValuesG();
         updateCardsInWaitingList();
         wait(TIME);//Time in miliseconds
@@ -409,21 +418,21 @@ public class Cardiac implements Initializable {
 
         switch (opCode){
             case 0:
-                gTerminalNote.setText("Ingrese el contenido para la celda "+operand);
-                if(!cards.isEmpty()) takeCardFromQueue();
+                gTerminalNote.setText("Waiting for input to the cell "+operand);
+                if(!cards.isEmpty()) takeCardFromQueue();//Always will give priority to get out the cards on the waiting list
                 else {
                     isInput = true;
-                    jump=true;//We simulate a jump to not add a cycle to the pc here, we'll added it in the ActionEvent Button
+                    jump=true;//We simulate a jump to not add a cycle to the pc here, we'll add it in the ActionEvent Button
                     //Only when isInput==true we will add one to the pc
                     timeline.pause();
                 }
                 break;
             case 1:
-                System.out.println(" Case 1  Operand :"+operand+"  Memoria:" +Memory[operand]);
+                System.out.println(" Case 1  Operand :"+operand+"  Memory:" +Memory[operand]);
                 acc = Integer.parseInt(Memory[operand]);
                 break;
             case 2:
-                System.out.println(" Case 2  Operand :"+operand+"  Memoria:" +Memory[operand]);
+                System.out.println(" Case 2  Operand :"+operand+"  Memory:" +Memory[operand]);
                 acc += Integer.parseInt(Memory[operand]);
                 break;
             case 3:
@@ -454,7 +463,7 @@ public class Cardiac implements Initializable {
             case 9:
                 changePC(pc,operand);
                 jump=true;
-                System.out.println("Termino de programa");
+                System.out.println("Program ended");
                 break;
 
         }

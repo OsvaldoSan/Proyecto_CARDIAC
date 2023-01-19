@@ -20,7 +20,7 @@ public class Welcome {
     private void goVirtualMachine(ActionEvent vmButton){
         Object resource=vmButton.getSource();
         if(resource.equals(cardiac)){
-            System.out.println("Reconocio a cardiac");
+            System.out.println("Go to cardiac");
             loadStage("../view/cardiac.fxml",vmButton);
         }
     }
@@ -47,6 +47,7 @@ public class Welcome {
             stage.show();
 
         } catch (IOException e) {
+            System.out.println("Error in the change of window");
             e.printStackTrace();
         }
 

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class  Cardiac {
     private int cells;//Amount of cells of the memory
-    private int sizeCell; // Size in characters, depends on cells
+    private int sizeCell; // Size in characters(for CARDIAC is 3), depends on cells
     private String Memory[]; // Memory of CARDIAC Machine
     private int pc;//Program counter
     private int acc;//Accumulator
@@ -104,7 +104,7 @@ public class  Cardiac {
         return card.split("-");
     }
 
-    // Put the entire card in the memory
+    // Put the entire card in the memory, in some particular position
     public void loadCard(String[] card, int position) {
         for (int i = 0; i < card.length; ++i) {
             Memory[position + i] = card[i];
@@ -112,17 +112,21 @@ public class  Cardiac {
     }
 
     // This function is to transform every integer to the format of the memory,i.e., array of string format
+    // is sizeCell= 4 and num=101->> 0101
     public String toStr(int num) {
-        String p = String.valueOf(num);
-        if (p.length() < sizeCell) {
+        return toStr(String.valueOf(num));
+    }
+
+    public String toStr(String numValue){
+        if (numValue.length() < sizeCell) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < (sizeCell - p.length()); i++)//The size that is needed to p
+            for (int i = 0; i < (sizeCell - numValue.length()); i++)//The size that is needed to numValue
             {
                 sb.append('0');
             }
-            return sb.toString().concat(p).replaceAll(",", "");
+            return sb.toString().concat(numValue).replaceAll(",", "");
         }
-        return p;
+        return numValue;
     }
 
     //Transform strings for architecture of sizeCells=3 to architecture of every sizeCell

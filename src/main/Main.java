@@ -13,10 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../view/welcome.fxml"));
 
-        // Buscar en la web css background gradient transparency fxml
-
-
-
+        // Search in web css background gradient transparency fxml
         primaryStage.setTitle("CARDIAC Systems");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
