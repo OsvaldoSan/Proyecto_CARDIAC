@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8fc66f43-a514-4dec-8267-5e728ac757d9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/CardiacExamples/Examples1.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/Cardiac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Cardiac.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/Welcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Welcome.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modelo/Cardiac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/modelo/Cardiac.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/styles_cardiac.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/styles_cardiac.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/welcome.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/welcome.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

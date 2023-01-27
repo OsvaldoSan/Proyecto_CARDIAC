@@ -39,7 +39,7 @@ public class Welcome {
 
             Parent newPage = FXMLLoader.load(getClass().getResource(fxmlPage));
             Scene scene = new Scene(newPage);
-            scene.getStylesheets().add(getClass().getResource("../view/styles_cardiac.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("../view/styles_to_cardiac.css").toExternalForm());
 
             stage.setScene(scene);
             //Generalize with valie of button
