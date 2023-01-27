@@ -1,0 +1,98 @@
+/*Background*/
+
+.root{
+    -fx-font-size: 11pt;
+    -fx-font-family: "Loto Black";
+    -fx-background: rgb(12,11,11);
+}
+
+
+.left_center_back{
+    -fx-border-color: rgb(0, 0, 0);
+    -fx-border-style: hidden solid solid;
+    -fx-border-width: 1.5;
+    -fx-border-insets: 0;
+}
+
+.upper_bar{
+    -fx-background-color: linear-gradient(rgba(0,0,0,1) 5%, rgba(26,28,27,1) 28%, rgba(36,33,34,1) 77%);
+    -fx-border-width: 1.5;
+    -fx-border-insets: 1;
+
+}
+
+.borders{
+    -fx-border-color: blue;
+    -fx-border-style: dotted;
+    -fx-border-width: 1.5;
+    -fx-border-insets: -5;
+}
+
+.titled-pane > .title 
+{
+	-fx-background-color: linear-gradient(rgba(0,0,0,1) 5%, rgba(26,28,27,1) 28%, rgba(36,33,34,1) 77%);
+	-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+}
+
+.titled-pane{
+	-fx-padding: 1px 5px 5px 5px ;	
+	-fx-text-fill: white;
+}
+
+.titled-pane  > .content
+{
+	-fx-border-width:0;
+	 
+}
+
+GridPane {
+    -fx-background-insets: 0.0 5.0 0.0 10.0;
+    -fx-padding: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.button{
+    -fx-text-fill: black;
+    -fx-font-size: 9.5pt;
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(rgba(163,161,161,1) 5%, rgba(146,153,149,1) 33%, rgba(107,100,100,1) 80%);
+	 -fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );
+    -fx-border-radius: 10;
+    -fx-background-radius: 15;
+    -fx-padding: 5;    
+
+
+}
+
+
+#labelNumeric{
+    -fx-alignment: center;
+    -fx-max-width: Infinity;
+}
+
+
+.HBoxLlaveImage{
+   -fx-background-image: url("resources/images/logo_llave.png");
+   -fx-background-repeat: stretch;   
+   -fx-background-size: 15 15;
+   -fx-background-position: center; 
+   -fx-padding: 1px 1px 1px 1px;
+}
+
+
+
+.normalText{
+    -fx-font-size: 8pt;
+    -fx-font-family: "Loto Black";
+    -fx-background: rgb(12,11,11);
+
+}
+
+.label{
+    -fx-font-size: 8pt;
+    -fx-font-family: "Loto Black";
+    -fx-padding: 0 0  1px 10px;/* arriba- derecha -abajo-izquierda*/
+    -fx-alignment: center ;
+    -fx-text-align: center;
+}
