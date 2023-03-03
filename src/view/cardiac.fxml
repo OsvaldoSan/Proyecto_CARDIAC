@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -18,244 +20,215 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="526.0" prefWidth="758.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Cardiac">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="793.0" prefWidth="1137.0" stylesheets="@styles_to_cardiac.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Cardiac">
    <children>
-      <BorderPane layoutX="121.0" layoutY="65.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <VBox alignment="TOP_CENTER" prefHeight="526.0" prefWidth="287.0" styleClass="fondo" stylesheets="@styles_cardiac.css" BorderPane.alignment="TOP_CENTER">
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="793.0" prefWidth="1137.0" stylesheets="@styles_to_cardiac.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <HBox alignment="CENTER" spacing="50.0" styleClass="upper_bar" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="152.0" prefWidth="287.0" styleClass="registro" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label styleClass="title" text="Instruction decoder" VBox.vgrow="ALWAYS" />
-                        <GridPane hgap="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="154.0" prefWidth="287.0" vgap="10.0" VBox.vgrow="ALWAYS">
-                           <columnConstraints>
-                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="260.0" minWidth="10.0" prefWidth="183.0" />
-                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="97.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
+                  <Button fx:id="gStartStop" mnemonicParsing="false" onAction="#controlBar" text="Start" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="gPause" mnemonicParsing="false" onAction="#controlBar" text="Play" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="gRestart" mnemonicParsing="false" onAction="#controlBar" text="Restart" HBox.hgrow="ALWAYS" />
+                  <ChoiceBox fx:id="tempos" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding></HBox>
+         </top>
+         <left>
+            <VBox alignment="TOP_CENTER" prefHeight="755.0" prefWidth="275.0" spacing="25.0" styleClass="left_center_back" stylesheets="@styles_to_cardiac.css" BorderPane.alignment="CENTER">
+               <children>
+                  <TitledPane animated="false" collapsible="false" text="Instruction decoder" textFill="#bcb7b7" VBox.vgrow="ALWAYS">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="226.0" styleClass="texto_normal" text="Instruction Register" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-                                 <font>
-                                    <Font name="System Italic" size="16.0" />
-                                 </font>
+                              <GridPane alignment="CENTER" gridLinesVisible="true" hgap="10.0" layoutX="-2.0" prefHeight="181.0" prefWidth="196.0" stylesheets="@styles_to_cardiac.css" vgap="10.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="-2.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="145.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="90.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
                                  <padding>
-                                    <Insets left="20.0" />
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
-                              </Label>
-                              <Label alignment="TOP_LEFT" layoutX="42.0" layoutY="41.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="238.0" styleClass="texto_normal" text="Operational Code" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
-                                 <font>
-                                    <Font name="System Italic" size="16.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
-                              </Label>
-                              <Label alignment="TOP_LEFT" layoutX="42.0" layoutY="70.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="282.0" styleClass="texto_normal" text="Operand" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
-                                 <font>
-                                    <Font name="System Italic" size="18.0" />
-                                 </font>
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
-                              </Label>
-                              <Label fx:id="gInReg" alignment="CENTER" prefHeight="20.0" prefWidth="94.0" style="-fx-background-color: a2f096;" text="null" GridPane.columnIndex="1">
-                                 <font>
-                                    <Font name="Go Regular" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="gOpCode" alignment="CENTER" layoutX="258.0" layoutY="32.0" prefHeight="20.0" prefWidth="237.0" style="-fx-background-color: #9cf0e2;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <font>
-                                    <Font name="Go Regular" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="gOperand" alignment="CENTER" layoutX="258.0" layoutY="56.0" prefHeight="20.0" prefWidth="179.0" style="-fx-background-color: #eceb7d;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font name="Go Regular" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="gPc" alignment="CENTER" layoutX="258.0" layoutY="80.0" prefHeight="20.0" prefWidth="169.0" style="-fx-background-color: #bc96f0;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                 <font>
-                                    <Font name="Go Regular" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label prefHeight="20.0" prefWidth="233.0" styleClass="texto_normal" text="Accumulator" textFill="#d31313" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets left="50.0" />
-                                 </padding>
-                              </Label>
-                              <Label fx:id="gAcc" alignment="CENTER" prefHeight="34.0" prefWidth="86.0" style="-fx-background-color: #e87b85;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Label>
-                              <Label nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="285.0" styleClass="texto_normal" text="Program Counter" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
-                              </Label>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" styleClass="fondo" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
-                                 <padding>
-                                    <Insets left="5.0" right="5.0" />
-                                 </padding>
+                                 <opaqueInsets>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </opaqueInsets>
                                  <children>
-                                    <Label alignment="CENTER" styleClass="texto_normal" text="Operation" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="gOperation" alignment="CENTER" styleClass="texto_especial" text="Input" wrapText="true" />
+                                    <Label text="Instruction Register">
+                                       <GridPane.margin>
+                                          <Insets />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="Operational Code" GridPane.rowIndex="1" />
+                                    <Label text="Operand" GridPane.rowIndex="2" />
+                                    <Label text="Program Counter" GridPane.rowIndex="3" />
+                                    <Label text="Accumulator" GridPane.rowIndex="4" />
+                                    <Label id="labelNumeric" fx:id="gInReg" alignment="CENTER" contentDisplay="CENTER" text="null" GridPane.columnIndex="1" />
+                                    <Label id="labelNumeric" fx:id="gOpCode" alignment="CENTER" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label id="labelNumeric" fx:id="gOperand" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label id="labelNumeric" fx:id="gPc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label id="labelNumeric" fx:id="gAcc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                  </children>
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                              </HBox>
+                              </GridPane>
                            </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </GridPane>
-                     </children>
-                  </VBox>
-                  <HBox alignment="CENTER" prefHeight="24.0" prefWidth="287.0" spacing="10.0" styleClass="fondo">
-                     <children>
-                        <Label styleClass="texto_normal" text="Choose speed:" />
-                        <ChoiceBox fx:id="tempos" prefWidth="150.0" />
-                     </children>
-                  </HBox>
-                  <ToolBar prefHeight="18.0" prefWidth="287.0" styleClass="fondo" VBox.vgrow="NEVER">
-                    <items>
-                      <Button fx:id="gStart" mnemonicParsing="false" onAction="#controlBar" text="Start" />
-                        <Button fx:id="gPause" mnemonicParsing="false" onAction="#controlBar" text="Pause" />
-                        <Button fx:id="gStop" mnemonicParsing="false" onAction="#controlBar" text="Stop" />
-                        <Button fx:id="gRestart" mnemonicParsing="false" onAction="#controlBar" text="Restart" />
-                    </items>
-                     <padding>
-                        <Insets bottom="5.0" left="15.0" right="10.0" top="5.0" />
-                     </padding>
-                     <opaqueInsets>
-                        <Insets left="1.0" right="1.0" />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </ToolBar>
-                  <VBox alignment="CENTER" maxHeight="35.0" prefHeight="47.0" prefWidth="287.0" styleClass="fondo" VBox.vgrow="NEVER">
-                     <children>
-                        <Label fx:id="gCardiacStatus" styleClass="texto_normal" text="Cardiac is off" VBox.vgrow="NEVER">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <TabPane prefHeight="194.0" prefWidth="287.0" styleClass="fondo" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-                    <tabs>
-                      <Tab text="Deck Mode">
-                           <content>
-                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                        </AnchorPane>
+                    </content>
+                     <graphic>
+                        <HBox alignment="CENTER" prefHeight="17.0" prefWidth="22.0" stylesheets="@styles_to_cardiac.css">
+                           <padding>
+                              <Insets right="1.0" />
+                           </padding>
+                           <styleClass>
+                              <String fx:value="HBoxLlaveImage" />
+                              <String fx:value="HBoxBinary" />
+                           </styleClass>
+                        </HBox>
+                     </graphic>
+                  </TitledPane>
+                  <TitledPane animated="false" collapsible="false" prefHeight="154.0" prefWidth="271.0" text="Machinne Status" VBox.vgrow="ALWAYS">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane gridLinesVisible="true" layoutX="14.0" layoutY="27.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
                                  <children>
-                                    <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="277.0" prefWidth="137.0" spacing="10.0" styleClass="miniFondo" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Label prefHeight="77.0" prefWidth="116.0" styleClass="texto_normal" text="Ingrese la tarjeta" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
-                                          <TextArea fx:id="gDeckText" prefHeight="134.0" prefWidth="106.0" promptText="001" VBox.vgrow="ALWAYS">
-                                             <VBox.margin>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </VBox.margin>
-                                          </TextArea>
-                                          <Button fx:id="gAddCard" mnemonicParsing="false" onAction="#execution" text="Add Card" VBox.vgrow="NEVER" />
-                                       </children>
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" />
-                                       </padding>
-                                    </VBox>
-                                    <VBox prefHeight="277.0" prefWidth="134.0" spacing="10.0" styleClass="miniFondo" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Label prefHeight="56.0" prefWidth="127.0" styleClass="texto_normal" text="Instrucciones en espera" textAlignment="CENTER" wrapText="true" />
-                                          <StackPane fx:id="stackCardsInWaitingList" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                       <padding>
-                                          <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
-                                       </padding>
-                                    </VBox>
+                                    <Label text="Operation" />
+                                    <Label text="Cycle" GridPane.rowIndex="1" />
+                                    <Label text="Status" GridPane.rowIndex="2" />
+                                    <Label id="labelNumeric" fx:id="gOperation" text="Input" GridPane.columnIndex="1" />
+                                    <Label id="labelNumeric" fx:id="gCycleNumber" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label id="labelNumeric" fx:id="gCardiacStatus" text="Off" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                  </children>
-                              </HBox>
-                           </content>
-                      </Tab>
-                      <Tab text="Terminal Mode">
-                           <content>
-                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                     <graphic>
+                        <HBox prefHeight="12.0" prefWidth="20.0" styleClass="HBoxSetUpMachine" />
+                     </graphic>
+                  </TitledPane>
+                  <TitledPane animated="false" prefHeight="205.0" prefWidth="271.0" text="Output" VBox.vgrow="ALWAYS">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="3.0">
                                  <children>
-                                    <Label fx:id="gTerminalNote" text="Ingrese la instrucción">
+                                    <ListView fx:id="outputCardsList" prefHeight="200.0" prefWidth="200.0">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                        </VBox.margin>
-                                    </Label>
-                                    <TextField fx:id="gTerminalText" promptText="001" VBox.vgrow="ALWAYS" />
-                                    <Button fx:id="gTerminalRun" mnemonicParsing="false" onAction="#execution" text="Run" />
+                                    </ListView>
+                                    <HBox alignment="CENTER_RIGHT" fillHeight="false" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <Label fx:id="gStatusDownload" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="120.0" />
+                                          <Button fx:id="gDownloadOutput" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#downloadOutput" text="Download">
+                                             <HBox.margin>
+                                                <Insets bottom="2.0" right="5.0" top="2.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets left="10.0" right="10.0" />
+                                       </opaqueInsets>
+                                    </HBox>
                                  </children>
                               </VBox>
-                           </content>
-                      </Tab>
-                    </tabs>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </TabPane>
-                  <HBox alignment="CENTER" fillHeight="false" maxHeight="40.0" prefHeight="75.0" prefWidth="287.0" spacing="50.0" styleClass="fondoOutput" VBox.vgrow="NEVER">
-                     <children>
-                        <Label maxHeight="80.0" styleClass="texto_normal" text="Output" HBox.hgrow="ALWAYS" />
-                        <Label fx:id="gOutput" maxHeight="80.0" styleClass="texto_normal" text="0" HBox.hgrow="ALWAYS" />
-                     </children>
-                  </HBox>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                     <graphic>
+                        <HBox prefHeight="15.0" prefWidth="17.0" styleClass="HBoxOUTPUT" />
+                     </graphic>
+                  </TitledPane>
                </children>
-            </VBox>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding></VBox>
          </left>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" styleClass="fondo" stylesheets="@styles_cardiac.css" BorderPane.alignment="CENTER">
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="471.0" styleClass="fondo" stylesheets="@styles_cardiac.css" VBox.vgrow="NEVER">
-                     <children>
-                        <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="23.0" prefWidth="337.0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" styleClass="title" text="Memory Cells" HBox.hgrow="NEVER" />
-                           </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="35.0" prefWidth="100.0" spacing="10.0" styleClass="cycleCounter" stylesheets="@styles_cardiac.css" HBox.hgrow="NEVER">
-                           <children>
-                              <Label styleClass="texto_normal" text="Cycle" />
-                              <Label fx:id="gCycleNumber" styleClass="texto_normal" text="0" />
-                           </children>
-                           <HBox.margin>
-                              <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
-                           </HBox.margin>
-                        </HBox>
-                     </children>
-                  </HBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="imageFondo" stylesheets="@styles_cardiac.css" VBox.vgrow="ALWAYS">
-                     <children>
-                        <ScrollPane fx:id="scrollMemory" prefHeight="432.0" prefWidth="447.0" styleClass="imageFondo" stylesheets="@styles_cardiac.css" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
+                  <ScrollPane fx:id="scrollMemory" prefHeight="548.0" prefWidth="862.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </center>
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="208.0" prefWidth="866.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TitledPane animated="false" prefHeight="204.0" prefWidth="271.0" text="Queue" HBox.hgrow="NEVER">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <StackPane fx:id="stackCardsInWaitingList" layoutX="-26.0" layoutY="-37.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="3.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </TitledPane>
+                  <TabPane prefHeight="202.0" prefWidth="687.0" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+                    <tabs>
+                      <Tab text="Deck Mode">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="167.0" prefWidth="417.0">
+                                 <children>
+                                    <VBox layoutX="51.0" layoutY="-51.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                                       <children>
+                                          <TextArea fx:id="gDeckText" prefHeight="200.0" prefWidth="200.0" promptText="Write out your card here" />
+                                          <Button fx:id="gAddCard" mnemonicParsing="false" onAction="#execution" text="Add Card">
+                                             <VBox.margin>
+                                                <Insets bottom="2.0" left="5.0" top="2.0" />
+                                             </VBox.margin>
+                                          </Button>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Terminal Mode">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <HBox layoutX="86.0" layoutY="24.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                                       <children>
+                                          <Label fx:id="gTerminalNote" prefHeight="28.0" prefWidth="109.0" text="Ingresa texto" />
+                                          <TextField fx:id="gTerminalText" />
+                                          <Button fx:id="gTerminalRun" mnemonicParsing="false" onAction="#execution" text="Run" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </HBox.margin>
+                  </TabPane>
+               </children>
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+            </HBox>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

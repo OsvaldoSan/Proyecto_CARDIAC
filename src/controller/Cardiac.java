@@ -14,7 +14,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -34,15 +39,15 @@ public class Cardiac implements Initializable {
     // Internal variable of output that gOutput uses
     private String output;
     @FXML // This label must use before any new variable that exists in the FXML
-    private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gOutput,gCycleNumber,gCardiacStatus,gOperation;
+    private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gCycleNumber,gCardiacStatus,gOperation,gStatusDownload;
     @FXML
     private TextField gTerminalText;
     @FXML
     private TextArea gDeckText;
     @FXML
-    private Button gTerminalRun, gAddCard,gStart,gPause,gStop,gRestart;
+    private Button gTerminalRun, gAddCard, gStartStop,gPause,gRestart,gDownloadOutput;
     @FXML
-    private GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell, there is not intialize in Scene Builder, because the length will be decided with the sizeCell
+    private GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell, there is not intiallize in Scene Builder, because the length will be decided with the sizeCell
     //it could be without label
     @FXML
     private ScrollPane scrollMemory;//Is the area whit scroll that has the grid
@@ -50,10 +55,14 @@ public class Cardiac implements Initializable {
     private StackPane stackCardsInWaitingList;
     @FXML
     private ChoiceBox<String> tempos;
+    @FXML
+    private ListView<String> outputCardsList;
 
-    // The size can change in function of the size of the cells
-    private StackPane itemsDirection[]= new StackPane[100],itemsContent[]=new StackPane[100];
-    private Label gContentMemory[]=new Label[100], gDirectionMemory[]=new Label[100];
+    // The size will be set in the method to make the gridPane
+    private StackPane itemsDirection[];
+    private StackPane itemsContent[];
+    private Label gContentMemory[];
+    private Label gDirectionMemory[];
     private ListView<String> cardsWaitingList;
 
     //Scheduling variables
@@ -68,13 +77,18 @@ public class Cardiac implements Initializable {
     // Final Variables
     private final String STATUS="CARDIAC is ";
 
+    // Style variables
+    // Max columns to the gridpane, this could change to have better performance
+    final int MAX_COLUMNS = 10;
+
 
     /* ----------------- Methods that are the main connection with the GUI ----------------------------------*/
 
     @FXML // This bar controls when is started,paused or stopped Cardiac
     public void controlBar(ActionEvent event){
         Object button=event.getSource();
-        if(button.equals(gStart) && isStarted==false) {
+        if(button.equals(gStartStop) && isStarted==false) {
+            gStartStop.setText("Stop");
             tempoControl();
             gCardiacStatus.setText(STATUS+"working");
             // Active Cardiac
@@ -98,7 +112,8 @@ public class Cardiac implements Initializable {
             // Start the cycle
             timeline.play();
         }
-        else if( (button.equals(gStop) || button.equals(gRestart) ) && isStarted==true){
+        else if( (button.equals(gStartStop) || button.equals(gRestart) ) && isStarted==true){
+            gStartStop.setText("Start");
             gCardiacStatus.setText(STATUS+"off");
             setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
 
@@ -108,7 +123,7 @@ public class Cardiac implements Initializable {
 
             isStarted=false;
             if(button.equals(gRestart)){
-                gStart.fire(); //Throws the event to start a new Cardiac machine
+                gStartStop.fire(); //Throws the event to start a new Cardiac machine
             }
         }
         else if( button.equals(gPause) ){
@@ -143,7 +158,7 @@ public class Cardiac implements Initializable {
         }
 
         //Add Card
-        if(button.equals(gAddCard)){
+        else if(button.equals(gAddCard)){
             cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
             //Erase all if there is not an input time
             gDeckText.clear();
@@ -159,11 +174,44 @@ public class Cardiac implements Initializable {
         }
     }
 
+    /* download */
+
+    public void downloadOutput(ActionEvent event){
+        Object button = event.getSource();
+
+        if ( button.equals(gDownloadOutput)){
+            try{
+                String home = System.getProperty("user.home");
+                String originDownloads=home+"/Downloads";
+                if(Files.exists(Path.of(originDownloads)) == false)
+                    originDownloads=home;//If the path doesn't exist, it uses the home path
+
+                System.out.println(home);
+                File saveFile = new File(originDownloads+"/CARDIAC_Output_" + new Timestamp(System.currentTimeMillis()) + ".txt");
+                saveFile.createNewFile();
+                Files.write(saveFile.toPath(), outputCardsList.getItems().subList(0, outputCardsList.getItems().size()));
+                gStatusDownload.setText("Downloaded");
+            }
+            catch(IOException e){
+                gStatusDownload.setText("Error in download");
+                System.out.println("An error occurred");
+                e.printStackTrace();
+            }
+        }
+    }
+
     /* -------------- Creation of GUI -------------------------------*/
     /*Create the grid Memory*/
-    public void createGridMemory(){
-        final int cells=100;//This will change
-        int column=0,row=0;
+    public void createGridMemory() {
+        final int cells = cardiac.getCells();//This will change
+        int MAX_ROWS = cells / MAX_COLUMNS;
+        int column = 0, row = 0;
+
+        //Assign the size to each element in the grid
+        itemsDirection= new StackPane[cells] ;
+        itemsContent=new StackPane[cells];
+        gContentMemory=new Label[cells];
+        gDirectionMemory=new Label[cells];
 
         scrollMemory.setContent(gridMemory);// Put the grid into the scroll
         scrollMemory.setPannable(true); // What is this?
@@ -171,15 +219,15 @@ public class Cardiac implements Initializable {
         // It searches in the style sheet defined for this module
         gridMemory.getStyleClass().add("grid");
 
-        for(int i=0;i<100;++i){
+        for(int i=0;i<cells;++i){
 
             //There are two columns in each row, the direction and the content of the direction
             // Example with six direction that needs 3 columns and two rows
             // dir : cont dir:cont dir:cont
             // dir: cont dir:cont dir:cont
-            if(row==10){
-                row=0;
-                column+=2;//because it must jump the content
+            if(column==(MAX_COLUMNS*2)){
+                column=0;
+                row+=1;//because it must jump the content
             }
             /*Add a new element to the grid
             * gDirectionMemory have a list of labels with direction, and itemsDirection have a list of panes that will receive that label
@@ -218,7 +266,7 @@ public class Cardiac implements Initializable {
             itemsContent[i].getChildren().add(gContentMemory[i]);
 
             //ADD Item
-            addConstraintsGrid(itemsContent[i],column--,row++); //Is column-- because for every cycle
+            addConstraintsGrid(itemsContent[i],column++,row); //Is column-- because for every cycle
             //we put in row 0 and column 0 a direction and in column 1 a content, but next will be row 1 and column 0
             gridMemory.getChildren().add(itemsContent[i]);
 
@@ -327,7 +375,7 @@ public class Cardiac implements Initializable {
             cardsWaitingList =new ListView<String>(FXCollections.observableArrayList(cards.toString().substring(1).split("\\[|,[ ]|\\]") ));
         }
         else{
-            cardsWaitingList =new ListView<String>( FXCollections.observableArrayList("Nothing Here","Neither here") );
+            cardsWaitingList =new ListView<String>( );
         }
 
         // If cardsSystem is not in Stack Pane we add it
@@ -448,7 +496,9 @@ public class Cardiac implements Initializable {
                 break;
             case 5:
                 output = Memory[operand];
-                gOutput.setText(output);
+                System.out.println("Salida :"+output);
+                outputCardsList.getItems().add(output);
+                //gOutput.setText(output);
                 break;
             case 6:
                 Memory[operand] = cardiac.toStr(acc);
