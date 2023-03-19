@@ -7,12 +7,20 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import main.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +28,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import static javafx.geometry.HPos.CENTER;
 
 public class Cardiac implements Initializable {
     //The model and all of its parameters are not necessary, but it is clearer keep in mind what are the parts
@@ -35,6 +42,8 @@ public class Cardiac implements Initializable {
     private String[] Memory;
     private int opCode,operand,acc,pc,sizeCell;
 
+    private int totalCells=100;
+
     // GUI variables
     // Internal variable of output that gOutput uses
     private String output;
@@ -45,16 +54,18 @@ public class Cardiac implements Initializable {
     @FXML
     private TextArea gDeckText;
     @FXML
-    private Button gTerminalRun, gAddCard, gStartStop,gPause,gRestart,gDownloadOutput;
+    private Button gTerminalRun, gAddCard, gStartStop,gPause,gRestart,gDownloadOutput,gBackHome;
     @FXML
     private GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell, there is not intiallize in Scene Builder, because the length will be decided with the sizeCell
+    @FXML
+    private StackPane stackGridMemory = new StackPane();
     //it could be without label
     @FXML
     private ScrollPane scrollMemory;//Is the area whit scroll that has the grid
     @FXML
     private StackPane stackCardsInWaitingList;
     @FXML
-    private ChoiceBox<String> tempos;
+    private ChoiceBox<String> tempos, architecture;
     @FXML
     private ListView<String> outputCardsList;
 
@@ -65,8 +76,8 @@ public class Cardiac implements Initializable {
     private Label gDirectionMemory[];
     private ListView<String> cardsWaitingList;
 
-    //Scheduling variables
-    private int TIME=1400;
+    //Timing variables variables
+    private int TIME=1600;
     private Timeline timeline ;
     //Control variables
     private Boolean isInput=false, isStarted=false, isPause=false;
@@ -79,7 +90,7 @@ public class Cardiac implements Initializable {
 
     // Style variables
     // Max columns to the gridpane, this could change to have better performance
-    final int MAX_COLUMNS = 10;
+    private final int MAX_COLUMNS = 10;
 
 
     /* ----------------- Methods that are the main connection with the GUI ----------------------------------*/
@@ -90,9 +101,10 @@ public class Cardiac implements Initializable {
         if(button.equals(gStartStop) && isStarted==false) {
             gStartStop.setText("Stop");
             tempoControl();
+            architectureControl();
             gCardiacStatus.setText(STATUS+"working");
             // Active Cardiac
-            cardiac = new modelo.Cardiac();
+            cardiac = new modelo.Cardiac(totalCells);
             // timeline knows what has to do, but is still stopped
             timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
             timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
@@ -149,7 +161,7 @@ public class Cardiac implements Initializable {
         Object button=event.getSource();
         if(button.equals(gTerminalRun) && isInput==true){
             isInput=false;
-            gTerminalNote.setText("Thanks!");
+            gTerminalNote.setText("Done!");
             Memory[operand]= cardiac.toStr(gTerminalText.getText());
             gTerminalText.clear();
             changePC(pc,pc+1);
@@ -174,7 +186,7 @@ public class Cardiac implements Initializable {
         }
     }
 
-    /* download */
+    /* -------------- Download ---------------------- */
 
     public void downloadOutput(ActionEvent event){
         Object button = event.getSource();
@@ -200,9 +212,47 @@ public class Cardiac implements Initializable {
         }
     }
 
+    /*------------- Change of Stages ---------------*/
+    public void changeStages(ActionEvent event){
+        // Alert Class to confirm return
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("If you return now you'll lose all progress");
+
+        Object Button = event.getSource();
+
+        if(Button.equals(gBackHome)){
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK ) {
+                try {
+                    //To get the window and execute in the same window
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                    Parent newPage = FXMLLoader.load(getClass().getResource(Main.FXMLWELCOME));
+                    Scene scene = new Scene(newPage);
+                    scene.getStylesheets().add(getClass().getResource(Main.STYLESCSS).toExternalForm());
+
+                    stage.setScene(scene);
+                    stage.setTitle(Main.TITLE);
+                    stage.show();
+
+                } catch (IOException e) {
+                    System.out.println("Error in the change of window");
+                    e.printStackTrace();
+                }
+            }
+            else{
+                System.out.println("THe user doesn't authorize");
+            }
+        }
+
+    }
+
     /* -------------- Creation of GUI -------------------------------*/
     /*Create the grid Memory*/
     public void createGridMemory() {
+        //If there is children already in grid pane this will clean the content
+        gridMemory.getChildren().clear();
+
         final int cells = cardiac.getCells();//This will change
         int MAX_ROWS = cells / MAX_COLUMNS;
         int column = 0, row = 0;
@@ -214,10 +264,13 @@ public class Cardiac implements Initializable {
         gDirectionMemory=new Label[cells];
 
         scrollMemory.setContent(gridMemory);// Put the grid into the scroll
-        scrollMemory.setPannable(true); // What is this?
+        scrollMemory.setPannable(false); // To move with  mouse
+
 
         // It searches in the style sheet defined for this module
         gridMemory.getStyleClass().add("grid");
+        GridPane.setHalignment(gridMemory, CENTER);
+        GridPane.setValignment(gridMemory, VPos.CENTER);
 
         for(int i=0;i<cells;++i){
 
@@ -231,14 +284,16 @@ public class Cardiac implements Initializable {
             }
             /*Add a new element to the grid
             * gDirectionMemory have a list of labels with direction, and itemsDirection have a list of panes that will receive that label
-            * First we add the direction, the we add the content
+            * First we add the direction, then we add the content
             * */
             //Create item
             itemsDirection[i]=new StackPane();
             itemsDirection[i].getStyleClass().add("itemDirection");
             //Add label direction
-            if(i<10) {
-                gDirectionMemory[i]= new Label("0"+Integer.toString(i)+" :");
+            if(i<MAX_ROWS) {
+                //The amount of zeros is sizeCell- len of i because will be used to put 001 or 091 depend on the case, and -1 because
+                // the size of the cell is with one extra value than direction
+                gDirectionMemory[i]= new Label("0".repeat(cardiac.getSizeCell()-1-Integer.toString(i).length())+Integer.toString(i)+" :");
             }
             else {
                 gDirectionMemory[i] = new Label(Integer.toString(i)+" :");
@@ -246,17 +301,21 @@ public class Cardiac implements Initializable {
 
             gDirectionMemory[i].getStyleClass().add("labelDirection");
             itemsDirection[i].getChildren().add(gDirectionMemory[i]);
+            gDirectionMemory[i].setTextAlignment(TextAlignment.LEFT);
+            //gDirectionMemory[i].setAlignment(Pos.CENTER);
+            itemsDirection[i].setAlignment(Pos.BOTTOM_LEFT);
 
             //Puts the restrictions to this pane in which column and row will be inside the grid memory
             addConstraintsGrid(itemsDirection[i],column++,row);//We put column++ because below we use that value of the column to the content
             //Add item to grid
             gridMemory.getChildren().add(itemsDirection[i]);
+            GridPane.setHalignment(itemsDirection[i],HPos.LEFT);
 
             // Add the content pane to the grid
             //Create Label with empty content
-            gContentMemory[i]= new Label("    ");
+            gContentMemory[i]= new Label(" ".repeat(cardiac.getSizeCell()));
             if(Memory[i]!=null){
-                //System.out.println("La memoria es "+Memory[i]);
+                //System.out.println("The memory is "+Memory[i]);
                 gContentMemory[i].setText(Memory[i] );
             }
             gContentMemory[i].getStyleClass().add("labelContent");
@@ -270,8 +329,11 @@ public class Cardiac implements Initializable {
             //we put in row 0 and column 0 a direction and in column 1 a content, but next will be row 1 and column 0
             gridMemory.getChildren().add(itemsContent[i]);
 
+            //Allign labels
+
         }
 
+        //scrollMemory.setFitToWidth(true);
     }
 
     // it's used to define constraints to the grid
@@ -287,10 +349,10 @@ public class Cardiac implements Initializable {
     // Values allocated in the Memory System are set in the graphic contentMemory
     // It is less efficient
     public void updateMemoryValuesG(){
-        for(int i=0;i<100;++i){
+        for(int i=0;i< cardiac.getCells();++i){
             if(Memory[i]!= gContentMemory[i].getText()){
                 if(Memory[i]==null){
-                    gContentMemory[i].setText("    ");
+                    gContentMemory[i].setText(" ".repeat(cardiac.getSizeCell()));
                 }
                 else{
                     gContentMemory[i].setText(Memory[i]);
@@ -390,7 +452,7 @@ public class Cardiac implements Initializable {
         Memory[operand]= cardiac.toStr(cards.remove());
         updateMemoryValuesG();
         updateCardsInWaitingList();
-        wait(TIME);//Time in miliseconds
+        //wait(TIME);//Time in miliseconds
     }
 
     //Transform every variable to null, including the memory and update the values of the GUI
@@ -404,7 +466,10 @@ public class Cardiac implements Initializable {
         Arrays.fill(Memory,null);//This clean the Memory of the machine
         updateContentG();
         updateMemoryValuesG();
-        //clearMemoryParametersG();
+
+        //To restart all the values
+        //
+        scrollMemory.setContent(new AnchorPane());
 
         timeline.stop();
     }
@@ -420,7 +485,7 @@ public class Cardiac implements Initializable {
         // Tempos is the list that have the different tempos, if there is nothing selected takes the default
         if(tempos.getValue()==null){
             gCardiacStatus.setText("Normal speed will be set");
-            TIME=1500;
+            TIME=1600;
             return;
         }
         String tempo=tempos.getValue();
@@ -428,13 +493,24 @@ public class Cardiac implements Initializable {
             TIME=200;
         }
         else if(tempo=="Normal"){
-            TIME=1500;
+            TIME=1600;
         }
         else{ // The option for slow tempo
-            TIME=2500;
+            TIME=4000;
         }
     }
 
+    // Controls the amount of cells in the VM
+    public void architectureControl(){
+        // Tempos is the list that have the different tempos, if there is nothing selected takes the default
+        if(architecture.getValue()==null){
+            gCardiacStatus.setText("Architecture selected");
+            totalCells=100;
+            return;
+        }
+        totalCells = Integer.parseInt(architecture.getValue());
+
+    }
 
 
     /* ------------------- Main Method that lead every change -----------------------------*/
@@ -535,6 +611,10 @@ public class Cardiac implements Initializable {
         //FXCollections.observableArrayList("Fast","Normal","Slow");
         tempos.getItems().addAll("Fast","Normal","Slow");
         tempos.setValue("Normal");
+
+        // The possibles architectures in amount of cells are put here
+        architecture.getItems().addAll("100","1000","10000");
+        architecture.setValue("100");
     }
 
 

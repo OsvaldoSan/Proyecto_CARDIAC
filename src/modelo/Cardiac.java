@@ -26,7 +26,7 @@ public class  Cardiac {
         Negative=false;
     }
     public Cardiac(){
-        this(1000); // The default option is cells=100
+        this(100); // The default option is cells=100
     }
 
     /*Setters*/

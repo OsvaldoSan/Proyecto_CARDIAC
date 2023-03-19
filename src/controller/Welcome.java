@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import main.Main;
 
 import java.io.IOException;
 
@@ -27,23 +28,17 @@ public class Welcome {
 
     private void loadStage(String fxmlPage, ActionEvent selectedVM){
         try{
-            /*Object eventSource = selectedVM.getSource();
-            Node sourceAsNode = (Node) eventSource ;
-            Scene oldScene = sourceAsNode.getScene();
-            Window window = oldScene.getWindow();
-            //Stage stage = (Stage) window ;
-            //stage.hide();*/
             //To get the window and execute in the same window
             Stage stage=(Stage)((Node)selectedVM.getSource()).getScene().getWindow();
 
 
             Parent newPage = FXMLLoader.load(getClass().getResource(fxmlPage));
             Scene scene = new Scene(newPage);
-            scene.getStylesheets().add(getClass().getResource("../view/styles_to_cardiac.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource(Main.STYLESCSS).toExternalForm());
 
             stage.setScene(scene);
-            //Generalize with valie of button
-            stage.setTitle("CARDIAC");
+            Button button = (Button) selectedVM.getSource();
+            stage.setTitle(button.getText());
             stage.show();
 
         } catch (IOException e) {
