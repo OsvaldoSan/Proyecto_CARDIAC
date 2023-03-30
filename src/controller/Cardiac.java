@@ -41,6 +41,7 @@ public class Cardiac implements Initializable {
     private String InReg;
     private String[] Memory;
     private int opCode,operand,acc,pc,sizeCell;
+    private Boolean negative;
 
     private int totalCells=100;
 
@@ -48,7 +49,7 @@ public class Cardiac implements Initializable {
     // Internal variable of output that gOutput uses
     private String output;
     @FXML // This label must use before any new variable that exists in the FXML
-    private Label gInReg,gOpCode,gOperand,gPc,gAcc, gTerminalNote,gCycleNumber,gCardiacStatus,gOperation,gStatusDownload;
+    private Label gInReg,gOpCode,gOperand,gPc,gAcc,gNegative, gTerminalNote,gCycleNumber,gCardiacStatus,gOperation,gStatusDownload;
     @FXML
     private TextField gTerminalText;
     @FXML
@@ -367,6 +368,7 @@ public class Cardiac implements Initializable {
         gOperand.setText(Integer.toString(operand));
         gPc.setText(Integer.toString(pc));
         gAcc.setText(Integer.toString(acc));
+        gNegative.setText(negative.toString());
 
         updateOperationTextG(); // Updates the value of gOperation
         gCycleNumber.setText(Integer.toString(cycleNumber));
@@ -593,17 +595,14 @@ public class Cardiac implements Initializable {
                 break;
 
         }
+            if (acc<0) negative=true;
+            else negative =false;
+
             if(jump==false) { changePC(pc,pc+1); }
             updateMemoryValuesG();
         }
 
-    public void wait(int n){
-        try {
-            Thread.sleep(n);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 
     @Override
@@ -628,6 +627,7 @@ public class Cardiac implements Initializable {
         opCode = cardiac.getOpCode();
         operand = cardiac.getOperand();
         acc = cardiac.getAcc();
+        negative=cardiac.getNegative();
         pc = cardiac.getPc();
         sizeCell= cardiac.getSizeCell();
     }
@@ -639,6 +639,7 @@ public class Cardiac implements Initializable {
         cardiac.setOpCode(opCode);
         cardiac.setOperand(operand);
         cardiac.setAcc(acc);
+        cardiac.setNegative(negative);
         cardiac.setPc(pc);
     }
 

@@ -118,15 +118,24 @@ public class  Cardiac {
     }
 
     public String toStr(String numValue){
+        String negative="";
+
+        if (numValue.substring(0,1).equals("-")){// If it has a negative value
+            negative="-";
+            numValue=numValue.substring(1);
+            System.out.println("Primer Num: "+numValue);
+        }
         if (numValue.length() < sizeCell) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < (sizeCell - numValue.length()); i++)//The size that is needed to numValue
             {
                 sb.append('0');
             }
-            return sb.toString().concat(numValue).replaceAll(",", "");
+            numValue=sb.toString().concat(numValue).replaceAll(",", "");
+
         }
-        return numValue;
+
+        return negative.concat(numValue);
     }
 
     //Transform strings for architecture of sizeCells=3 to architecture of every sizeCell

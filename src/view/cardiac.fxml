@@ -42,7 +42,7 @@
                   <HBox alignment="CENTER" prefHeight="25.0" prefWidth="889.0" spacing="35.0" styleClass="upper_bar">
                      <children>
                         <Button fx:id="gStartStop" mnemonicParsing="false" onAction="#controlBar" text="Start" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="gPause" mnemonicParsing="false" onAction="#controlBar" text="Play" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="gPause" mnemonicParsing="false" onAction="#controlBar" text="Pause" HBox.hgrow="ALWAYS" />
                         <Button fx:id="gRestart" mnemonicParsing="false" onAction="#controlBar" text="Restart" HBox.hgrow="ALWAYS" />
                         <ChoiceBox fx:id="tempos" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                         <ChoiceBox fx:id="architecture" prefHeight="20.0" prefWidth="90.0" />
@@ -54,13 +54,13 @@
                </children></HBox>
          </top>
          <left>
-            <VBox alignment="TOP_CENTER" prefHeight="755.0" prefWidth="275.0" spacing="25.0" styleClass="left_center_back" stylesheets="@styles_to_cardiac.css" BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" prefHeight="755.0" prefWidth="275.0" spacing="10.0" styleClass="left_center_back" stylesheets="@styles_to_cardiac.css" BorderPane.alignment="CENTER">
                <children>
                   <TitledPane animated="false" collapsible="false" text="Instruction decoder" textFill="#bcb7b7" VBox.vgrow="ALWAYS">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="243.0" prefWidth="261.0">
                            <children>
-                              <GridPane alignment="CENTER" gridLinesVisible="true" hgap="10.0" layoutX="-2.0" prefHeight="181.0" prefWidth="196.0" stylesheets="@styles_to_cardiac.css" vgap="10.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="-2.0">
+                              <GridPane alignment="CENTER" gridLinesVisible="true" hgap="10.0" layoutX="24.0" layoutY="31.0" prefHeight="154.0" prefWidth="239.0" stylesheets="@styles_to_cardiac.css" vgap="10.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="145.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="90.0" />
@@ -70,6 +70,7 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <padding>
@@ -93,6 +94,8 @@
                                     <Label id="labelNumeric" fx:id="gOperand" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Label id="labelNumeric" fx:id="gPc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Label id="labelNumeric" fx:id="gAcc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Label text="Negative" GridPane.rowIndex="5" />
+                                    <Label id="labelNumeric" fx:id="gNegative" text="False" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                  </children>
                               </GridPane>
                            </children>
@@ -113,7 +116,7 @@
                         </HBox>
                      </graphic>
                   </TitledPane>
-                  <TitledPane animated="false" collapsible="false" prefHeight="154.0" prefWidth="271.0" text="Machinne Status" VBox.vgrow="ALWAYS">
+                  <TitledPane animated="false" collapsible="false" prefHeight="179.0" prefWidth="271.0" text="Machinne Status" VBox.vgrow="ALWAYS">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -143,7 +146,7 @@
                         <HBox prefHeight="12.0" prefWidth="20.0" styleClass="HBoxSetUpMachine" />
                      </graphic>
                   </TitledPane>
-                  <TitledPane animated="false" prefHeight="205.0" prefWidth="271.0" text="Output" VBox.vgrow="ALWAYS">
+                  <TitledPane animated="false" prefHeight="193.0" prefWidth="271.0" text="Output" VBox.vgrow="ALWAYS">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
