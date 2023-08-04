@@ -15,14 +15,13 @@ public class  Cardiac {
 
 
     public Cardiac(int cells) {
+        // Default value if the number is not multiple of 100
+        if(cells%10 != 0) cells=100;
         this.cells = cells;
         sizeCell = Integer.toString(cells).length();// Each cell needs 3 spaces when the total amount is 100
         Memory = new String[cells];
-        pc=0;
-        acc=0;
+        //pc=0,acc=0.opCode=0.operand=0; Are put automatically in zero
         InReg=null;
-        opCode=0;
-        operand=0;
         Negative=false;
     }
     public Cardiac(){
