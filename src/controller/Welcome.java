@@ -31,8 +31,10 @@ public class Welcome {
             //To get the window and execute in the same window
             Stage stage=(Stage)((Node)selectedVM.getSource()).getScene().getWindow();
 
+            FXMLLoader loader=new FXMLLoader(getClass().getResource(fxmlPage));
+            loader.setController(new Cardiac());
 
-            Parent newPage = FXMLLoader.load(getClass().getResource(fxmlPage));
+            Parent newPage = (Parent) loader.load();
             Scene scene = new Scene(newPage);
             scene.getStylesheets().add(getClass().getResource(Main.STYLESCSS).toExternalForm());
 
@@ -40,6 +42,9 @@ public class Welcome {
             Button button = (Button) selectedVM.getSource();
             stage.setTitle(button.getText());
             stage.show();
+
+
+
 
         } catch (IOException e) {
             System.out.println("Error in the change of window");
