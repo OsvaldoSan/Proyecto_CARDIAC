@@ -2,6 +2,7 @@ package modelo;
 
 public class CardiacSync extends Cardiac{
     private String SecondaryMemory[] = {"0000","0001","0002"};
+    private String bootloaderContent[]={"0008"};
     private String StarterStatus;
     private int intSwitcher;
     private String strSwitcher;
@@ -23,10 +24,11 @@ public class CardiacSync extends Cardiac{
 
     // Preprocess methods
     private static int validationCells(int cells){
-        if(cells < 1000) cells=1000;
+        if(cells < 1000) cells=1000; // CARDIAC SYNC needs at least 1000 cells to work
         return cells;
     }
 
+    // Override the startVM
 
 
 }
