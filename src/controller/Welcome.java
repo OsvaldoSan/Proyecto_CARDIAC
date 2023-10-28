@@ -49,7 +49,8 @@ public class Welcome {
             
             Parent newPage = (Parent) loader.load();
             Scene scene = new Scene(newPage);
-            scene.getStylesheets().add(getClass().getResource(Main.STYLESCSS).toExternalForm());
+            //scene.getStylesheets().add(getClass().getResource(Main.STYLESCSS).toExternalForm());
+            scene.getStylesheets().add("../view/styles_to_cardiac.css");
 
             if(selectedVM.getSource()==gCardiacSync) ((CardiacSync_controller)controller_selected).editLayout();
 

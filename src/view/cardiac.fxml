@@ -54,50 +54,54 @@
                </children></HBox>
          </top>
          <left>
-            <VBox alignment="TOP_CENTER" prefHeight="755.0" prefWidth="275.0" spacing="10.0" styleClass="left_center_back" stylesheets="@styles_to_cardiac.css" BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" prefHeight="755.0" prefWidth="275.0" styleClass="left_center_back" stylesheets="@styles_to_cardiac.css" BorderPane.alignment="CENTER">
                <children>
-                  <TitledPane animated="false" collapsible="false" text="Instruction decoder" textFill="#bcb7b7" VBox.vgrow="ALWAYS">
+                  <TitledPane animated="false" text="Instruction decoder" textFill="#bcb7b7">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="243.0" prefWidth="261.0">
                            <children>
-                              <GridPane fx:id="gridPMachineStatus" alignment="CENTER" gridLinesVisible="true" hgap="10.0" layoutX="24.0" layoutY="31.0" prefHeight="154.0" prefWidth="239.0" stylesheets="@styles_to_cardiac.css" vgap="10.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="145.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="90.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                                 <opaqueInsets>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </opaqueInsets>
-                                 <children>
-                                    <Label text="Instruction Register">
-                                       <GridPane.margin>
-                                          <Insets />
-                                       </GridPane.margin>
-                                    </Label>
-                                    <Label text="Operational Code" GridPane.rowIndex="1" />
-                                    <Label text="Operand" GridPane.rowIndex="2" />
-                                    <Label text="Program Counter" GridPane.rowIndex="3" />
-                                    <Label text="Accumulator" GridPane.rowIndex="4" />
-                                    <Label id="labelNumeric" fx:id="gInReg" alignment="CENTER" contentDisplay="CENTER" text="null" GridPane.columnIndex="1" />
-                                    <Label id="labelNumeric" fx:id="gOpCode" alignment="CENTER" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label id="labelNumeric" fx:id="gOperand" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <Label id="labelNumeric" fx:id="gPc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <Label id="labelNumeric" fx:id="gAcc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                    <Label text="Negative" GridPane.rowIndex="5" />
-                                    <Label id="labelNumeric" fx:id="gNegative" text="False" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                 </children>
-                              </GridPane>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="edge-to-edge" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                                 <content>
+                                    <GridPane fx:id="gridPMachineStatus" alignment="CENTER" gridLinesVisible="true" hgap="10.0" prefWidth="228.0" stylesheets="@styles_to_cardiac.css" vgap="10.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="145.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="90.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                       <opaqueInsets>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </opaqueInsets>
+                                       <children>
+                                          <Label text="Instruction Register">
+                                             <GridPane.margin>
+                                                <Insets />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label text="Operational Code" GridPane.rowIndex="1" />
+                                          <Label text="Operand" GridPane.rowIndex="2" />
+                                          <Label text="Program Counter" GridPane.rowIndex="3" />
+                                          <Label text="Accumulator" GridPane.rowIndex="4" />
+                                          <Label id="labelNumeric" fx:id="gInReg" alignment="BOTTOM_LEFT" text="null" GridPane.columnIndex="1" />
+                                          <Label id="labelNumeric" fx:id="gOpCode" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Label id="labelNumeric" fx:id="gOperand" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Label id="labelNumeric" fx:id="gPc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label id="labelNumeric" fx:id="gAcc" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <Label text="Negative" GridPane.rowIndex="5" />
+                                          <Label id="labelNumeric" fx:id="gNegative" text="False" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                       </children>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
                            </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -116,29 +120,33 @@
                         </HBox>
                      </graphic>
                   </TitledPane>
-                  <TitledPane animated="false" collapsible="false" prefHeight="179.0" prefWidth="271.0" text="Machinne Status" VBox.vgrow="ALWAYS">
+                  <TitledPane animated="false" text="Machinne Status" VBox.vgrow="ALWAYS">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <GridPane fx:id="gridPMachineStatus" gridLinesVisible="true" layoutX="14.0" layoutY="27.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <Label text="Operation" />
-                                    <Label text="Cycle" GridPane.rowIndex="1" />
-                                    <Label text="Status" GridPane.rowIndex="2" />
-                                    <Label id="labelNumeric" fx:id="gOperation" GridPane.columnIndex="1" />
-                                    <Label id="labelNumeric" fx:id="gCycleNumber" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label id="labelNumeric" fx:id="gCardiacStatus" text="Off" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                 </children>
-                              </GridPane>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="edge-to-edge" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                                 <content>
+                                    <GridPane fx:id="gridPMachineStatus" gridLinesVisible="true">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Operation" />
+                                          <Label text="Cycle" GridPane.rowIndex="1" />
+                                          <Label text="Status" GridPane.rowIndex="2" />
+                                          <Label id="labelNumeric" fx:id="gOperation" GridPane.columnIndex="1" />
+                                          <Label id="labelNumeric" fx:id="gCycleNumber" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Label id="labelNumeric" fx:id="gCardiacStatus" text="Off" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       </children>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </AnchorPane>
                     </content>
@@ -146,7 +154,7 @@
                         <HBox prefHeight="12.0" prefWidth="20.0" styleClass="HBoxSetUpMachine" />
                      </graphic>
                   </TitledPane>
-                  <TitledPane animated="false" prefHeight="193.0" prefWidth="271.0" text="Output" VBox.vgrow="ALWAYS">
+                  <TitledPane text="Output" VBox.vgrow="ALWAYS">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -181,7 +189,7 @@
                   </TitledPane>
                </children>
                <padding>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets top="10.0" />
                </padding></VBox>
          </left>
          <bottom>
@@ -251,7 +259,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <children>
-                  <ScrollPane fx:id="scrollMemory" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  <ScrollPane fx:id="scrollMemory" prefHeight="200.0" prefWidth="200.0" styleClass="edge-to-edge" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                     </content>
