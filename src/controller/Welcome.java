@@ -15,28 +15,43 @@ import java.io.IOException;
 public class Welcome {
 
     @FXML
-    private Button cardiac;
+    private Button gCardiac,gCardiacSync;
 
     @FXML
     private void goVirtualMachine(ActionEvent vmButton){
         Object resource=vmButton.getSource();
-        if(resource.equals(cardiac)){
+        if(resource.equals(gCardiac)){
             System.out.println("Go to cardiac");
-            loadStage("../view/cardiac.fxml",vmButton);
+            loadStage("../view/cardiac.fxml",vmButton,new Cardiac());
+        }
+        else if(resource.equals(gCardiacSync)){
+            System.out.println("Go to E-CARDIAC SYNC");
+            loadStage("../view/cardiac.fxml",vmButton,new CardiacSync_controller());
         }
     }
 
-    private void loadStage(String fxmlPage, ActionEvent selectedVM){
+    private void loadStage(String fxmlPage, ActionEvent selectedVM, Object controller_selected){
         try{
+            if(selectedVM.getSource()== gCardiac){
+               controller_selected=(Cardiac)controller_selected;
+            }
+            else if(selectedVM.getSource()==gCardiacSync){
+                controller_selected=(CardiacSync_controller)controller_selected;
+                
+            }
+
             //To get the window and execute in the same window
             Stage stage=(Stage)((Node)selectedVM.getSource()).getScene().getWindow();
 
             FXMLLoader loader=new FXMLLoader(getClass().getResource(fxmlPage));
-            loader.setController(new Cardiac());
+            loader.setController(controller_selected);
 
+            
             Parent newPage = (Parent) loader.load();
             Scene scene = new Scene(newPage);
             scene.getStylesheets().add(getClass().getResource(Main.STYLESCSS).toExternalForm());
+
+            if(selectedVM.getSource()==gCardiacSync) ((CardiacSync_controller)controller_selected).editLayout();
 
             stage.setScene(scene);
             Button button = (Button) selectedVM.getSource();
