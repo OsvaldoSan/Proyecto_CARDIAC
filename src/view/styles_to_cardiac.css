@@ -109,6 +109,32 @@ GridPane {
     -fx-vgap: 10;
 }
 
+/* --------------------------------------- TableView -------------------------------------------------------------------- */
+
+.table-view{
+	-fx-background-color:#0e0e0e;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(rgba(0,0,0,1) 5%, rgba(26,28,27,1) 28%, rgba(36,33,34,1) 77%);
+    -fx-background-radius: 7px 7px 2px 2px;
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 5px 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
 
 
 /* --------------------------------------------------- Controlls ------------------------------------------- */
