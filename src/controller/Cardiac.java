@@ -36,14 +36,14 @@ public class Cardiac implements Initializable {
     //The model and all of its parameters are not necessary, but it is clearer keep in mind what are the parts
     //that cardiac needs, although in the future could be good for save information.
     // Cardiac Variables
-    private modelo.Cardiac cardiac;
+    protected modelo.Cardiac cardiac;
 
-    private String InReg;
-    private String[] Memory;
-    private int opCode,operand,acc,pc,sizeCell;
-    private Boolean negative;
+    protected String InReg;
+    protected String[] Memory;
+    protected int opCode,operand,acc,pc,sizeCell;
+    protected Boolean negative;
 
-    private int totalCells=100;
+    protected int totalCells=100;
 
     // GUI variables
     // Internal variable of output that gOutput uses
@@ -62,7 +62,7 @@ public class Cardiac implements Initializable {
     private StackPane stackGridMemory = new StackPane();
     //it could be without label
     @FXML
-    private ScrollPane scrollMemory;//Is the area whit scroll that has the grid
+    protected ScrollPane scrollMemory;//Is the area whit scroll that has the grid
     @FXML
     private StackPane stackCardsInWaitingList;
     @FXML
@@ -79,12 +79,12 @@ public class Cardiac implements Initializable {
 
     //Timing variables variables
     private int TIME=1600;
-    private Timeline timeline ;
+    protected Timeline timeline ;
     //Control variables
     private Boolean isInput=false, isStarted=false, isPause=false;
-    private int cycleNumber=0;
+    protected int cycleNumber=0;
 
-    private Queue<String> cards;
+    protected Queue<String> cards;
 
     // Final Variables
     private final String STATUS="CARDIAC is ";
@@ -104,8 +104,7 @@ public class Cardiac implements Initializable {
             tempoControl();
             architectureControl();
             gCardiacStatus.setText(STATUS+"working");
-            // Active Cardiac
-            cardiac = new modelo.Cardiac(totalCells);
+
             // timeline knows what has to do, but is still stopped
             timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
             timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
@@ -115,12 +114,7 @@ public class Cardiac implements Initializable {
 
             isStarted=true;
             // Initialize the Cardiac Variables
-            cardiac.startCVM();
-
-            updateCardsInWaitingList();
-            getCardiacParameters();
-            createGridMemory();
-            changePC(0,0);// This is to select the 0 cell
+            startCardiac();
 
             // Start the cycle
             timeline.play();
@@ -128,7 +122,7 @@ public class Cardiac implements Initializable {
         else if( (button.equals(gStartStop) || button.equals(gRestart) ) && isStarted==true){
             gStartStop.setText("Start");
             gCardiacStatus.setText(STATUS+"off");
-            setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
+
 
             // Use new function to stop CARDIAC
             stopCVM();
@@ -153,6 +147,20 @@ public class Cardiac implements Initializable {
 
 
         }
+    }
+
+    // Method created to initialize the CARDIAC VM
+
+    public void startCardiac(){
+        // Active Cardiac
+        cardiac = new modelo.Cardiac(totalCells);
+        cardiac.startCVM();
+
+        updateCardsInWaitingList();
+        getCardiacParameters();
+        createGridMemory();
+        changePC(0,0);// This is to select the 0 cell
+
     }
 
     // This event actioned by gTerminalRun or gAddCard, is the method that throws events to the action
@@ -363,6 +371,10 @@ public class Cardiac implements Initializable {
     }
 
     public void updateContentG(){
+        updateContentGraphicsCardiac();
+    }
+
+    public void updateContentGraphicsCardiac(){
         gInReg.setText(InReg);
         gOpCode.setText(Integer.toString(opCode));
         gOperand.setText(Integer.toString(operand));
@@ -372,7 +384,6 @@ public class Cardiac implements Initializable {
 
         updateOperationTextG(); // Updates the value of gOperation
         gCycleNumber.setText(Integer.toString(cycleNumber));
-
     }
 
     //Updates the value of gOperation that shows to the user which operation is do it
@@ -459,6 +470,8 @@ public class Cardiac implements Initializable {
 
     //Transform every variable to null, including the memory and update the values of the GUI
     public void stopCVM(){
+        setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
+
         InReg = null;
         opCode = 0;
         operand = 0;
@@ -519,19 +532,24 @@ public class Cardiac implements Initializable {
     /*Control the cycle and times*/
     public void cycleSystem() {
         cycleNumber++;
+        controlSwitcher();
+        //checkJumpSO();// It will check if is it the direction when the SO jumps to the User state
 
         output = "null";//Every cycle this variable is restart
         int o1, o2;//Auxiliaries in shift
         boolean jump=false;
 
+
         if(Memory[pc]!=null){
             InReg = Memory[pc];
-           // System.out.println("Memoria en pc != null "+Memory[pc]);
+            //System.out.println("Memoria en pc != null "+Memory[pc]+" con pc: "+pc);
             opCode = Integer.parseInt(Memory[pc].substring(0, 1));
             operand = Integer.parseInt(Memory[pc].substring(1));
         }
         else{
             System.out.println("Memory of PC is null, pc=="+pc);
+            System.out.println(Memory);
+            System.out.println("--------------------------------------------------------------");
             emergencyStop();
         }
 
@@ -585,13 +603,15 @@ public class Cardiac implements Initializable {
                 acc -= Integer.parseInt(Memory[operand]);
                 break;
             case 8:
+                // Load into the last register of memory the 8+pc
+
+                Memory[cardiac.getCells()-1]= cardiac.toStr((cardiac.getCells()*8)+pc);
                 changePC(pc,operand);
                 jump=true;
                 break;
             case 9:
-                changePC(pc,operand);
+                HaltOperation(pc,operand);
                 jump=true;
-                System.out.println("Program ended");
                 break;
 
         }
@@ -600,9 +620,16 @@ public class Cardiac implements Initializable {
 
             if(jump==false) { changePC(pc,pc+1); }
             updateMemoryValuesG();
-        }
+    }
 
 
+    public void HaltOperation(int pc, int operand){
+        changePC(pc,operand);
+        System.out.println("Program ended");
+    }
+
+    public void controlSwitcher(){;}
+    public void checkJumpSO(){;}
 
 
     @Override
@@ -622,6 +649,7 @@ public class Cardiac implements Initializable {
     /* ------------------------------- Connection with the model -----------------------------------*/
     // Get Cardiac parameters from the model
     public void getCardiacParameters(){
+        System.out.println("Inside parameters "+cardiac);
         InReg=cardiac.getInReg();
         Memory=cardiac.getMemory();
         opCode = cardiac.getOpCode();

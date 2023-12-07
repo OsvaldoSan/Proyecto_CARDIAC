@@ -113,6 +113,8 @@ GridPane {
 
 .table-view{
 	-fx-background-color:#0e0e0e;
+    -fx-background-insets: 2px 18px 1px 0px;
+
 }
 
 .table-view .column-header-background .filler {
@@ -125,10 +127,11 @@ GridPane {
 }
 
 .table-view .column-header-background{
-    -fx-background-color: linear-gradient(rgba(0,0,0,1) 5%, rgba(26,28,27,1) 28%, rgba(36,33,34,1) 77%);
-    -fx-background-radius: 7px 7px 2px 2px;
-    -fx-background-insets: 0 11px 0 0;
-    -fx-padding: 0 0 5px 0;
+	-fx-background-color: linear-gradient( rgba(82,82,82,1) 16%, rgba(101,91,91,1) 51%, rgba(71,71,71,1) 84%);
+
+    -fx-background-radius: 7px 7px 5px 5px;
+    -fx-background-insets: 2px 18px 1px 0px;
+    -fx-padding: 1px 1px 1px 1px;
 }
 
 .table-view .column-header {

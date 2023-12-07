@@ -16,7 +16,7 @@ public class  Cardiac {
 
     public Cardiac(int cells) {
         // Default value if the number is not multiple of 100
-        if(cells%10 != 0) cells=100;
+        if((cells%10 )!= 0) cells=100;
         this.cells = cells;
         sizeCell = Integer.toString(cells).length();// Each cell needs 3 spaces when the total amount is 100
         Memory = new String[cells];
@@ -137,8 +137,8 @@ public class  Cardiac {
         return negative.concat(numValue);
     }
 
-    //Transform strings for architecture of sizeCells=3 to architecture of every sizeCell
-    // Receive a card with a list of instructions
+    //Transform strings from architecture of sizeCells=3 to architecture of every sizeCell
+    // Receive a card with a list of instructions, it needs to handle negatives
     public String[] transformSpace(String[] card) { //Always receive instruction with 3 cells
         if (sizeCell == 3) {
             return card;
@@ -147,8 +147,9 @@ public class  Cardiac {
         String[] newCard = new String[card.length];
         int j = 0;
         for (String instruction : card) {
+
             String opCode = instruction.substring(0, 1);
-            String dir = instruction.substring(1, 3);
+            String dir = instruction.substring(1, 3);// To cove
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < (numZeros); i++)//The size that is needed to p
             {
@@ -193,6 +194,7 @@ public class  Cardiac {
     public void startCVM() {
         //We use the index 0 because we only pass one value
         // We use this because if Cardiac needs another architecture this will change the architecture of the instructions
+
         Memory[0] = transformSpace(new String[]{"001"})[0];
         Memory[cells - 1] = transformSpace(new String[]{"800"})[0]; // In the last cell
     }

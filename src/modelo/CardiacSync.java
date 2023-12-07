@@ -3,21 +3,45 @@ package modelo;
 public class CardiacSync extends Cardiac{
     private String SecondaryMemory[] = {"0000","0001","0002"};
     private String bootloaderContent[]={"0008"};
-    private String StarterStatus;
-    private int intSwitcher;
-    private String strSwitcher;
+    private String starterStatus;
+    private int cycleLimitSwitch;
+    private int cycleSwitcherCounter=0;
+    private boolean switcherStatus=false;
+    private int directionStartPreSO;
+    private int directionUserStart;
+    private int directionUserEnd;
+    private int directionChargeStart;
+    private int directionChargeEnd;
+    private int directionHaltSO;
+
+    public int getDirectionUserStart(){return directionUserStart;}
+    public int getDirectionUserEnd(){return directionUserEnd;}
+    public int getDirectionChargeStart(){return directionChargeStart;}
+    public int getDirectionChargeEnd(){return directionChargeEnd;}
+    public int getDirectionHaltSO(){return  directionHaltSO;}
 
 
-    public void setStarterStatus(String status){ StarterStatus=status;}
-    public void setIntSwitcher(int switcher){intSwitcher=switcher;}
-    public void setStrSwitcher(String switcher){strSwitcher=switcher;}
+    public void setStarterStatus(String status){ starterStatus =status;}
+    public void setCycleLimitSwitch(int cycleLimit){cycleLimitSwitch=cycleLimit;}
+    public void setCycleSwitcherCounter(int counter){cycleSwitcherCounter=counter;}
+    public void setSwitcherStatus(boolean switcher){switcherStatus=switcher;}
 
-    public String getStarterStatus(){return StarterStatus;}
-    public String getStrSwitcher(){return strSwitcher;}
-    public int getIntSwitcher(){return intSwitcher;}
+    public String getStarterStatus(){return starterStatus;}
+    public int getCycleLimitSwitch(){return cycleLimitSwitch;}
+    public int getCycleSwitcherCounter(){return cycleSwitcherCounter;}
+    public boolean getSwitcherStatus(){return switcherStatus;}
+    public int getDirectionStartPreSO(){return directionStartPreSO;}
 
-    public CardiacSync(int cells){
+
+    public CardiacSync(int cells,int directionPreSo,int cycleLimit,int directionssuerstart,int directionuserend,int dirHalt){
         super(validationCells(cells));
+        directionStartPreSO =directionPreSo;
+        cycleLimitSwitch=cycleLimit;
+        directionChargeStart=0;
+        directionChargeEnd=3;
+        directionUserStart=directionssuerstart;
+        directionUserEnd=directionuserend;
+        directionHaltSO=dirHalt;
         //Read the file to charge the second memory
 
     }
