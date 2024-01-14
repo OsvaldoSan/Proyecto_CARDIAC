@@ -101,13 +101,13 @@ public class Cardiac implements Initializable {
         Object button=event.getSource();
         if(button.equals(gStartStop) && isStarted==false) {
             gStartStop.setText("Stop");
-            tempoControl();
+            TIME=tempoControl();
             architectureControl();
             gCardiacStatus.setText(STATUS+"working");
 
             // timeline knows what has to do, but is still stopped
-            timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
-            timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
+            //
+            initiallizeTimeline(TIME);
 
             // The list of cards is set
             cards =new LinkedList<>();
@@ -148,6 +148,27 @@ public class Cardiac implements Initializable {
 
         }
     }
+
+    public void initiallizeTimeline(int TIME){
+        // timeline knows what has to do, but is still stopped
+        timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
+        timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
+    }
+
+    @FXML
+    public void updateCycleTime(){
+        if (TIME == tempoControl()){return;}
+        System.out.print("The time :"+TIME);
+        TIME=tempoControl();
+        System.out.println(" Was Changed to : "+TIME);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        timeline.stop();
+        initiallizeTimeline(TIME);
+
+        timeline.play();
+
+    }
+
 
     // Method created to initialize the CARDIAC VM
 
@@ -491,27 +512,31 @@ public class Cardiac implements Initializable {
 
     // Stops the Virtual Machine by itself
     public void emergencyStop(){
-        stopCVM();
+        //stopCVM();
+        timeline.stop();
+        setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
         gCardiacStatus.setText(STATUS+"dead, please restart");
     }
 
     // Controls the speed of each cycle in the VM
-    public void tempoControl(){
+    public int tempoControl(){
         // Tempos is the list that have the different tempos, if there is nothing selected takes the default
         if(tempos.getValue()==null){
             gCardiacStatus.setText("Normal speed will be set");
-            TIME=1600;
-            return;
+            return 1600;
         }
         String tempo=tempos.getValue();
         if(tempo=="Fast"){
-            TIME=200;
+            return 200;
         }
         else if(tempo=="Normal"){
-            TIME=1600;
+            return 1600;
+        }
+        else if(tempo=="Instant"){
+            return 10;
         }
         else{ // The option for slow tempo
-            TIME=4000;
+            return 4000;
         }
     }
 
@@ -531,6 +556,7 @@ public class Cardiac implements Initializable {
     /* ------------------- Main Method that lead every change -----------------------------*/
     /*Control the cycle and times*/
     public void cycleSystem() {
+        updateCycleTime();
         cycleNumber++;
         controlSwitcher();
         //checkJumpSO();// It will check if is it the direction when the SO jumps to the User state
@@ -542,16 +568,16 @@ public class Cardiac implements Initializable {
 
         if(Memory[pc]!=null){
             InReg = Memory[pc];
-            //System.out.println("Memoria en pc != null "+Memory[pc]+" con pc: "+pc);
+            System.out.println("Memory en pc != null "+ Memory[pc] +" con pc: "+pc);
             opCode = Integer.parseInt(Memory[pc].substring(0, 1));
             operand = Integer.parseInt(Memory[pc].substring(1));
         }
         else{
-            System.out.println("Memory of PC is null, pc=="+pc);
-            System.out.println(Memory);
-            System.out.println("--------------------------------------------------------------");
+            System.out.println("Memory of PC is null : "+Memory[pc]+" pc=="+pc);
             emergencyStop();
         }
+
+        System.out.println("--------------------------------------------------------------");
 
         updateContentG();
 
@@ -572,16 +598,18 @@ public class Cardiac implements Initializable {
                 }
                 break;
             case 1:
-                System.out.println(" Case 1  Operand :"+operand+"  Memory:" +Memory[operand]);
+                System.out.println(" Case 1  Operand :"+operand+" Content of Memory:" +Memory[operand]);
                 acc = Integer.parseInt(Memory[operand]);
                 break;
             case 2:
-                System.out.println(" Case 2  Operand :"+operand+"  Memory:" +Memory[operand]);
+                System.out.println(" Case 2  Operand :"+operand+" Content Memory:" +Memory[operand]);
                 acc += Integer.parseInt(Memory[operand]);
                 break;
             case 3:
                 if (acc < 0) {
                     changePC(pc,operand);
+                    System.out.println("Acumulator less than zero");
+                    jump=true;
                 }
                 break;
             case 4:
@@ -617,14 +645,16 @@ public class Cardiac implements Initializable {
         }
             if (acc<0) negative=true;
             else negative =false;
+            updateContentG();
 
             if(jump==false) { changePC(pc,pc+1); }
             updateMemoryValuesG();
+            System.out.println("++++++++++++++++++++++++++++ Cycle Finished +++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
 
-    public void HaltOperation(int pc, int operand){
-        changePC(pc,operand);
+    public void HaltOperation(int newPc, int operand){
+        changePC(newPc,operand);
         System.out.println("Program ended");
     }
 
@@ -635,7 +665,7 @@ public class Cardiac implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         //FXCollections.observableArrayList("Fast","Normal","Slow");
-        tempos.getItems().addAll("Fast","Normal","Slow");
+        tempos.getItems().addAll("Instant","Fast","Normal","Slow");
         tempos.setValue("Normal");
 
         // The possibles architectures in amount of cells are put here

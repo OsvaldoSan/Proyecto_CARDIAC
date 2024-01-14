@@ -44,8 +44,8 @@
                         <Button fx:id="gStartStop" mnemonicParsing="false" onAction="#controlBar" text="Start" HBox.hgrow="ALWAYS" />
                         <Button fx:id="gPause" mnemonicParsing="false" onAction="#controlBar" text="Pause" HBox.hgrow="ALWAYS" />
                         <Button fx:id="gRestart" mnemonicParsing="false" onAction="#controlBar" text="Restart" HBox.hgrow="ALWAYS" />
-                        <ChoiceBox fx:id="tempos" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                         <ChoiceBox fx:id="architecture" prefHeight="20.0" prefWidth="90.0" />
+                        <ChoiceBox fx:id="tempos" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" top="5.0" />

@@ -182,7 +182,7 @@ public class CardiacSync_controller extends Cardiac {
     public void updateStatusCardiacG(){
         //gStarter.setText(starterStatus);
 
-        if (switcherStatus== true) {
+        if (switcherStatus== false) {
             gSwitcher.setText("SO");
         }
         else {
@@ -218,7 +218,7 @@ public class CardiacSync_controller extends Cardiac {
 
         // Version SYNC
         switcherCycleCounter=0;
-        switcherStatus=false;
+        switcherStatus=true;
         starterStatus="Off";
 
         //Version Normal
@@ -279,28 +279,39 @@ public class CardiacSync_controller extends Cardiac {
 
         switcherCycleCounter++;
         //System.out.println("Switcher Status : "+ switcherStatus);
-        //System.out.println("Contador :"+switcherCycleCounter+"  Limite :"+cycleLimitSwitcher + " Sentencia :"+(switcherCycleCounter>cycleLimitSwitcher));
-        if ((switcherCycleCounter>cycleLimitSwitcher) & (Memory[3]!=cardiac.transformSpace(new String[]{"000"})[0])){
+        //Its the automatic change of pc
+        // If the cycles are finished and the content in the flag space is 1, the user time ends and starts the SO time
+        if ((switcherCycleCounter>cycleLimitSwitcher) & (cardiac.transformSpace(new String[]{"001"})[0].equals(Memory[3]) & (switcherStatus==true)) ){
             // The flag will be changed in the software(SO)
-            System.out.println(" Is into the Pre-SO section");
+            System.out.println(" Is into the Pre-SO section, Flag status : "+Memory[3]);
+            //Put the last direction of the user program in e0 to save the process
+            Memory[directionStartPreSO-1]= cardiac.toStr(pc);
             switcherCycleCounter=0;
-            pc= directionStartPreSO;
-            switcherStatus=true;
+            changePC(pc,directionStartPreSO);
+
             updateStatusCardiacG();
         }
+        // if the flag is 1(activated in so) and ss is false means that the last operation was into the SO to activate the flag, to start the User time
         else // If the flag is set to 1 the jumps are activated
-            if ((Memory[3]!=cardiac.transformSpace(new String[]{"000"})[0]) &(switcherStatus==true) ){
-                switcherStatus=false;
+            if ((cardiac.transformSpace(new String[]{"001"})[0].equals(Memory[3])) &(switcherStatus==false) ){
+                System.out.println(" Is out the SO Space, Flag status : "+Memory[3]);
+                switcherStatus=true;
                 switcherCycleCounter=0;
                 updateStatusCardiacG();
             }
+
+
+        if (cardiac.transformSpace(new String[]{"000"})[0].equals(Memory[3])){
+                switcherStatus=false;
+                updateStatusCardiacG();
+        }
         // Mod en Halt to get 9 to so
     }
 
-    public void HaltOperation(int pc, int operand){
+    public void HaltOperation(int newPc, int operand){
         System.out.println(" Is into the SO Erase Section");
-        pc= directionHaltSo;
-        switcherStatus=true;
+        changePC(pc,directionHaltSo);
+        switcherStatus=false;
         updateStatusCardiacG();
 
     }

@@ -110,7 +110,7 @@ public class  Cardiac {
         }
     }
 
-    // This function is to transform every integer to the format of the memory,i.e., array of string format
+    // This function is to transform every integer to the format of the memory,i.e., array of string format, to add 0 to the left
     // is sizeCell= 4 and num=101->> 0101
     public String toStr(int num) {
         return toStr(String.valueOf(num));
