@@ -137,25 +137,43 @@ public class  Cardiac {
         return negative.concat(numValue);
     }
 
-    //Transform strings from architecture of sizeCells=3 to architecture of every sizeCell
+    //Transform strings from architecture of sizeCells=>3 to architecture of every sizeCell
     // Receive a card with a list of instructions, it needs to handle negatives
     public String[] transformSpace(String[] card) { //Always receive instruction with 3 cells
-        if (sizeCell == 3) {
-            return card;
-        }
-        int numZeros = sizeCell - 3;
+
+
         String[] newCard = new String[card.length];
-        int j = 0;
+        String dir;
+        boolean sign=false;
+        int j = 0,numZeros;
         for (String instruction : card) {
 
+
             String opCode = instruction.substring(0, 1);
-            String dir = instruction.substring(1, 3);// To cove
+            if (opCode.equals("-")){
+                sign=true;
+                opCode = instruction.substring(1, 2);
+                instruction = instruction.substring(1);// To cove
+                //System.out.println("(Inside)The new instruction is :"+instruction);
+            }
+
+            //System.out.println("The new instruction is :"+instruction);
+            numZeros=sizeCell-instruction.length();
+            //System.out.println("Number of zeros:"+ numZeros+"with sixeCell:"+sizeCell);
+            dir= instruction.substring(1);
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < (numZeros); i++)//The size that is needed to p
             {
                 sb.append('0');
             }
-            newCard[j] = opCode.concat(sb.toString().concat(dir));
+            String new_string=opCode.concat(sb.toString().concat(dir));
+            if (sign==false) {
+                newCard[j] = new_string;
+            }
+            else {
+                newCard[j] = "-".concat(new_string);
+            }
             ++j;
         }
         return newCard;
@@ -169,22 +187,33 @@ public class  Cardiac {
     }
 
     public int shiftLeft(String instruction, int displacement) {
-        if (displacement >= instruction.length())
+        if (displacement >= sizeCell) {
+            //System.out.println("The displacement "+displacement+" is greater than size cell:"+sizeCell);
             return 0;
+        }
+        //System.out.println("The String is :"+instruction);
         String prefix = instruction.substring(displacement);// From displacement to end of instruction
+        //System.out.println("The preffix is :"+prefix);
         StringBuffer suffix = new StringBuffer(); // suffix is the new end of the string
         for (int i = 0; i < displacement; ++i)
             suffix.append('0');
+        //System.out.println("The suffix is :"+suffix);
+        //System.out.println("The final is :"+prefix.concat(suffix.toString()).replaceAll(",", ""));
         return Integer.parseInt(prefix.concat(suffix.toString()).replaceAll(",", ""));
     }
 
     public int shiftRight(String instruction, int displacement) {
-        if (displacement >= instruction.length())
+        if (displacement >= sizeCell) {
+            //System.out.println("The displacement "+displacement+" is greater than size cell:"+sizeCell);
             return 0;
-        String suffix = instruction.substring(0, sizeCell - displacement);
+        }
+        String suffix = instruction.substring(0, sizeCell - displacement);//maybe will be needed a try catch
         StringBuilder prefix = new StringBuilder();
-        for (int i = 0; i < (sizeCell - displacement); ++i)
+        //System.out.println("The suffix is :"+suffix);
+        for (int i = 0; i < displacement; ++i)
             prefix.append('0');
+        //System.out.println("The prefix is :"+prefix);
+        //System.out.println("The final is :"+prefix.toString().concat(suffix).replaceAll(",", ""));
         return Integer.parseInt(prefix.toString().concat(suffix).replaceAll(",", ""));
     }
 

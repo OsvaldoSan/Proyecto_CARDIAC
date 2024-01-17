@@ -556,6 +556,10 @@ public class Cardiac implements Initializable {
     /* ------------------- Main Method that lead every change -----------------------------*/
     /*Control the cycle and times*/
     public void cycleSystem() {
+        //System.out.println("-------------------------------- Test Area -----------------------------------------------");
+       // System.out.println(cardiac.transformSpace(new String[]{"-0001"})[0]);
+        //System.out.println(cardiac.transformSpace(new String[]{"-001"})[0]);
+        //System.out.println("-------------------------------- Test Area -----------------------------------------------");
         updateCycleTime();
         cycleNumber++;
         controlSwitcher();
@@ -613,8 +617,9 @@ public class Cardiac implements Initializable {
                 }
                 break;
             case 4:
-                o1 = Memory[pc].charAt(sizeCell - 2);
-                o2 = Memory[pc].charAt(sizeCell - 1);
+                o1 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 2));
+                o2 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 1));
+                System.out.println("Start the shift secction with o1:"+o1+" and o2:"+o2+" and with the accumulator :"+acc+" and with string value:"+String.valueOf(acc));
                 acc = cardiac.shiftLeft(cardiac.toStr(acc), o1);
                 acc = cardiac.shiftRight(cardiac.toStr(acc), o2);
                 break;

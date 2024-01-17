@@ -309,8 +309,10 @@ public class CardiacSync_controller extends Cardiac {
     }
 
     public void HaltOperation(int newPc, int operand){
-        System.out.println(" Is into the SO Erase Section");
-        changePC(pc,directionHaltSo);
+        System.out.println(" Is into the preamble section to jump to  SO Erase Section");
+        //Assign to e0 the value of -0001 to use as flag in the preamble section to jump to the erase section
+        Memory[directionStartPreSO-1]=cardiac.transformSpace(new String[]{"-001"})[0];
+        changePC(pc,directionStartPreSO);
         switcherStatus=false;
         updateStatusCardiacG();
 
