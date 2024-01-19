@@ -638,8 +638,8 @@ public class Cardiac implements Initializable {
             case 8:
                 // Load into the last register of memory the 8+pc
 
-                Memory[cardiac.getCells()-1]= cardiac.toStr((cardiac.getCells()*8)+pc);
-                changePC(pc,operand);
+                // It makes the jump safer
+                saveJump(operand);
                 jump=true;
                 break;
             case 9:
@@ -653,10 +653,15 @@ public class Cardiac implements Initializable {
             updateContentG();
 
             if(jump==false) { changePC(pc,pc+1); }
+
             updateMemoryValuesG();
             System.out.println("++++++++++++++++++++++++++++ Cycle Finished +++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
+    public void saveJump(int operand){
+        Memory[cardiac.getCells()-1]= cardiac.toStr((cardiac.getCells()*8)+pc);
+        changePC(pc,operand);
+    }
 
     public void HaltOperation(int newPc, int operand){
         changePC(newPc,operand);

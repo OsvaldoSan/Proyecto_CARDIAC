@@ -43,6 +43,7 @@ public class CardiacSync_controller extends Cardiac {
 
     // --------------------- Model Variables ------------------------------------------
     private int cycleLimitSwitcher,switcherCycleCounter, directionStartPreSO,directionUserStart,directionUserEnd,directionChargeStart,directionChargeEnd,directionHaltSo;
+    private int directionSaverJump,lastDirectionSO;
     private boolean switcherStatus;
     private String starterStatus;
 
@@ -196,7 +197,7 @@ public class CardiacSync_controller extends Cardiac {
 
     // --------------------------- Start and End -----------------------------------------------------
     public void startCardiac(){
-        cardiac = (CardiacSync)(new CardiacSync(totalCells,946,30,4,799,814));
+        cardiac = (CardiacSync)(new CardiacSync(totalCells,951,30,4,799,814,918,949));
         cardiac.startCVM();
 
         cards.addAll(datosFileSystem);
@@ -254,6 +255,8 @@ public class CardiacSync_controller extends Cardiac {
             directionChargeStart=((CardiacSync) cardiac).getDirectionChargeStart();
             directionChargeEnd=((CardiacSync) cardiac).getDirectionChargeEnd();
             directionHaltSo=((CardiacSync) cardiac).getDirectionHaltSO();
+            directionSaverJump= ((CardiacSync) cardiac).getDirectionSaverJump();
+            lastDirectionSO=((CardiacSync) cardiac).getLastDirectionSO();
 
         }
         else{
@@ -306,6 +309,18 @@ public class CardiacSync_controller extends Cardiac {
                 updateStatusCardiacG();
         }
         // Mod en Halt to get 9 to so
+    }
+
+    public void saveJump(int operand){
+        //Means that the SO will left the control to the user program
+        if (pc == lastDirectionSO ){
+            // We will save in 999 the global variable of the process that was saved by the SO
+            Memory[cardiac.getCells()-1]=Memory[directionSaverJump];
+        }
+        else {
+            Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc);
+        }
+        changePC(pc,operand);
     }
 
     public void HaltOperation(int newPc, int operand){
