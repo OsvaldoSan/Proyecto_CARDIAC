@@ -43,7 +43,7 @@ public class CardiacSync_controller extends Cardiac {
 
     // --------------------- Model Variables ------------------------------------------
     private int cycleLimitSwitcher,switcherCycleCounter, directionStartPreSO,directionUserStart,directionUserEnd,directionChargeStart,directionChargeEnd,directionHaltSo;
-    private int directionSaverJump,lastDirectionSO;
+    private int directionSaverJump,lastDirectionSO,dirC7;
     private boolean switcherStatus;
     private String starterStatus;
 
@@ -197,7 +197,7 @@ public class CardiacSync_controller extends Cardiac {
 
     // --------------------------- Start and End -----------------------------------------------------
     public void startCardiac(){
-        cardiac = (CardiacSync)(new CardiacSync(totalCells,951,30,4,799,814,918,949));
+        cardiac = (CardiacSync)(new CardiacSync(totalCells,951,30,4,799,814,918,949,942));
         cardiac.startCVM();
 
         cards.addAll(datosFileSystem);
@@ -236,6 +236,8 @@ public class CardiacSync_controller extends Cardiac {
         //To restart all the values
         //
         scrollMemory.setContent(new AnchorPane());
+        cardsWaitingList.getItems().clear();
+        outputCardsList.getItems().clear();
 
         timeline.stop();
     }
@@ -257,6 +259,7 @@ public class CardiacSync_controller extends Cardiac {
             directionHaltSo=((CardiacSync) cardiac).getDirectionHaltSO();
             directionSaverJump= ((CardiacSync) cardiac).getDirectionSaverJump();
             lastDirectionSO=((CardiacSync) cardiac).getLastDirectionSO();
+            dirC7=((CardiacSync) cardiac).getDirC7();
 
         }
         else{
@@ -323,6 +326,12 @@ public class CardiacSync_controller extends Cardiac {
         changePC(pc,operand);
     }
 
+    public void printOutput(String output){
+
+        System.out.println("Salida :"+output);
+        outputCardsList.getItems().add("ID:"+Memory[dirC7]+" "+output);
+    }
+
     public void HaltOperation(int newPc, int operand){
         System.out.println(" Is into the preamble section to jump to  SO Erase Section");
         //Assign to e0 the value of -0001 to use as flag in the preamble section to jump to the erase section
@@ -330,6 +339,7 @@ public class CardiacSync_controller extends Cardiac {
         changePC(pc,directionStartPreSO);
         switcherStatus=false;
         updateStatusCardiacG();
+        printOutput("----");
 
     }
 }

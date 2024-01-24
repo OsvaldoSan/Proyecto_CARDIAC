@@ -68,14 +68,15 @@ public class Cardiac implements Initializable {
     @FXML
     private ChoiceBox<String> tempos, architecture;
     @FXML
-    private ListView<String> outputCardsList;
+    protected ListView<String> outputCardsList;
+
 
     // The size will be set in the method to make the gridPane
     private StackPane itemsDirection[];
     private StackPane itemsContent[];
     private Label gContentMemory[];
     private Label gDirectionMemory[];
-    private ListView<String> cardsWaitingList;
+    protected ListView<String> cardsWaitingList;
 
     //Timing variables variables
     private int TIME=1600;
@@ -506,6 +507,8 @@ public class Cardiac implements Initializable {
         //To restart all the values
         //
         scrollMemory.setContent(new AnchorPane());
+        cardsWaitingList.getItems().clear();
+        outputCardsList.getItems().clear();
 
         timeline.stop();
     }
@@ -625,15 +628,17 @@ public class Cardiac implements Initializable {
                 break;
             case 5:
                 output = Memory[operand];
-                System.out.println("Salida :"+output);
-                outputCardsList.getItems().add(output);
+                printOutput(output);
                 //gOutput.setText(output);
                 break;
             case 6:
+                System.out.println("Case 6  Stored value :"+cardiac.toStr(acc));
                 Memory[operand] = cardiac.toStr(acc);
                 break;
             case 7:
+
                 acc -= Integer.parseInt(Memory[operand]);
+                System.out.println("Case 7 Substract value Memory value:"+Memory[operand]+"  result acum:"+acc);
                 break;
             case 8:
                 // Load into the last register of memory the 8+pc
@@ -666,6 +671,11 @@ public class Cardiac implements Initializable {
     public void HaltOperation(int newPc, int operand){
         changePC(newPc,operand);
         System.out.println("Program ended");
+    }
+
+    public void printOutput(String output){
+        System.out.println("Salida :"+output);
+        outputCardsList.getItems().add(output);
     }
 
     public void controlSwitcher(){;}
