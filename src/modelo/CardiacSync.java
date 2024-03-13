@@ -15,7 +15,7 @@ public class CardiacSync extends Cardiac{
     private int directionHaltSO;
     private int lastDirectionSO;
     private int directionSaverJump;
-    private int dirC7;
+    private int dirStaticProcess;
 
     public int getDirectionUserStart(){return directionUserStart;}
     public int getDirectionUserEnd(){return directionUserEnd;}
@@ -24,7 +24,7 @@ public class CardiacSync extends Cardiac{
     public int getDirectionHaltSO(){return  directionHaltSO;}
     public int getLastDirectionSO(){return lastDirectionSO;}
     public int getDirectionSaverJump(){return directionSaverJump;}
-    public int getDirC7(){return dirC7;}
+    public int getDirStaticProcess(){return dirStaticProcess;}
 
     public void setStarterStatus(String status){ starterStatus =status;}
     public void setCycleLimitSwitch(int cycleLimit){cycleLimitSwitch=cycleLimit;}
@@ -39,7 +39,7 @@ public class CardiacSync extends Cardiac{
     public int getDirectionStartPreSO(){return directionStartPreSO;}
 
 
-    public CardiacSync(int cells,int directionPreSo,int cycleLimit,int directionssuerstart,int directionuserend,int dirHalt,int lastdirectionso,int directionsj, int dirc7){
+    public CardiacSync(int cells,int directionPreSo,int cycleLimit,int directionssuerstart,int directionuserend,int dirHalt,int lastdirectionso,int directionsj, int dirstaticp){
         super(validationCells(cells));
         directionStartPreSO =directionPreSo;
         cycleLimitSwitch=cycleLimit;
@@ -50,7 +50,7 @@ public class CardiacSync extends Cardiac{
         directionHaltSO=dirHalt;
         lastDirectionSO=lastdirectionso;
         directionSaverJump=directionsj;
-        dirC7=dirc7;
+        dirStaticProcess =dirstaticp;
         //Read the file to charge the second memory
 
     }

@@ -43,7 +43,7 @@ public class CardiacSync_controller extends Cardiac {
 
     // --------------------- Model Variables ------------------------------------------
     private int cycleLimitSwitcher,switcherCycleCounter, directionStartPreSO,directionUserStart,directionUserEnd,directionChargeStart,directionChargeEnd,directionHaltSo;
-    private int directionSaverJump,lastDirectionSO,dirC7;
+    private int directionSaverJump,lastDirectionSO, dirStaticProcess;
     private boolean switcherStatus;
     private String starterStatus;
 
@@ -97,7 +97,7 @@ public class CardiacSync_controller extends Cardiac {
         bottomTabPane.setPrefWidth(561);
         newTitlePane.setPrefWidth(271);
 
-        newTitlePane.setText("Memoria Secundaria");
+        newTitlePane.setText("Secondary Memory");
 
         // Content of the new pane
 
@@ -144,7 +144,7 @@ public class CardiacSync_controller extends Cardiac {
         TableColumn<FileData, String> directionColumn = new TableColumn<>("Direction");
         directionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDirection()));
 
-        TableColumn<FileData, String> datosColumn = new TableColumn<>("Datos");
+        TableColumn<FileData, String> datosColumn = new TableColumn<>("Data");
         datosColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDatos()));
 
         // Add columns to TableView
@@ -197,7 +197,7 @@ public class CardiacSync_controller extends Cardiac {
 
     // --------------------------- Start and End -----------------------------------------------------
     public void startCardiac(){
-        cardiac = (CardiacSync)(new CardiacSync(totalCells,951,30,4,799,814,918,949,942));
+        cardiac = (CardiacSync)(new CardiacSync(totalCells,951,30,5,765,819,933,979,4));
         cardiac.startCVM();
 
         cards.addAll(datosFileSystem);
@@ -259,7 +259,7 @@ public class CardiacSync_controller extends Cardiac {
             directionHaltSo=((CardiacSync) cardiac).getDirectionHaltSO();
             directionSaverJump= ((CardiacSync) cardiac).getDirectionSaverJump();
             lastDirectionSO=((CardiacSync) cardiac).getLastDirectionSO();
-            dirC7=((CardiacSync) cardiac).getDirC7();
+            dirStaticProcess =((CardiacSync) cardiac).getDirStaticProcess();
 
         }
         else{
@@ -329,7 +329,7 @@ public class CardiacSync_controller extends Cardiac {
     public void printOutput(String output){
 
         System.out.println("Salida :"+output);
-        outputCardsList.getItems().add("ID:"+Memory[dirC7]+" "+output);
+        outputCardsList.getItems().add("ID:"+Memory[dirStaticProcess]+" "+output);
     }
 
     public void HaltOperation(int newPc, int operand){

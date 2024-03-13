@@ -516,6 +516,7 @@ public class Cardiac implements Initializable {
     // Stops the Virtual Machine by itself
     public void emergencyStop(){
         //stopCVM();
+        // It is not using stopCVM because we can Keep the latest status of CARDIAC
         timeline.stop();
         setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
         gCardiacStatus.setText(STATUS+"dead, please restart");

@@ -21,13 +21,13 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="145.0" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
                <children>
-                  <Button fx:id="gCardiacSync" mnemonicParsing="false" onAction="#goVirtualMachine" prefHeight="25.0" prefWidth="161.0" text="E-CARDIAC SYNC" />
+                  <Button fx:id="gCardiacSync" mnemonicParsing="false" onAction="#goVirtualMachine" prefHeight="25.0" prefWidth="161.0" text="E-CARDIAC C" />
                   <Button mnemonicParsing="false" text="Instructions" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="195.0" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="161.0" text="E-CARDIAC Parallel" />
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="161.0" text="E-CARDIAC PC" />
                   <Button mnemonicParsing="false" text="Instructions" />
                </children>
             </HBox>
@@ -42,7 +42,7 @@
                   <Image url="@../media/creative-commons.png" />
                </image>
             </ImageView>
-            <Label prefHeight="36.0" prefWidth="189.0" text="Licenced by Creative Commons" />
+            <Label prefHeight="36.0" prefWidth="290.0" text="Licenced by Creative Commons" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
