@@ -193,6 +193,29 @@ Label{
     -fx-padding: 0 0  1px 10px;/* arriba- derecha -abajo-izquierda*/
     -fx-alignment: center ;
     -fx-text-align: center;
+     -fx-min-width: 50px; /* Minimum width */
+    -fx-min-height: 20px; /* Minimum height */
+
+
+    /* Add margin */
+    -fx-margin: 5px;
+
+}
+
+.labelspecialb{
+    -fx-font-size: 9pt;
+    -fx-font-family: "Loto Black";
+    -fx-padding: 0 0  1px 10px;/* arriba- derecha -abajo-izquierda*/
+    -fx-alignment: center ;
+    -fx-text-align: center;
+     -fx-min-width: 50px; /* Minimum width */
+    -fx-min-height: 20px; /* Minimum height */
+
+
+    /* Add margin */
+    -fx-margin: 5px;
+
+
 }
 
 

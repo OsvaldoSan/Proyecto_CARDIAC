@@ -6,6 +6,8 @@ public class  Cardiac {
     private int cells;//Amount of cells of the memory
     private int sizeCell; // Size in characters(for CARDIAC is 3), depends on cells
     private String Memory[]; // Memory of CARDIAC Machine
+
+    // Key elements of every cpu
     private int pc;//Program counter
     private int acc;//Accumulator
     private String InReg;//Instruction register

@@ -19,33 +19,33 @@ import java.util.List;
 public class CardiacSync_controller extends Cardiac {
 
 
-
+    protected String fileNameSO="/home/mrblue/Documents/Proyectos/Tesis_MAC/Cardiac_VM/src/modelo/Files/File_System_SO.txt";
     // Design Variables
     @FXML
-    private GridPane gridPMachineStatus;
+    protected GridPane gridPMachineStatus;
 
     @FXML
-    private HBox HBoxBottom;
+    protected HBox HBoxBottom;
 
     @FXML
-    private TitledPane bottomQueue;
+    protected TitledPane bottomQueue;
     @FXML
-    private TabPane bottomTabPane;
+    protected TabPane bottomTabPane;
 
-    private TableView<FileData> fileSystem= new TableView<>();;
+    protected TableView<FileData> fileSystem= new TableView<>();;
 
     Label gDescriptionStarter = new Label("Starter"),gDescriptionSwitcher=new Label("SW Status");
     Label gDescriptionCycleLimitSwitch = new Label("Limit of Cycles "), gDescriptionSwitcherCycleCounter = new Label("Counter SW");
     Label gStarter= new Label(""),gSwitcher=new Label(""), gCycleLimitSwitch=new Label(""),gSwitcherCycleCounter=new Label("");
 
     // ---------------------- Control Variables -------------------------------
-    private List<String> datosFileSystem = new ArrayList<>();
+    protected List<String> datosFileSystem = new ArrayList<>();
 
     // --------------------- Model Variables ------------------------------------------
-    private int cycleLimitSwitcher,switcherCycleCounter, directionStartPreSO,directionUserStart,directionUserEnd,directionChargeStart,directionChargeEnd,directionHaltSo;
-    private int directionSaverJump,lastDirectionSO, dirStaticProcess;
-    private boolean switcherStatus;
-    private String starterStatus;
+    protected int cycleLimitSwitcher,switcherCycleCounter, directionStartPreSO,directionUserStart,directionUserEnd,directionChargeStart,directionChargeEnd,directionHaltSo;
+    protected int directionSaverJump,lastDirectionSO, dirStaticProcess;
+    protected boolean switcherStatus;
+    protected String starterStatus;
 
 
     // ----------------------------------------------------- Layout FXML edition -------------------------------------------------------------------------------------------------
@@ -54,38 +54,12 @@ public class CardiacSync_controller extends Cardiac {
 
         // -------------------------------------------- Section Left Bar ------------------------------------------------------------------
 
-        // Grid pane for Machine Status
-        // CSS definitions for labels
-        gStarter.setId("labelNumeric");
-        gSwitcher.setId("labelNumeric");
-        gCycleLimitSwitch.setId("labelNumeric");
-        gSwitcherCycleCounter.setId("labelNumeric");
 
-
-        // Definitions for Machine Status
-        System.out.println("Gridpane value: "+gridPMachineStatus);
-        // Define the height of the new row equal to all the original rows
-        RowConstraints newRowConstraints = new RowConstraints();
-        newRowConstraints.setPrefHeight(gridPMachineStatus.getRowConstraints().get(0).getPrefHeight());
-        // Get the number of rows
-        int newRow = gridPMachineStatus.getRowCount();
-        // Add the new row and the constraints
-        gridPMachineStatus.addRow(newRow,gDescriptionStarter,gStarter);
-        //gridPMachineStatus.getRowConstraints().add(newRowConstraints);
-        //Add CycleLimit
-        gridPMachineStatus.addRow(newRow+1,gDescriptionCycleLimitSwitch,gCycleLimitSwitch);
-        //gridPMachineStatus.getRowConstraints().add(newRowConstraints);
-        //Add Counter Cycles
-        gridPMachineStatus.addRow(newRow+2,gDescriptionSwitcherCycleCounter,gSwitcherCycleCounter);
-        //gridPMachineStatus.getRowConstraints().add(newRowConstraints);
-
-        //Add switcher
-        gridPMachineStatus.addRow(newRow+3,gDescriptionSwitcher,gSwitcher);
-        gridPMachineStatus.getRowConstraints().add(newRowConstraints);
-
+        editMachineStatus();
+        editTitleCPU();
 
         // ----------------------------------------- Section bottom right -------------------------------------------------------
-
+        // Create section to show the secondary memory
         // Create new pane
         TitledPane newTitlePane = new TitledPane();
         HBox.setHgrow(bottomQueue, Priority.ALWAYS);
@@ -113,16 +87,54 @@ public class CardiacSync_controller extends Cardiac {
 
         HBoxBottom.getChildren().add(newTitlePane);
 
+
         initializeTableView();
 
 
+
     }
+
+    @FXML
+    protected void editMachineStatus(){
+        // Grid pane for Machine Status
+        // CSS definitions for labels
+        gStarter.setId("labelNumeric");
+        gSwitcher.setId("labelNumeric");
+        gCycleLimitSwitch.setId("labelNumeric");
+        gSwitcherCycleCounter.setId("labelNumeric");
+
+
+        // Definitions for Machine Status
+        System.out.println("Gridpane value: "+gridPMachineStatus);
+        // Define the height of the new row equal to all the original rows
+        RowConstraints newRowConstraints = new RowConstraints();
+        newRowConstraints.setPrefHeight(gridPMachineStatus.getRowConstraints().get(0).getPrefHeight());
+        // Get the number of rows
+        int newRow = gridPMachineStatus.getRowCount();
+        // Add the new row and the constraints
+        gridPMachineStatus.addRow(newRow,gDescriptionStarter,gStarter);
+        //gridPMachineStatus.getRowConstraints().add(newRowConstraints);
+        //Add CycleLimit
+        gridPMachineStatus.addRow(newRow+1,gDescriptionCycleLimitSwitch,gCycleLimitSwitch);
+        //gridPMachineStatus.getRowConstraints().add(newRowConstraints);
+        //Add Counter Cycles
+        gridPMachineStatus.addRow(newRow+2,gDescriptionSwitcherCycleCounter,gSwitcherCycleCounter);
+        //gridPMachineStatus.getRowConstraints().add(newRowConstraints);
+
+        //Add switcher
+        gridPMachineStatus.addRow(newRow+3,gDescriptionSwitcher,gSwitcher);
+        //gridPMachineStatus.getRowConstraints().add(newRowConstraints);
+
+    }
+
+    @FXML
+    protected void editTitleCPU(){}
 
     private void initializeTableView() {
         // Read data from the file and populate TableView
         gStarter.setText("Waiting");
         try {
-            ObservableList<FileData> data = readFileAndCreateData("/home/mrblue/Documents/Proyectos/Tesis_MAC/Cardiac_VM/src/modelo/Files/File_System_SO.txt");
+            ObservableList<FileData> data = readFileAndCreateData(fileNameSO);
             fileSystem.setItems(data);
 
             // Fill the data into datosFileSystem to the system

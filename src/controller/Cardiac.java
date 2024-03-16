@@ -47,52 +47,52 @@ public class Cardiac implements Initializable {
 
     // GUI variables
     // Internal variable of output that gOutput uses
-    private String output;
+    protected String output;
     @FXML // This label must use before any new variable that exists in the FXML
-    private Label gInReg,gOpCode,gOperand,gPc,gAcc,gNegative, gTerminalNote,gCycleNumber,gCardiacStatus,gOperation,gStatusDownload;
+    protected Label gInReg,gOpCode,gOperand,gPc,gAcc,gNegative, gTerminalNote,gCycleNumber,gCardiacStatus,gOperation,gStatusDownload;
     @FXML
-    private TextField gTerminalText;
+    protected TextField gTerminalText;
     @FXML
-    private TextArea gDeckText;
+    protected TextArea gDeckText;
     @FXML
-    private Button gTerminalRun, gAddCard, gStartStop,gPause,gRestart,gDownloadOutput,gBackHome;
+    protected Button gTerminalRun, gAddCard, gStartStop,gPause,gRestart,gDownloadOutput,gBackHome;
     @FXML
-    private GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell, there is not intiallize in Scene Builder, because the length will be decided with the sizeCell
+    protected GridPane gridMemory= new GridPane(); //Is the grid pane that will have each cell, there is not intiallize in Scene Builder, because the length will be decided with the sizeCell
     @FXML
-    private StackPane stackGridMemory = new StackPane();
+    protected StackPane stackGridMemory = new StackPane();
     //it could be without label
     @FXML
     protected ScrollPane scrollMemory;//Is the area whit scroll that has the grid
     @FXML
-    private StackPane stackCardsInWaitingList;
+    protected StackPane stackCardsInWaitingList;
     @FXML
-    private ChoiceBox<String> tempos, architecture;
+    protected ChoiceBox<String> tempos, architecture;
     @FXML
     protected ListView<String> outputCardsList;
 
 
     // The size will be set in the method to make the gridPane
-    private StackPane itemsDirection[];
-    private StackPane itemsContent[];
-    private Label gContentMemory[];
-    private Label gDirectionMemory[];
+    protected StackPane itemsDirection[];
+    protected StackPane itemsContent[];
+    protected Label gContentMemory[];
+    protected Label gDirectionMemory[];
     protected ListView<String> cardsWaitingList;
 
     //Timing variables variables
-    private int TIME=1600;
+    protected int TIME=1600;
     protected Timeline timeline ;
     //Control variables
-    private Boolean isInput=false, isStarted=false, isPause=false;
+    protected Boolean isInput=false, isStarted=false, isPause=false;
     protected int cycleNumber=0;
 
     protected Queue<String> cards;
 
     // Final Variables
-    private final String STATUS="CARDIAC is ";
+    protected final String STATUS="CARDIAC is ";
 
     // Style variables
     // Max columns to the gridpane, this could change to have better performance
-    private final int MAX_COLUMNS = 10;
+    protected final int MAX_COLUMNS = 10;
 
 
     /* ----------------- Methods that are the main connection with the GUI ----------------------------------*/
@@ -404,12 +404,12 @@ public class Cardiac implements Initializable {
         gAcc.setText(Integer.toString(acc));
         gNegative.setText(negative.toString());
 
-        updateOperationTextG(); // Updates the value of gOperation
+        gOperation=updateOperationTextG(gOperation); // Updates the value of gOperation
         gCycleNumber.setText(Integer.toString(cycleNumber));
     }
 
     //Updates the value of gOperation that shows to the user which operation is do it
-    public void updateOperationTextG(){
+    public Label updateOperationTextG(Label gOperation){
         switch(opCode){
             case 0:
                 gOperation.setText("Input");
@@ -445,6 +445,7 @@ public class Cardiac implements Initializable {
                 gOperation.setText(" ");
                 break;
         }
+        return gOperation;
     }
 
     /* ------------------------------- Objects to control the execution of the VM -----------------------------------*/

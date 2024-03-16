@@ -1,21 +1,23 @@
 package modelo;
 
 public class CardiacSync extends Cardiac{
-    private String SecondaryMemory[] = {"0000","0001","0002"};
-    private String bootloaderContent[]={"0008"};
-    private String starterStatus;
-    private int cycleLimitSwitch;
-    private int cycleSwitcherCounter=0;
-    private boolean switcherStatus=false;
-    private int directionStartPreSO;
-    private int directionUserStart;
-    private int directionUserEnd;
-    private int directionChargeStart;
-    private int directionChargeEnd;
-    private int directionHaltSO;
-    private int lastDirectionSO;
-    private int directionSaverJump;
-    private int dirStaticProcess;
+    protected String SecondaryMemory[] = {"0000","0001","0002"}; // CPU L
+    protected String bootloaderContent[]={"0008"}; // CPU L
+    protected String starterStatus; // CPU L - General para machine status
+
+    protected int cycleLimitSwitch; // CPU E
+    protected int cycleSwitcherCounter=0; //CPU E
+    protected boolean switcherStatus=false; // CPU E
+    // General directions used
+    protected int directionStartPreSO; // Direction to preamble
+    protected int directionUserStart; // Direction where user space starts
+    protected int directionUserEnd; // Direction where user space ends
+    protected int directionChargeStart; // Direction where load of SO starts
+    protected int directionChargeEnd; // Direction where load of SO ends
+    protected int directionHaltSO; // Direction to erase process
+    protected int lastDirectionSO; // Last direction of SO
+    protected int directionSaverJump; // Direction to save saver jump
+    protected int dirStaticProcess; // Direction of id static to show in output
 
     public int getDirectionUserStart(){return directionUserStart;}
     public int getDirectionUserEnd(){return directionUserEnd;}
@@ -56,7 +58,7 @@ public class CardiacSync extends Cardiac{
     }
 
     // Preprocess methods
-    private static int validationCells(int cells){
+    protected static int validationCells(int cells){
         if(cells < 1000) cells=1000; // CARDIAC SYNC needs at least 1000 cells to work
         return cells;
     }

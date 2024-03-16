@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Welcome {
 
     @FXML
-    private Button gCardiac,gCardiacSync;
+    private Button gCardiac,gCardiacSync,gCardiacPar;
 
     @FXML
     private void goVirtualMachine(ActionEvent vmButton){
@@ -27,6 +27,10 @@ public class Welcome {
         else if(resource.equals(gCardiacSync)){
             System.out.println("Go to E-CARDIAC SYNC");
             loadStage("../view/cardiac.fxml",vmButton,new CardiacSync_controller());
+        }
+        else if(resource.equals(gCardiacPar)){
+            System.out.println("Go to E-CARDIAC Parallel");
+            loadStage("../view/cardiac.fxml",vmButton,new CardiacPar_controller());
         }
     }
 
@@ -53,6 +57,8 @@ public class Welcome {
             scene.getStylesheets().add("../view/styles_to_cardiac.css");
 
             if(selectedVM.getSource()==gCardiacSync) ((CardiacSync_controller)controller_selected).editLayout();
+
+            else if(selectedVM.getSource()==gCardiacPar) ((CardiacPar_controller)controller_selected).editLayout();
 
             stage.setScene(scene);
             Button button = (Button) selectedVM.getSource();

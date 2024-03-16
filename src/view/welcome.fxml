@@ -27,7 +27,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="195.0" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="161.0" text="E-CARDIAC PC" />
+                  <Button fx:id="gCardiacPar" mnemonicParsing="false" onAction="#goVirtualMachine" prefHeight="25.0" prefWidth="161.0" text="E-CARDIAC PC" />
                   <Button mnemonicParsing="false" text="Instructions" />
                </children>
             </HBox>
