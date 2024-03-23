@@ -1,6 +1,7 @@
 package controller;
 
 // There is an infinite cycle when there is a "load" form an empty element
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -16,7 +17,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -80,7 +84,7 @@ public class Cardiac implements Initializable {
 
     //Timing variables variables
     protected int TIME=1600;
-    protected Timeline timeline ;
+    protected TimeUtils timeline = new TimeUtils();
     //Control variables
     protected Boolean isInput=false, isStarted=false, isPause=false;
     protected int cycleNumber=0;
@@ -88,7 +92,7 @@ public class Cardiac implements Initializable {
     protected Queue<String> cards;
 
     // Final Variables
-    protected final String STATUS="CARDIAC is ";
+    protected final String STATUS="";
 
     // Style variables
     // Max columns to the gridpane, this could change to have better performance
@@ -118,6 +122,7 @@ public class Cardiac implements Initializable {
             startCardiac();
 
             // Start the cycle
+            System.out.println();
             timeline.play();
         }
         else if( (button.equals(gStartStop) || button.equals(gRestart) ) && isStarted==true){
@@ -152,8 +157,8 @@ public class Cardiac implements Initializable {
 
     public void initiallizeTimeline(int TIME){
         // timeline knows what has to do, but is still stopped
-        timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
-        timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
+        timeline.timeline = new Timeline(new KeyFrame(Duration.millis(TIME), e -> cycleSystem() ));
+        timeline.timeline.setCycleCount(Animation.INDEFINITE); // The amount of cycles for the timeline is set
     }
 
     @FXML
@@ -191,28 +196,12 @@ public class Cardiac implements Initializable {
     public void execution(ActionEvent event){
         Object button=event.getSource();
         if(button.equals(gTerminalRun) && isInput==true){
-            isInput=false;
-            gTerminalNote.setText("Done!");
-            Memory[operand]= cardiac.toStr(gTerminalText.getText());
-            gTerminalText.clear();
-            changePC(pc,pc+1);
-            updateMemoryValuesG();
-            timeline.play();
+            funcInput();
         }
 
         //Add Card
         else if(button.equals(gAddCard)){
-            cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
-            //Erase all if there is not an input time
-            gDeckText.clear();
-            updateCardsInWaitingList();
-            if(isInput==true){
-                takeCardFromQueue();
-                isInput=false;
-                //pc++;
-                changePC(pc,pc+1);
-                timeline.play();
-            }
+            funcAddCard();
 
         }
     }
@@ -243,6 +232,31 @@ public class Cardiac implements Initializable {
         }
     }
 
+    public synchronized void funcInput(){
+        isInput=false;
+        gTerminalNote.setText("Done!");
+        Memory[operand]= cardiac.toStr(gTerminalText.getText());
+        gTerminalText.clear();
+        changePC(pc,pc+1);
+        updateMemoryValuesG();
+        timeline.play();
+    }
+
+    public synchronized void funcAddCard(){
+
+        cards.addAll(Arrays.asList( gDeckText.getText().split("\n") ));
+        //Erase all if there is not an input time
+        gDeckText.clear();
+        updateCardsInWaitingList();
+        if(isInput==true){
+            takeCardFromQueue();
+            isInput=false;
+            //pc++;
+            changePC(pc,pc+1);
+            timeline.play();
+        }
+
+    }
     /*------------- Change of Stages ---------------*/
     public void changeStages(ActionEvent event){
         // Alert Class to confirm return
@@ -404,12 +418,12 @@ public class Cardiac implements Initializable {
         gAcc.setText(Integer.toString(acc));
         gNegative.setText(negative.toString());
 
-        gOperation=updateOperationTextG(gOperation); // Updates the value of gOperation
+        gOperation=updateOperationTextG(gOperation,opCode); // Updates the value of gOperation
         gCycleNumber.setText(Integer.toString(cycleNumber));
     }
 
     //Updates the value of gOperation that shows to the user which operation is do it
-    public Label updateOperationTextG(Label gOperation){
+    public Label updateOperationTextG(Label gOperation,int opCode){
         switch(opCode){
             case 0:
                 gOperation.setText("Input");
@@ -459,6 +473,8 @@ public class Cardiac implements Initializable {
         itemsDirection[nextPC].getStyleClass().add("itemDirectionSelected");
     }
 
+    // It will be more useful in the parallel architecture, but it is good to have it here
+    //public void changePCEx(int actualPC, int nextPC){changePC(actualPC,nextPC);}
     /*Control the Waiting List and the  stop*/
 
     //Is for the options that charge a complete deck
@@ -518,7 +534,10 @@ public class Cardiac implements Initializable {
     public void emergencyStop(){
         //stopCVM();
         // It is not using stopCVM because we can Keep the latest status of CARDIAC
+        System.out.println("This is an emergency stop");
         timeline.stop();
+        System.out.println(" ES Status of timeline 1 after:"+timeline.timeline1.getStatus());
+        System.out.println(" ES Status of timeline 2 after:"+timeline.timeline2.getStatus());
         setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
         gCardiacStatus.setText(STATUS+"dead, please restart");
     }
@@ -701,7 +720,7 @@ public class Cardiac implements Initializable {
     /* ------------------------------- Connection with the model -----------------------------------*/
     // Get Cardiac parameters from the model
     public void getCardiacParameters(){
-        System.out.println("Inside parameters "+cardiac);
+        System.out.println("Inside get Carduac parameters "+cardiac);
         InReg=cardiac.getInReg();
         Memory=cardiac.getMemory();
         opCode = cardiac.getOpCode();
@@ -714,6 +733,7 @@ public class Cardiac implements Initializable {
 
     // Set parameters to the model
     public void setCardiacParameters(){
+        System.out.println("Inside set CARDIAC Parameters");
         cardiac.setInReg(InReg);
         cardiac.setMemory(Memory);
         cardiac.setOpCode(opCode);

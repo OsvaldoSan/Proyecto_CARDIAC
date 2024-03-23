@@ -227,6 +227,11 @@ public class CardiacSync_controller extends Cardiac {
 
     //Transform every variable to null, including the memory and update the values of the GUI
     public void stopCVM(){
+        stopCVMSync();
+
+    }
+
+    public void stopCVMSync(){
         setCardiacSyncParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
 
         // Version SYNC
@@ -252,12 +257,13 @@ public class CardiacSync_controller extends Cardiac {
         outputCardsList.getItems().clear();
 
         timeline.stop();
+
     }
 
 
     // -------------------------- Getters and Setters -----------------------------------
     public void getCardiacSyncParameters(){
-        System.out.println("Inside Cardiac Sync Parameters "+ cardiac);
+        System.out.println("Inside get Cardiac Sync Parameters "+ cardiac);
         if (cardiac instanceof CardiacSync) {
             cycleLimitSwitcher=((CardiacSync) cardiac).getCycleLimitSwitch();
             switcherCycleCounter=((CardiacSync) cardiac).getCycleSwitcherCounter();
@@ -282,7 +288,7 @@ public class CardiacSync_controller extends Cardiac {
     }
 
     public void setCardiacSyncParameters(){
-        System.out.println("Inside Cardiac Sync Parameters "+ cardiac);
+        System.out.println("Inside Set Cardiac Sync Parameters "+ cardiac);
         if (cardiac instanceof CardiacSync) {
          ((CardiacSync) cardiac).setCycleLimitSwitch(cycleLimitSwitcher);
          ((CardiacSync) cardiac).setCycleSwitcherCounter(switcherCycleCounter);
@@ -292,6 +298,8 @@ public class CardiacSync_controller extends Cardiac {
         setCardiacParameters();
     }
 
+    // It will be more useful in the parallel architecture, but it is good to have it here
+    //public void changePCEx(int actualPC, int nextPC){changePC(actualPC,nextPC);    }
 
     public void controlSwitcher(){
 
@@ -300,12 +308,8 @@ public class CardiacSync_controller extends Cardiac {
         //Its the automatic change of pc
         // If the cycles are finished and the content in the flag space is 1, the user time ends and starts the SO time
         if ((switcherCycleCounter>cycleLimitSwitcher) & (cardiac.transformSpace(new String[]{"001"})[0].equals(Memory[3]) & (switcherStatus==true)) ){
-            // The flag will be changed in the software(SO)
-            System.out.println(" Is into the Pre-SO section, Flag status : "+Memory[3]);
-            //Put the last direction of the user program in e0 to save the process
-            Memory[directionStartPreSO-1]= cardiac.toStr(pc);
-            switcherCycleCounter=0;
-            changePC(pc,directionStartPreSO);
+            // The flag will be changed in the software(SO
+            updateValuesSwitcher();
 
             updateStatusCardiacG();
         }
@@ -326,6 +330,15 @@ public class CardiacSync_controller extends Cardiac {
         // Mod en Halt to get 9 to so
     }
 
+    public void updateValuesSwitcher(){
+
+        System.out.println(" Is into the Pre-SO section, Flag status : "+Memory[3]);
+        //Put the last direction of the user program in e0 to save the process
+        Memory[directionStartPreSO-1]= cardiac.toStr(pc);
+        switcherCycleCounter=0;
+        changePC(pc,directionStartPreSO);
+    }
+
     public void saveJump(int operand){
         //Means that the SO will left the control to the user program
         if (pc == lastDirectionSO ){
@@ -335,7 +348,9 @@ public class CardiacSync_controller extends Cardiac {
         else {
             Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc);
         }
+        // It takes Ex because this method will be used by parallel to executor
         changePC(pc,operand);
+
     }
 
     public void printOutput(String output){
@@ -348,6 +363,7 @@ public class CardiacSync_controller extends Cardiac {
         System.out.println(" Is into the preamble section to jump to  SO Erase Section");
         //Assign to e0 the value of -0001 to use as flag in the preamble section to jump to the erase section
         Memory[directionStartPreSO-1]=cardiac.transformSpace(new String[]{"-001"})[0];
+        // It uses Ex because only to executor the parallel version will use this method
         changePC(pc,directionStartPreSO);
         switcherStatus=false;
         updateStatusCardiacG();

@@ -329,6 +329,23 @@ Label{
 }
 
 
+
+/* + Añadido desde Java: es son distintivos para el pc de executer */
+/* + Añadido desde Java: Se añade en el metodo de Change PC para cambiar el tono del item seleccionado sobre el Stack Pane*/
+.itemDirectionSelectedExe{
+     -fx-background-color:    #c84806     ;
+     -fx-background-radius: 5.0;
+     -fx-background-insets: 0.5 5.0 0.5 5.0;
+     -fx-padding: 10;
+     -fx-hgap: 8;
+     -fx-vgap: 8;
+     -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+
+}
+
+
+
+
 /* + Añadido desde Java: En la lista de etiquetas para el grid, gDirectionMemory en el metodo de la creación de la memoria*/
 .labelDirection{
     -fx-alignment: center;
