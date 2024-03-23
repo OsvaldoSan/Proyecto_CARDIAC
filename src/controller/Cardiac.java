@@ -5,11 +5,14 @@ package controller;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -96,7 +99,7 @@ public class Cardiac implements Initializable {
 
     // Style variables
     // Max columns to the gridpane, this could change to have better performance
-    protected final int MAX_COLUMNS = 10;
+    protected final int MAX_COLUMNS = 40;
 
 
     /* ----------------- Methods that are the main connection with the GUI ----------------------------------*/
@@ -299,7 +302,7 @@ public class Cardiac implements Initializable {
         gridMemory.getChildren().clear();
 
         final int cells = cardiac.getCells();//This will change
-        int MAX_ROWS = cells / MAX_COLUMNS;
+        int MAX_ROWS = cells / 10;
         int column = 0, row = 0;
 
         //Assign the size to each element in the grid
@@ -350,11 +353,7 @@ public class Cardiac implements Initializable {
             //gDirectionMemory[i].setAlignment(Pos.CENTER);
             itemsDirection[i].setAlignment(Pos.BOTTOM_LEFT);
 
-            //Puts the restrictions to this pane in which column and row will be inside the grid memory
-            addConstraintsGrid(itemsDirection[i],column++,row);//We put column++ because below we use that value of the column to the content
-            //Add item to grid
-            gridMemory.getChildren().add(itemsDirection[i]);
-            GridPane.setHalignment(itemsDirection[i],HPos.LEFT);
+
 
             // Add the content pane to the grid
             //Create Label with empty content
@@ -369,18 +368,66 @@ public class Cardiac implements Initializable {
             itemsContent[i].getStyleClass().add("itemContent");
             itemsContent[i].getChildren().add(gContentMemory[i]);
 
-            //ADD Item
-            addConstraintsGrid(itemsContent[i],column++,row); //Is column-- because for every cycle
-            //we put in row 0 and column 0 a direction and in column 1 a content, but next will be row 1 and column 0
-            gridMemory.getChildren().add(itemsContent[i]);
 
-            //Allign labels
+
+            //ADD Item to the grid
+            updateChildrenGrid(i,column++,row);
+
 
         }
 
-        //scrollMemory.setFitToWidth(true);
+        // Activate the listener
+        // Adjust the number of columns when the size changes
+        int MIN_CELL_WIDTH=88;
+        int MIN_COLUMNS=2;
+        scrollMemory.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
+            @Override
+            public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
+                //System.out.println("The size of the screen has changed");
+                int availableWidth = (int) newValue.getWidth();
+                //System.out.println("The available width is "+availableWidth);
+                //System.out.println("The min cell width is "+MIN_CELL_WIDTH);
+                int numColumns = Math.max(MIN_COLUMNS, Math.min(MAX_COLUMNS, availableWidth / MIN_CELL_WIDTH));
+                // Get a pair number
+                numColumns = numColumns % 2 == 0 ? numColumns : numColumns - 1;
+                updateGridColumns( numColumns);
+            }
+        });
     }
 
+    public void updateGridColumns(int numColumns){
+        final int cells = cardiac.getCells();//This will change
+        int MAX_ROWS = cells / numColumns;
+        int column = 0, row = 0;
+
+        gridMemory.getChildren().clear();
+        gridMemory.getColumnConstraints().clear();
+        //System.out.println("it is into the updateChildrenGrid with now:"+numColumns);
+        for(int i=0;i<cells;++i){
+            if(column==(numColumns)){
+                column=0;
+                row+=1;//because it must jump the content
+            }
+            updateChildrenGrid(i,column,row);
+            column+=2;// I add the two because in the method is added two times
+        }
+    }
+
+    public void updateChildrenGrid(int iterable,int column, int row){
+        //ADD Item to the grid
+
+        addConstraintsGrid(itemsDirection[iterable],column++,row);//We put column++ because below we use that value of the column to the content
+        //Add item to grid
+        gridMemory.getChildren().add(itemsDirection[iterable]);
+        GridPane.setHalignment(itemsDirection[iterable],HPos.LEFT);
+
+
+        addConstraintsGrid(itemsContent[iterable],column++,row); //Is column-- because for every cycle
+        //we put in row 0 and column 0 a direction and in column 1 a content, but next will be row 1 and column 0
+        gridMemory.getChildren().add(itemsContent[iterable]);
+        //Puts the restrictions to this pane in which column and row will be inside the grid memory
+
+    }
     // it's used to define constraints to the grid
     public void addConstraintsGrid(StackPane memory,int x,int y){
         GridPane.setConstraints(memory,x,y);// Define in which column and row will be put the Pane
