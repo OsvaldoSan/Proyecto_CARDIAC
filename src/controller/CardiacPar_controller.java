@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import modelo.CardiacPar;
@@ -47,6 +49,8 @@ public class CardiacPar_controller extends  CardiacSync_controller{
     protected GridPane gridPCPU;
     @FXML
     protected BorderPane principalBorderPane;
+    @FXML
+    protected Label gDescriptionCycle,gDescriptionOperation;
 
 
     // Complete new Layout for vbox
@@ -57,7 +61,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
     protected ScrollPane scrollCPU2;
     protected GridPane gridCPU2;
     protected VBox vboxRightSide;
-
+    Image image;
 
     // Conecction with the SO
 
@@ -72,7 +76,10 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         // It is used this method to update the path of the SO
         fileNameSO="/home/mrblue/Documents/Proyectos/Tesis_MAC/Cardiac_VM/src/modelo/Files/File_System_SO_Parallel.txt";
 
-        // Grid pane for Machine Status
+        // Update content of opertation and cycle
+        gDescriptionCycle.setText("Cycle CPUL");
+        gDescriptionOperation.setText("Operation CPUL");
+
         // Set the CSS Config
         gCycleNumber2.setId("LabelNumeric");
 
@@ -85,8 +92,18 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         int newRow = gridPMachineStatus.getRowCount();
         // Add the new row and the constraints
 
-        gridPMachineStatus.addRow(newRow,descGCycleNumber2,gCycleNumber2);
-        gridPMachineStatus.addRow(newRow+1,descGOperation2,gOperation2);
+        gridPMachineStatus.addRow(newRow,descGOperation2,gOperation2);
+        gridPMachineStatus.addRow(newRow+1,descGCycleNumber2,gCycleNumber2);
+
+        // Add toe to titled cpu
+        //RowConstraints newRowConstraints1 = new RowConstraints();
+        //newRowConstraints1.setPrefHeight(gridPCPU.getRowConstraints().get(0).getPrefHeight());
+        // Get the number of rows
+        int newRowCPU = gridPCPU.getRowCount();
+        // Add the new row and the constraints
+
+        gridPCPU.addRow(newRowCPU,gDescriptionStarter,gStarter);
+
 
 
 
@@ -94,6 +111,9 @@ public class CardiacPar_controller extends  CardiacSync_controller{
 
     @Override
     public void editTitleCPU(){
+        // Update titleCPU
+        titleCPU.setText(" CPU Loader");
+
         // CSS definitions for labels
         gStarter.setId("labelNumeric"); //Moved to CPULoader
         gInReg2.setId("labelNumeric");
@@ -119,7 +139,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
 
         // Create the second tab with new components
         vboxRightSide = new VBox();
-        titleCPUE = new TitledPane("CPU Executor",new Label("CPU Executor"));
+        titleCPUE = new TitledPane(" CPU Executor",new Label(" CPU Executor"));
         titleCPUE.setCollapsible(false);
 
         anchorCPU2 = new AnchorPane();
@@ -140,6 +160,17 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         scrollCPU2.setContent(gridCPU2);
         anchorCPU2.getChildren().add(scrollCPU2);
         titleCPUE.setContent(anchorCPU2);
+        titleCPUE.setCollapsible(true);
+
+        // Set an image to the titled cpue
+        // Load the image
+        image = new Image(getClass().getResourceAsStream("../view/resources/images/cpue.png"));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+
+        // Set the graphic (image) next to the title
+        titleCPUE.setGraphic(imageView);
 
         // Add the content to the right side
         vboxRightSide.getChildren().add(titleCPUE);
@@ -169,8 +200,6 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         String css = getClass().getResource("../view/styles_to_cardiac.css").toExternalForm();
         gridCPU2.getStylesheets().add(css);
         gridCPU2.setGridLinesVisible(true);
-
-
 
 
         RowConstraints newRowConstraints = new RowConstraints();
@@ -334,72 +363,83 @@ public class CardiacPar_controller extends  CardiacSync_controller{
             emergencyStop();
             return;
         }
+        if (validateRestrictions(pc,opCode,operand)==true) {
+            System.out.println(" The operation in memory has been accepted");
+            switch (opCode) {
+                case 0:
 
-        switch (opCode){
-            case 0:
+                    if (!cards.isEmpty())
+                        takeCardFromQueue();//Always will give priority to get out the cards on the waiting list
+                    else {
 
-                if(!cards.isEmpty()) takeCardFromQueue();//Always will give priority to get out the cards on the waiting list
-                else {
+                        isInputLoader = true;
+                        jump = true;//We simulate a jump to not add a cycle to the pc here, we'll add it in the ActionEvent Button
+                        System.out.println("Timeline 1 paused");
+                        timeline.timeline1.pause();
+                    }
+                    break;
+                case 1:
+                    System.out.println(" Case 1  Operand :" + operand + " Content of Memory:" + Memory[operand]);
+                    acc = Integer.parseInt(Memory[operand]);
+                    acc=checkAccOverflow(acc);
+                    break;
+                case 2:
+                    System.out.println(" Case 2  Operand :" + operand + " Content Memory:" + Memory[operand]);
+                    acc += Integer.parseInt(Memory[operand]);
+                    acc=checkAccOverflow(acc);
+                    break;
+                case 3:
+                    if (acc < 0) {
+                        changePC(pc, operand);
+                        System.out.println("Acumulator less than zero");
+                        jump = true;
+                    }
+                    break;
+                case 4:
+                    o1 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 2));
+                    o2 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 1));
+                    System.out.println("Start the shift secction with o1:" + o1 + " and o2:" + o2 + " and with the accumulator :" + acc + " and with string value:" + String.valueOf(acc));
+                    acc = cardiac.shiftLeft(cardiac.toStr(acc,true), o1);
+                    acc = cardiac.shiftRight(cardiac.toStr(acc,true), o2);
+                    break;
+                case 5:
+                    output = Memory[operand];
+                    printOutput(output);
+                    //gOutput.setText(output);
+                    break;
+                case 6:
+                    System.out.println("Case 6  Stored value :" + cardiac.toStr(acc,false));
+                    Memory[operand] = cardiac.toStr(checkTruncateAcc(acc),false);
+                    break;
+                case 7:
 
-                    isInputLoader = true;
-                    jump=true;//We simulate a jump to not add a cycle to the pc here, we'll add it in the ActionEvent Button
-                    System.out.println("Timeline 1 paused");
-                    timeline.timeline1.pause();
-                }
-                break;
-            case 1:
-                System.out.println(" Case 1  Operand :"+operand+" Content of Memory:" +Memory[operand]);
-                acc = Integer.parseInt(Memory[operand]);
-                break;
-            case 2:
-                System.out.println(" Case 2  Operand :"+operand+" Content Memory:" +Memory[operand]);
-                acc += Integer.parseInt(Memory[operand]);
-                break;
-            case 3:
-                if (acc < 0) {
-                    changePC(pc,operand);
-                    System.out.println("Acumulator less than zero");
-                    jump=true;
-                }
-                break;
-            case 4:
-                o1 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 2));
-                o2 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 1));
-                System.out.println("Start the shift secction with o1:"+o1+" and o2:"+o2+" and with the accumulator :"+acc+" and with string value:"+String.valueOf(acc));
-                acc = cardiac.shiftLeft(cardiac.toStr(acc), o1);
-                acc = cardiac.shiftRight(cardiac.toStr(acc), o2);
-                break;
-            case 5:
-                output = Memory[operand];
-                printOutput(output);
-                //gOutput.setText(output);
-                break;
-            case 6:
-                System.out.println("Case 6  Stored value :"+cardiac.toStr(acc));
-                Memory[operand] = cardiac.toStr(acc);
-                break;
-            case 7:
+                    acc -= Integer.parseInt(Memory[operand]);
+                    System.out.println("Case 7 Substract value Memory value:" + Memory[operand] + "  result acum:" + acc);
+                    acc=checkAccOverflow(acc);
+                    break;
+                case 8:
+                    // Load into the last register of memory the 8+pc
 
-                acc -= Integer.parseInt(Memory[operand]);
-                System.out.println("Case 7 Substract value Memory value:"+Memory[operand]+"  result acum:"+acc);
-                break;
-            case 8:
-                // Load into the last register of memory the 8+pc
+                    // In this version anything is saved in the last direction of the machine
+                    changePC(pc, operand);
+                    ;
+                    jump = true;
+                    break;
+                case 9:
+                    changePC(pc, 0);
+                    System.out.println("Salida :" + output);
+                    //dirStaticProcess+1 is the static process that will have the static ID to process 0
+                    outputCardsList.getItems().add("ID:" + Memory[dirStaticProcess + 1] + " " + output);
+                    jump = true;
 
-                // In this version anything is saved in the last direction of the machine
-                changePC(pc,operand);;
-                jump=true;
-                break;
-            case 9:
-                changePC(pc,0);
-                System.out.println("Salida :"+output);
-                //dirStaticProcess+1 is the static process that will have the static ID to process 0
-                outputCardsList.getItems().add("ID:"+Memory[dirStaticProcess+1]+" "+output);
-                jump=true;
+                    break;
 
-                break;
-
+            }
         }
+        else{
+            System.out.println("The operation in memory is not allowed");
+        }
+
         if (acc<0) negative=true;
         else negative =false;
         updateContentG();
@@ -438,28 +478,25 @@ public class CardiacPar_controller extends  CardiacSync_controller{
     /*Control the cycle and times*/
     public void cycleSystemExecutor() throws InterruptedException {
         //System.out.println("-------------------------------- Test Area -----------------------------------------------");
-        // System.out.println(cardiac.transformSpace(new String[]{"-0001"})[0]);
-        //System.out.println(cardiac.transformSpace(new String[]{"-001"})[0]);
-        System.out.println("****************************************************************++  Start Cycle system Executor **********************************************************************+ ");
-        updateCycleTime();
-        cycleNumber2++;
-        controlSwitcher();
-        //checkJumpSO();// It will check if is it the direction when the SO jumps to the User state
 
-        output = "null";//Every cycle this variable is restart
-        int o1, o2;//Auxiliaries in shift
-        boolean jump=false;
 
         if (pc2==dirWaiter){
-            System.out.println("dir waiter will be activated because pc2=dirWaiter");
+            //System.out.println("dir waiter is activated because pc2=dirWaiter");
             //timeline.timeline2.pause();
             boolean result=activeWaiter();
             if (result==false){
-                // There is nothing at dirWaiter
+                // There is no process to execute
                 return;
             }
             // Else, the pc2 has a new value and dir waiter is inactive
         }
+        System.out.println("****************************************************************++  Start Cycle system Executor **********************************************************************+ ");
+        output = "null";//Every cycle this variable is restart
+        int o1, o2;//Auxiliaries in shift
+        boolean jump=false;
+        updateCycleTime();
+        cycleNumber2++;
+        controlSwitcher();
 
 
 
@@ -485,65 +522,70 @@ public class CardiacPar_controller extends  CardiacSync_controller{
             emergencyStop();
             return;
         }
+        if (validateRestrictions(pc2,opCode2,operand2) == true) {
+            System.out.println(" The operation in memory has been accepted");
+            switch (opCode2) {
+                case 0:
+                    gTerminalNote.setText("Waiting for input(Executor) to the cell " + operand);
 
-        switch (opCode2){
-            case 0:
-                gTerminalNote.setText("Waiting for input(Executor) to the cell "+operand);
+                    isInput = true;
+                    System.out.println("Only timeline 2 paused with status " + timeline.timeline2.getStatus());
+                    jump = true;//We simulate a jump to not add a cycle to the pc here, we'll add it in the ActionEvent Button
+                    timeline.timeline2.pause();
 
-                isInput=true;
-                System.out.println("Only timeline 2 paused with status "+timeline.timeline2.getStatus());
-                jump=true;//We simulate a jump to not add a cycle to the pc here, we'll add it in the ActionEvent Button
-                timeline.timeline2.pause();
+                    break;
+                case 1:
+                    System.out.println(" Case 1  Operand :" + operand2 + " Content of Memory:" + Memory[operand2]);
+                    acc2 = Integer.parseInt(Memory[operand2]);
+                    break;
+                case 2:
+                    System.out.println(" Case 2  Operand :" + operand2 + " Content Memory:" + Memory[operand2]);
+                    acc2 += Integer.parseInt(Memory[operand2]);
+                    break;
+                case 3:
+                    if (acc2 < 0) {
+                        changePCEx(pc2, operand2);
+                        System.out.println("Acumulator less than zero");
+                        jump = true;
+                    }
+                    break;
+                case 4:
+                    o1 = Character.getNumericValue(Memory[pc2].charAt(sizeCell - 2));
+                    o2 = Character.getNumericValue(Memory[pc2].charAt(sizeCell - 1));
+                    System.out.println("Start the shift secction with o1:" + o1 + " and o2:" + o2 + " and with the accumulator :" + acc2 + " and with string value:" + String.valueOf(acc2));
+                    acc2 = cardiac.shiftLeft(cardiac.toStr(acc2,true), o1);
+                    acc2 = cardiac.shiftRight(cardiac.toStr(acc2,true), o2);
+                    break;
+                case 5:
+                    output = Memory[operand2];
+                    printOutput(output);
+                    //gOutput.setText(output);
+                    break;
+                case 6:
+                    System.out.println("Case 6  Stored value :" + cardiac.toStr(acc2,false));
+                    Memory[operand2] = cardiac.toStr(checkTruncateAcc(acc2),false);
+                    break;
+                case 7:
 
-                break;
-            case 1:
-                System.out.println(" Case 1  Operand :"+operand2+" Content of Memory:" +Memory[operand2]);
-                acc2 = Integer.parseInt(Memory[operand2]);
-                break;
-            case 2:
-                System.out.println(" Case 2  Operand :"+operand2+" Content Memory:" +Memory[operand2]);
-                acc2 += Integer.parseInt(Memory[operand2]);
-                break;
-            case 3:
-                if (acc2 < 0) {
-                    changePCEx(pc2,operand2);
-                    System.out.println("Acumulator less than zero");
-                    jump=true;
-                }
-                break;
-            case 4:
-                o1 = Character.getNumericValue(Memory[pc2].charAt(sizeCell - 2));
-                o2 = Character.getNumericValue(Memory[pc2].charAt(sizeCell - 1));
-                System.out.println("Start the shift secction with o1:"+o1+" and o2:"+o2+" and with the accumulator :"+acc2+" and with string value:"+String.valueOf(acc2));
-                acc2 = cardiac.shiftLeft(cardiac.toStr(acc2), o1);
-                acc2 = cardiac.shiftRight(cardiac.toStr(acc2), o2);
-                break;
-            case 5:
-                output = Memory[operand2];
-                printOutput(output);
-                //gOutput.setText(output);
-                break;
-            case 6:
-                System.out.println("Case 6  Stored value :"+cardiac.toStr(acc2));
-                Memory[operand2] = cardiac.toStr(acc2);
-                break;
-            case 7:
+                    acc2 -= Integer.parseInt(Memory[operand2]);
+                    System.out.println("Case 7 Substract value Memory value:" + Memory[operand2] + "  result acum:" + acc2);
+                    break;
+                case 8:
+                    // Load into the last register of memory the 8+pc
 
-                acc2 -= Integer.parseInt(Memory[operand2]);
-                System.out.println("Case 7 Substract value Memory value:"+Memory[operand2]+"  result acum:"+acc2);
-                break;
-            case 8:
-                // Load into the last register of memory the 8+pc
+                    // It makes the jump safer
+                    saveJump(operand2);
+                    jump = true;
+                    break;
+                case 9:
+                    HaltOperation(pc2, operand2);
+                    jump = true;
+                    break;
 
-                // It makes the jump safer
-                saveJump(operand2);
-                jump=true;
-                break;
-            case 9:
-                HaltOperation(pc2,operand2);
-                jump=true;
-                break;
-
+            }
+        }
+        else{
+            System.out.println("The operation in memory is not allowed");
         }
         if (acc2<0) negative2=true;
         else negative2 =false;
@@ -569,7 +611,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         System.out.println("In the input function");
         isInput=false;
         gTerminalNote.setText("Done!");
-        Memory[operand]= cardiac.toStr(gTerminalText.getText());
+        Memory[operand]= cardiac.toStr(gTerminalText.getText(),false);
         gTerminalText.clear();
         changePCEx(pc,pc+1);
         updateMemoryValuesG();
@@ -599,7 +641,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
             Memory[cardiac.getCells()-1]=Memory[directionSaverJump];
         }
         else {
-            Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc);
+            Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc,false);
         }
         // It takes Ex because this method will be used by parallel to executor
         changePCEx(pc2,operand);
@@ -611,7 +653,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
 
         System.out.println(" Is into the Pre-SO section, Flag status : "+Memory[3]);
         //Put the last direction of the user program in e0 to save the process
-        Memory[directionStartPreSO-1]= cardiac.toStr(pc2);
+        Memory[directionStartPreSO-1]= cardiac.toStr(pc2,false);
         switcherCycleCounter=0;
         changePCEx(pc2,directionStartPreSO);
     }
@@ -632,9 +674,9 @@ public class CardiacPar_controller extends  CardiacSync_controller{
     // It returns false if there are no process, it returns true if there are process
     public boolean activeWaiter() throws InterruptedException {
         gWaiter.setText("Active");
-        System.out.println("The while cycle will start");
+        //System.out.println("The while cycle will start");
 
-        while (!((Memory[dirIdCounterZV] != null) && (Integer.parseInt(Memory[dirIdCounterZV]) != 0))) {
+        if (!((Memory[dirIdCounterZV] != null) && (Integer.parseInt(Memory[dirIdCounterZV]) != 0))) {
             return false;
         }
         int test=pc2+1;
@@ -646,31 +688,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         return true;
     }
 
-    public synchronized void waiterCheck() throws InterruptedException {
-        // It checks if the id counter id of ZV is zero, then the timeline continues,
-        System.out.println(" ???????????????? A new cycle in waiter ????????????????");
-        if ( (Memory[dirIdCounterZV] != null) &&(Integer.parseInt(Memory[dirIdCounterZV]) != 0) ){
-            System.out.println("*************************************************** The waiter will be stopped with value of Memory"+Memory[dirIdCounterZV]+" ***************************************************" );
-            waiter.stop();
-            while(waiter.getStatus() != Animation.Status.STOPPED){
-                //wait for the timeline to stop
-                //wait(100)
-            }
 
-            gWaiter.setText("Inactive");
-            int test=pc2+1;
-            System.out.println("The direction will be  changeg from "+pc2+ " to "+test);
-            changePCEx(pc2,pc2+1); // Make the jumps that was not realized before the waiter found the counter id !=0
-            System.out.println("The direction now is "+pc2);
-            updateMemoryValuesG();
-            System.out.println(" Status of timeline 2 before in Waiter :"+timeline.timeline2.getStatus());
-            timeline.timeline2.play();
-            System.out.println(" Status of timeline 2 after in Waiter :"+timeline.timeline2.getStatus());
-
-            System.out.println("The waiter has found its final;"+waiter.getStatus());
-        }
-
-    }
 
 
 }

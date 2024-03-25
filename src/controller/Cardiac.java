@@ -184,6 +184,8 @@ public class Cardiac implements Initializable {
     public void startCardiac(){
         // Active Cardiac
         cardiac = new modelo.Cardiac(totalCells);
+        // If the input was wrong it corrects the input
+
         cardiac.startCVM();
 
         updateCardsInWaitingList();
@@ -238,7 +240,7 @@ public class Cardiac implements Initializable {
     public synchronized void funcInput(){
         isInput=false;
         gTerminalNote.setText("Done!");
-        Memory[operand]= cardiac.toStr(gTerminalText.getText());
+        Memory[operand]= cardiac.toStr(gTerminalText.getText(),false);
         gTerminalText.clear();
         changePC(pc,pc+1);
         updateMemoryValuesG();
@@ -273,6 +275,7 @@ public class Cardiac implements Initializable {
             if(result.isPresent() && result.get() == ButtonType.OK ) {
                 try {
                     //To get the window and execute in the same window
+                    stopCVM();
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
                     Parent newPage = FXMLLoader.load(getClass().getResource(Main.FXMLWELCOME));
@@ -289,7 +292,7 @@ public class Cardiac implements Initializable {
                 }
             }
             else{
-                System.out.println("THe user doesn't authorize");
+                System.out.println("The user doesn't authorize");
             }
         }
 
@@ -378,7 +381,13 @@ public class Cardiac implements Initializable {
 
         // Activate the listener
         // Adjust the number of columns when the size changes
-        int MIN_CELL_WIDTH=88;
+        int MIN_CELL_WIDTH;
+        if (sizeCell<=3){
+            MIN_CELL_WIDTH=88;
+        }
+        else if (sizeCell == 4){MIN_CELL_WIDTH=88;}
+        else {MIN_CELL_WIDTH = 90;}
+
         int MIN_COLUMNS=2;
         scrollMemory.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
             @Override
@@ -548,7 +557,7 @@ public class Cardiac implements Initializable {
     // Take an instruction from the queue "cards" and put them into Memory
     // This requires that operand will be updated since the place where this method is called
     public void takeCardFromQueue(){
-        Memory[operand]= cardiac.toStr(cards.remove());
+        Memory[operand]= cardiac.toStr(cards.remove(),false);
         updateMemoryValuesG();
         updateCardsInWaitingList();
         //wait(TIME);//Time in miliseconds
@@ -583,10 +592,9 @@ public class Cardiac implements Initializable {
         // It is not using stopCVM because we can Keep the latest status of CARDIAC
         System.out.println("This is an emergency stop");
         timeline.stop();
-        System.out.println(" ES Status of timeline 1 after:"+timeline.timeline1.getStatus());
-        System.out.println(" ES Status of timeline 2 after:"+timeline.timeline2.getStatus());
         setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
-        gCardiacStatus.setText(STATUS+"dead, please restart");
+        gCardiacStatus.setText(STATUS+"dead");
+        updateContentG();
     }
 
     // Controls the speed of each cycle in the VM
@@ -634,7 +642,6 @@ public class Cardiac implements Initializable {
         updateCycleTime();
         cycleNumber++;
         controlSwitcher();
-        //checkJumpSO();// It will check if is it the direction when the SO jumps to the User state
 
         output = "null";//Every cycle this variable is restart
         int o1, o2;//Auxiliaries in shift
@@ -660,79 +667,112 @@ public class Cardiac implements Initializable {
             System.out.println("Memory of operand is null and opcode=="+opCode);
             emergencyStop();
         }
+        if (validateRestrictions(pc,opCode,operand)== true) {
+            System.out.println(" The operation in memory has been accepted");
+            switch (opCode) {
+                case 0:
+                    gTerminalNote.setText("Waiting for input to the cell " + operand);
+                    if (!cards.isEmpty())
+                        takeCardFromQueue();//Always will give priority to get out the cards on the waiting list
+                    else {
+                        isInput = true;
+                        jump = true;//We simulate a jump to not add a cycle to the pc here, we'll add it in the ActionEvent Button
+                        //Only when isInput==true we will add one to the pc
+                        timeline.pause();
+                    }
+                    break;
+                case 1:
+                    System.out.println(" Case 1  Operand :" + operand + " Content of Memory:" + Memory[operand]);
+                    acc = Integer.parseInt(Memory[operand]);
+                    acc=checkAccOverflow(acc);
+                    break;
+                case 2:
+                    System.out.println(" Case 2  Operand :" + operand + " Content Memory:" + Memory[operand]);
+                    acc += Integer.parseInt(Memory[operand]);
+                    acc=checkAccOverflow(acc);
+                    break;
+                case 3:
+                    if (acc < 0) {
+                        changePC(pc, operand);
+                        System.out.println("Acumulator less than zero");
+                        jump = true;
+                    }
+                    break;
+                case 4:
+                    o1 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 2));
+                    o2 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 1));
+                    System.out.println("Start the shift secction with o1:" + o1 + " and o2:" + o2 + " and with the accumulator :" + acc + " and with string value:" + String.valueOf(acc));
+                    acc = cardiac.shiftLeft(cardiac.toStr(acc,true), o1);
+                    acc = cardiac.shiftRight(cardiac.toStr(acc,true), o2);
+                    break;
+                case 5:
+                    output = Memory[operand];
+                    printOutput(output);
+                    //gOutput.setText(output);
+                    break;
+                case 6:
+                    System.out.println("Case 6  Stored value :" + cardiac.toStr(acc,false));
+                    Memory[operand] = cardiac.toStr(checkTruncateAcc(acc),false);
+                    break;
+                case 7:
 
-        switch (opCode){
-            case 0:
-                gTerminalNote.setText("Waiting for input to the cell "+operand);
-                if(!cards.isEmpty()) takeCardFromQueue();//Always will give priority to get out the cards on the waiting list
-                else {
-                    isInput = true;
-                    jump=true;//We simulate a jump to not add a cycle to the pc here, we'll add it in the ActionEvent Button
-                    //Only when isInput==true we will add one to the pc
-                    timeline.pause();
-                }
-                break;
-            case 1:
-                System.out.println(" Case 1  Operand :"+operand+" Content of Memory:" +Memory[operand]);
-                acc = Integer.parseInt(Memory[operand]);
-                break;
-            case 2:
-                System.out.println(" Case 2  Operand :"+operand+" Content Memory:" +Memory[operand]);
-                acc += Integer.parseInt(Memory[operand]);
-                break;
-            case 3:
-                if (acc < 0) {
-                    changePC(pc,operand);
-                    System.out.println("Acumulator less than zero");
-                    jump=true;
-                }
-                break;
-            case 4:
-                o1 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 2));
-                o2 = Character.getNumericValue(Memory[pc].charAt(sizeCell - 1));
-                System.out.println("Start the shift secction with o1:"+o1+" and o2:"+o2+" and with the accumulator :"+acc+" and with string value:"+String.valueOf(acc));
-                acc = cardiac.shiftLeft(cardiac.toStr(acc), o1);
-                acc = cardiac.shiftRight(cardiac.toStr(acc), o2);
-                break;
-            case 5:
-                output = Memory[operand];
-                printOutput(output);
-                //gOutput.setText(output);
-                break;
-            case 6:
-                System.out.println("Case 6  Stored value :"+cardiac.toStr(acc));
-                Memory[operand] = cardiac.toStr(acc);
-                break;
-            case 7:
+                    acc -= Integer.parseInt(Memory[operand]);
+                    System.out.println("Case 7 Substract value Memory value:" + Memory[operand] + "  result acum:" + acc);
+                    acc=checkAccOverflow(acc);
+                    break;
+                case 8:
+                    // Load into the last register of memory the 8+pc
 
-                acc -= Integer.parseInt(Memory[operand]);
-                System.out.println("Case 7 Substract value Memory value:"+Memory[operand]+"  result acum:"+acc);
-                break;
-            case 8:
-                // Load into the last register of memory the 8+pc
+                    // It makes the jump safer
+                    saveJump(operand);
+                    jump = true;
+                    break;
+                case 9:
+                    HaltOperation(pc, operand);
+                    jump = true;
+                    break;
 
-                // It makes the jump safer
-                saveJump(operand);
-                jump=true;
-                break;
-            case 9:
-                HaltOperation(pc,operand);
-                jump=true;
-                break;
-
+            }
         }
-            if (acc<0) negative=true;
-            else negative =false;
-            updateContentG();
+        else{
+            System.out.println("The operation in memory is not allowed");
+        }
 
-            if(jump==false) { changePC(pc,pc+1); }
+        if (acc<0) negative=true;
+        else negative =false;
+        updateContentG();
 
-            updateMemoryValuesG();
-            System.out.println("++++++++++++++++++++++++++++ Cycle Finished +++++++++++++++++++++++++++++++++++++++++++++++++++");
+        if(jump==false) { changePC(pc,pc+1); }
+
+        updateMemoryValuesG();
+        System.out.println("++++++++++++++++++++++++++++ Cycle Finished "+cycleNumber+" +++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
+    public int checkAccOverflow(int accumulator){
+
+        if ((accumulator >=(cardiac.getCells()*100)) || (accumulator <=(cardiac.getCells()*-100))){
+            System.out.println("Overflow in the accumulator");
+            return (cardiac.getCells()*100)-1;
+        }
+        else return  accumulator;
+
+    }
+
+    public int checkTruncateAcc(int accumulator){
+
+        if ( (accumulator>=cardiac.getCells()*10) || (accumulator<=cardiac.getCells()*-10) ){
+            System.out.println("It needs to truncate the accumulator");
+            String sacc=Integer.toString(accumulator);
+            return Integer.parseInt(sacc.substring(sacc.length()-cardiac.getSizeCell()));
+        }
+        else {return accumulator;}
+    }
+    public boolean validateRestrictions(int pc,int opCode,int operand){
+        // Return true if the user make a allowed operation in memory
+        return true;
+    }
     public void saveJump(int operand){
-        Memory[cardiac.getCells()-1]= cardiac.toStr((cardiac.getCells()*8)+pc);
+        Memory[cardiac.getCells()-1]= cardiac.toStr((cardiac.getCells()*8)+pc,false);
         changePC(pc,operand);
     }
 

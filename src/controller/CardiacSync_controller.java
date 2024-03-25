@@ -46,6 +46,7 @@ public class CardiacSync_controller extends Cardiac {
     protected int directionSaverJump,lastDirectionSO, dirStaticProcess;
     protected boolean switcherStatus;
     protected String starterStatus;
+    protected int rowsData;
 
 
     // ----------------------------------------------------- Layout FXML edition -------------------------------------------------------------------------------------------------
@@ -135,6 +136,9 @@ public class CardiacSync_controller extends Cardiac {
         gStarter.setText("Waiting");
         try {
             ObservableList<FileData> data = readFileAndCreateData(fileNameSO);
+            rowsData=data.size();
+            System.out.println(" !!!!!!!!!!!!!!!!!!!!!!!! The amount of rows is :"+rowsData);
+
             fileSystem.setItems(data);
 
             // Fill the data into datosFileSystem to the system
@@ -255,7 +259,7 @@ public class CardiacSync_controller extends Cardiac {
         scrollMemory.setContent(new AnchorPane());
         cardsWaitingList.getItems().clear();
         outputCardsList.getItems().clear();
-
+        gStarter.setText("");
         timeline.stop();
 
     }
@@ -334,7 +338,7 @@ public class CardiacSync_controller extends Cardiac {
 
         System.out.println(" Is into the Pre-SO section, Flag status : "+Memory[3]);
         //Put the last direction of the user program in e0 to save the process
-        Memory[directionStartPreSO-1]= cardiac.toStr(pc);
+        Memory[directionStartPreSO-1]= cardiac.toStr(pc,false);
         switcherCycleCounter=0;
         changePC(pc,directionStartPreSO);
     }
@@ -346,10 +350,57 @@ public class CardiacSync_controller extends Cardiac {
             Memory[cardiac.getCells()-1]=Memory[directionSaverJump];
         }
         else {
-            Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc);
+            Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc,false);
         }
         // It takes Ex because this method will be used by parallel to executor
         changePC(pc,operand);
+
+    }
+
+    public boolean validateRestrictions(int pc,int opCode,int operand){
+
+        // If pc is pointing to the memory user space or if the cycles of the loader
+        // are above the formula it means that the so has ended its load, so the user
+        // is using the process 0 and then it can make changes to the SO
+        // To know if the SO is loaded we take the half of the number of the ros in the file and we multiply by three
+        if (((pc>=directionUserStart)&&(pc<=directionUserEnd)) || ( (cycleNumber>((rowsData/2)*3)) && (pc==1) ) ) {
+
+            System.out.println("It is a user process or is the user using the process 0 with value"+Memory[pc]);
+
+            // write or jump in memory
+            if ((Memory[pc].equals("0800")) ||(Memory[pc].equals("8985"))){
+                System.out.println("Special operations for the user");
+                return true;
+            }
+
+            if ((opCode==1)||(opCode==2)||(opCode==5)||(opCode==7)){
+                // Read option
+                if ((operand==0)||(operand==cardiac.getCells()-1)){
+                    // It is allowed to read these in this space of memory
+                    return true;
+                }
+
+            }
+
+            if ((opCode == 0) || (opCode == 6) || (opCode == 3) || (opCode == 8) || (opCode == 1) || (opCode == 2) || (opCode == 5) || (opCode == 7)) {
+
+                if ((operand >= directionUserStart) && (operand <= directionUserEnd)) {
+                    return true;
+                } else {
+                    System.out.println("You cannot write/read in the SO Memory Space or jump to it with pc"+pc);
+                    printOutput("Not allowed operation");
+                    return false;
+                }
+
+            } else {
+                System.out.println("It is an allowed operation");
+                return true;
+            }
+        }
+        else {
+            System.out.println("It is a SO Operation");
+            return true;
+        }
 
     }
 

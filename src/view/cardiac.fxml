@@ -137,14 +137,11 @@
                                         <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <Label maxHeight="20.0" minHeight="20.0" prefHeight="20.0" style="-fx-min-height: 20px;" styleClass="labelspecialb" text="Operation">
-                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                             </padding>
+                                          <Label fx:id="gDescriptionOperation" minHeight="20.0" style="-fx-min-height: 20px;" styleClass="labelspecialb" text="Operation">
                                              <GridPane.margin>
-                                                <Insets bottom="5.0" left="2.0" right="2.0" top="5.0" />
+                                                <Insets />
                                              </GridPane.margin></Label>
-                                          <Label minHeight="20.0" style="-fx-min-height: 20px;" styleClass="labelspecialb" text="Cycle" GridPane.rowIndex="1" />
+                                          <Label fx:id="gDescriptionCycle" minHeight="20.0" style="-fx-min-height: 20px;" styleClass="labelspecialb" text="Cycle" GridPane.rowIndex="1" />
                                           <Label minHeight="20.0" style="-fx-min-height: 20px;" text="Status" GridPane.rowIndex="2" />
                                           <Label id="labelNumeric" fx:id="gOperation" maxHeight="20.0" minHeight="20.0" prefHeight="20.0" GridPane.columnIndex="1" />
                                           <Label id="labelNumeric" fx:id="gCycleNumber" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />

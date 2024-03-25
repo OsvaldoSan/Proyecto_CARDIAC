@@ -114,11 +114,12 @@ public class  Cardiac {
 
     // This function is to transform every integer to the format of the memory,i.e., array of string format, to add 0 to the left
     // is sizeCell= 4 and num=101->> 0101
-    public String toStr(int num) {
-        return toStr(String.valueOf(num));
+    public String toStr(int num, boolean allowOversize) {
+        return toStr(String.valueOf(num),allowOversize);
+
     }
 
-    public String toStr(String numValue){
+    public String toStr(String numValue,boolean allowOversize){
         String negative="";
 
         if (numValue.substring(0,1).equals("-")){// If it has a negative value
@@ -134,6 +135,11 @@ public class  Cardiac {
             }
             numValue=sb.toString().concat(numValue).replaceAll(",", "");
 
+        }
+
+        if ( (allowOversize==false)&&(numValue.length()>sizeCell)){
+            System.out.println("Oversize in the input, truncated");
+            numValue=numValue.substring(numValue.length()-sizeCell);
         }
 
         return negative.concat(numValue);
@@ -189,34 +195,57 @@ public class  Cardiac {
     }
 
     public int shiftLeft(String instruction, int displacement) {
-        if (displacement >= sizeCell) {
+        if (displacement >= (sizeCell+1)) {
             //System.out.println("The displacement "+displacement+" is greater than size cell:"+sizeCell);
             return 0;
         }
         //System.out.println("The String is :"+instruction);
-        String prefix = instruction.substring(displacement);// From displacement to end of instruction
+
+        String prefix;
+        if (instruction.length()==sizeCell) {
+            // We add an artificial 0 because the accumulator can handle one more digit
+            prefix = "0".concat(instruction).substring(displacement);// From displacement to end of instruction
+        }
+        else{
+            // It means that the accumulator has a number with more spaces than the sizecell
+            prefix = instruction.substring(displacement);// From displacement to end of instruction
+        }
+
         //System.out.println("The preffix is :"+prefix);
         StringBuffer suffix = new StringBuffer(); // suffix is the new end of the string
         for (int i = 0; i < displacement; ++i)
             suffix.append('0');
-        //System.out.println("The suffix is :"+suffix);
-        //System.out.println("The final is :"+prefix.concat(suffix.toString()).replaceAll(",", ""));
-        return Integer.parseInt(prefix.concat(suffix.toString()).replaceAll(",", ""));
+        System.out.println("The suffix is :"+suffix);
+
+        String stringResult = prefix.concat(suffix.toString()).replaceAll(",", "");
+        System.out.println("Result in the accumulator  left:"+stringResult);
+        return Integer.parseInt(stringResult);
     }
 
     public int shiftRight(String instruction, int displacement) {
-        if (displacement >= sizeCell) {
+        if (displacement >= (sizeCell+1)) {
             //System.out.println("The displacement "+displacement+" is greater than size cell:"+sizeCell);
             return 0;
         }
-        String suffix = instruction.substring(0, sizeCell - displacement);//maybe will be needed a try catch
+        String suffix;
+        if (instruction.length() == sizeCell ){
+            // We add an artificial 0 because the accumulator can handle one more digit
+            suffix = "0".concat(instruction).substring(0, (sizeCell + 1) - displacement);//maybe will be needed a try catch
+            System.out.println("The suffix in if:"+suffix);
+        }
+        else {
+               suffix =instruction.substring(0, (sizeCell + 1) - displacement);//maybe will be needed a try catch
+                System.out.println("The suffix in else :"+suffix);
+        }
         StringBuilder prefix = new StringBuilder();
         //System.out.println("The suffix is :"+suffix);
         for (int i = 0; i < displacement; ++i)
             prefix.append('0');
-        //System.out.println("The prefix is :"+prefix);
+        System.out.println("The prefix is :"+prefix);
         //System.out.println("The final is :"+prefix.toString().concat(suffix).replaceAll(",", ""));
-        return Integer.parseInt(prefix.toString().concat(suffix).replaceAll(",", ""));
+        String stringResult = prefix.toString().concat(suffix).replaceAll(",", "");
+        System.out.println("Result in the accumulator :"+stringResult);
+        return Integer.parseInt(stringResult);
     }
 
 
