@@ -565,25 +565,32 @@ public class Cardiac implements Initializable {
 
     //Transform every variable to null, including the memory and update the values of the GUI
     public void stopCVM(){
-        setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
+        try {
+            setCardiacParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
+            InReg = null;
+            opCode = 0;
+            operand = 0;
+            cycleNumber=0;
+            acc=0;
+            pc=0;
+            Arrays.fill(Memory,null);//This clean the Memory of the machine
+            updateContentG();
+            updateMemoryValuesG();
 
-        InReg = null;
-        opCode = 0;
-        operand = 0;
-        cycleNumber=0;
-        acc=0;
-        pc=0;
-        Arrays.fill(Memory,null);//This clean the Memory of the machine
-        updateContentG();
-        updateMemoryValuesG();
+            //To restart all the values
+            //
+            scrollMemory.setContent(new AnchorPane());
+            cardsWaitingList.getItems().clear();
+            outputCardsList.getItems().clear();
+            timeline.stop();
 
-        //To restart all the values
-        //
-        scrollMemory.setContent(new AnchorPane());
-        cardsWaitingList.getItems().clear();
-        outputCardsList.getItems().clear();
+        }
+        catch (NullPointerException e){
+            // Handle the exception
+            System.out.println("Caught NullPointerException: " + e.getMessage());
+            System.out.println("Cardiac cannot be setted because is not started");
+        }
 
-        timeline.stop();
     }
 
     // Stops the Virtual Machine by itself
@@ -799,6 +806,27 @@ public class Cardiac implements Initializable {
         // The possibles architectures in amount of cells are put here
         architecture.getItems().addAll("100","1000","10000");
         architecture.setValue("100");
+
+
+        // Check to only allow numbers
+        gTerminalText.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isContentChange()) {
+                if (!change.getControlNewText().matches("\\d*")) {
+                    return null; // Prevent the change
+                }
+            }
+            return change; // Allow the change
+        }));
+
+        gDeckText.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isContentChange()) {
+                if (!change.getControlNewText().matches("\\d*")) {
+                    return null; // Prevent the change
+                }
+            }
+            return change; // Allow the change
+        }));
+
     }
 
 

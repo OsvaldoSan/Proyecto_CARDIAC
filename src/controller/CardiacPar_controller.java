@@ -167,10 +167,11 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         image = new Image(getClass().getResourceAsStream("../view/resources/images/cpue.png"));
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(20);
-        imageView.setFitHeight(20);
+        imageView.setFitHeight(16);
 
         // Set the graphic (image) next to the title
         titleCPUE.setGraphic(imageView);
+        //titledOutput.setGraphic(imageView);
 
         // Add the content to the right side
         vboxRightSide.getChildren().add(titleCPUE);
@@ -300,17 +301,23 @@ public class CardiacPar_controller extends  CardiacSync_controller{
     }
 
     public void stopCardiacPar(){
-        System.out.println(" -------------------------- !!!!!!!!!!!!!!Alert¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡ Cardiac is stopped");
-        gWaiter.setText("Inactive");
-        InReg2 = null;
-        opCode2 = 0;
-        operand2 = 0;
-        cycleNumber2=0;
-        acc2=0;
-        pc2=0;
+        try{
+            System.out.println(" -------------------------- !!!!!!!!!!!!!!Alert¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡ Cardiac is stopped");
+            gWaiter.setText("Inactive");
+            InReg2 = null;
+            opCode2 = 0;
+            operand2 = 0;
+            cycleNumber2 = 0;
+            acc2 = 0;
+            pc2 = 0;
 
-        updateContentGCPUE();
-        setCardiacParParameters();
+            updateContentGCPUE();
+            setCardiacParParameters();
+        }
+        catch (NullPointerException e){
+            System.out.println("Caught NullPointerException: " + e.getMessage());
+            System.out.println("Cardiac Parallel cannot be setted because is not started");
+        }
         stopCVMSync();
     }
 

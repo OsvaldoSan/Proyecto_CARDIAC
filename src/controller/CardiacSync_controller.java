@@ -62,17 +62,18 @@ public class CardiacSync_controller extends Cardiac {
         // ----------------------------------------- Section bottom right -------------------------------------------------------
         // Create section to show the secondary memory
         // Create new pane
-        TitledPane newTitlePane = new TitledPane();
+        TitledPane titlePaneSMem = new TitledPane();
         HBox.setHgrow(bottomQueue, Priority.ALWAYS);
         HBox.setHgrow(bottomTabPane, Priority.ALWAYS);
-        HBox.setHgrow(newTitlePane, Priority.ALWAYS);
+        HBox.setHgrow(titlePaneSMem, Priority.ALWAYS);
         // Definitions and redefintions of the space
-        newTitlePane.setPrefHeight(204);
+        titlePaneSMem.setPrefHeight(204);
         bottomQueue.setPrefWidth(271);
         bottomTabPane.setPrefWidth(561);
-        newTitlePane.setPrefWidth(271);
+        titlePaneSMem.setPrefWidth(271);
+        titlePaneSMem.setMaxWidth(277);
 
-        newTitlePane.setText("Secondary Memory");
+        titlePaneSMem.setText("Secondary Memory");
 
         // Content of the new pane
 
@@ -82,11 +83,11 @@ public class CardiacSync_controller extends Cardiac {
         textArea.setTextFormatter(new TextFormatter<String>(change ->
                 change.getControlNewText().length() <= 100 ? change : null));
 
-        newTitlePane.setCollapsible(false); // Optional: Make the TitledPane non-collapsible
+        titlePaneSMem.setCollapsible(false); // Optional: Make the TitledPane non-collapsible
 
-        newTitlePane.setContent(fileSystem);
+        titlePaneSMem.setContent(fileSystem);
 
-        HBoxBottom.getChildren().add(newTitlePane);
+        HBoxBottom.getChildren().add(titlePaneSMem);
 
 
         initializeTableView();
@@ -236,32 +237,38 @@ public class CardiacSync_controller extends Cardiac {
     }
 
     public void stopCVMSync(){
-        setCardiacSyncParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
+        try{
+            setCardiacSyncParameters();//If you want to save the state of the virtual machine in the future with an upgrade in the code
 
-        // Version SYNC
-        switcherCycleCounter=0;
-        switcherStatus=true;
-        starterStatus="Off";
+            // Version SYNC
+            switcherCycleCounter = 0;
+            switcherStatus = true;
+            starterStatus = "Off";
 
-        //Version Normal
-        InReg = null;
-        opCode = 0;
-        operand = 0;
-        cycleNumber=0;
-        acc=0;
-        pc=0;
-        Arrays.fill(Memory,null);//This clean the Memory of the machine
-        updateContentG();
-        updateMemoryValuesG();
+            //Version Normal
+            InReg = null;
+            opCode = 0;
+            operand = 0;
+            cycleNumber = 0;
+            acc = 0;
+            pc = 0;
+            Arrays.fill(Memory, null);//This clean the Memory of the machine
+            updateContentG();
+            updateMemoryValuesG();
 
-        //To restart all the values
-        //
-        scrollMemory.setContent(new AnchorPane());
-        cardsWaitingList.getItems().clear();
-        outputCardsList.getItems().clear();
-        gStarter.setText("");
-        timeline.stop();
-
+            //To restart all the values
+            //
+            scrollMemory.setContent(new AnchorPane());
+            cardsWaitingList.getItems().clear();
+            outputCardsList.getItems().clear();
+            gStarter.setText("");
+            timeline.stop();
+        }
+        catch (NullPointerException e){
+            // Handle the exception
+            System.out.println("Caught NullPointerException: " + e.getMessage());
+            System.out.println("Cardiac cannot be setted because is not started");
+        }
     }
 
 
