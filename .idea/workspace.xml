@@ -6,11 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="8fc66f43-a514-4dec-8267-5e728ac757d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/Cardiac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Cardiac.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/CardiacPar_controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/CardiacPar_controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modelo/Files/.~lock.File_System_SO.ods#" beforeDir="false" afterPath="$PROJECT_DIR$/src/modelo/Files/.~lock.File_System_SO.ods#" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modelo/Files/File_System_SO.ods" beforeDir="false" afterPath="$PROJECT_DIR$/src/modelo/Files/File_System_SO.ods" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/.styles_to_cardiac.css.swp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,13 +55,16 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="Project Files" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/view" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/view" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/view" />
     </key>

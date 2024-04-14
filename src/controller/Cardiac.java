@@ -820,7 +820,7 @@ public class Cardiac implements Initializable {
 
         gDeckText.setTextFormatter(new TextFormatter<>(change -> {
             if (change.isContentChange()) {
-                if (!change.getControlNewText().matches("\\d*")) {
+                if (!change.getControlNewText().matches("[\\d\\n]*")) {
                     return null; // Prevent the change
                 }
             }

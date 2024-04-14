@@ -411,7 +411,8 @@ public class CardiacPar_controller extends  CardiacSync_controller{
                     break;
                 case 5:
                     output = Memory[operand];
-                    printOutput(output);
+                    //printOutput(output);
+                    System.out.println("The output is "+output);
                     //gOutput.setText(output);
                     break;
                 case 6:
@@ -429,7 +430,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
 
                     // In this version anything is saved in the last direction of the machine
                     changePC(pc, operand);
-                    ;
+
                     jump = true;
                     break;
                 case 9:
@@ -533,7 +534,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
             System.out.println(" The operation in memory has been accepted");
             switch (opCode2) {
                 case 0:
-                    gTerminalNote.setText("Waiting for input(Executor) to the cell " + operand);
+                    gTerminalNote.setText("Waiting for input(Executor) to the cell " + operand2);
 
                     isInput = true;
                     System.out.println("Only timeline 2 paused with status " + timeline.timeline2.getStatus());
@@ -618,9 +619,11 @@ public class CardiacPar_controller extends  CardiacSync_controller{
         System.out.println("In the input function");
         isInput=false;
         gTerminalNote.setText("Done!");
-        Memory[operand]= cardiac.toStr(gTerminalText.getText(),false);
+        System.out.println("The operand is :"+operand2+" and the text in terminal is :"+gTerminalText.getText());
+        Memory[operand2]= cardiac.toStr(gTerminalText.getText(),false);
+        System.out.println("The value in memory at the end is"+Memory[operand2]);
         gTerminalText.clear();
-        changePCEx(pc,pc+1);
+        changePCEx(pc2,pc2+1);
         updateMemoryValuesG();
         timeline.timeline2.play();
     }
@@ -648,7 +651,7 @@ public class CardiacPar_controller extends  CardiacSync_controller{
             Memory[cardiac.getCells()-1]=Memory[directionSaverJump];
         }
         else {
-            Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc,false);
+            Memory[cardiac.getCells() - 1] = cardiac.toStr((cardiac.getCells() * 8) + pc2,false);
         }
         // It takes Ex because this method will be used by parallel to executor
         changePCEx(pc2,operand);
