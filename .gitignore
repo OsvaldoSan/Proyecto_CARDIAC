@@ -3,7 +3,6 @@ documentos/*
 out/production/ProyectoCardiac/Maquina_Virtual/Main.class
 
 # Images
-*src/view/resources/images/*
 
 # Java
 .mtj.tmp/
